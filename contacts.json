@@ -1,0 +1,16 @@
+{
+  "contacts": [
+    {
+      "name": "Azidin",
+      "surname": "Amas",
+      "address": null,
+      "phone": "500919055"
+    },
+    {
+      "name": "Azidin",
+      "surname": "Amankulov",
+      "address": "Kumbel 83A",
+      "phone": "+996 500 919 055"
+    }
+  ]
+}
