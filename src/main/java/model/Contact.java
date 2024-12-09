@@ -16,6 +16,9 @@ public class Contact {
     @JsonProperty("phone")
     private String phone;
 
+    public Contact() {
+    }
+
     public Contact
             (@JsonProperty("name") String name, @JsonProperty("surname") String surname,
              @JsonProperty("address") String address, @JsonProperty("phone") String phone) {

@@ -1,9 +1,8 @@
-package repository;
-
 import model.Contact;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import repository.SearchActionMove;
 
 import java.io.ByteArrayInputStream;
 import java.util.Arrays;

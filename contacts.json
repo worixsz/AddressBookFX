@@ -1,16 +1,18 @@
 {
-  "contacts": [
-    {
-      "name": "Azidin",
-      "surname": "Amas",
-      "address": null,
-      "phone": "500919055"
-    },
-    {
-      "name": "Azidin",
-      "surname": "Amankulov",
-      "address": "Kumbel 83A",
-      "phone": "+996 500 919 055"
-    }
-  ]
+  "contacts" : [ {
+    "name" : "ACDC",
+    "surname" : "Az",
+    "address" : "Az",
+    "phone" : "+996 500 919 055"
+  }, {
+    "name" : "Az",
+    "surname" : "Az",
+    "address" : "Az",
+    "phone" : "+996 500 919 555"
+  }, {
+    "name" : "Qe",
+    "surname" : "Qe",
+    "address" : "Qe",
+    "phone" : "+996 500 919 055"
+  } ]
 }
