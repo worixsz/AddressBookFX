@@ -1,33 +1,28 @@
 package databil.ui;
 
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
-import model.Contact;
+import javafx.scene.layout.StackPane;
 import repository.CheckActionMove;
 import repository.CreateContactMove;
 
-import java.util.List;
+public class MainControlPane extends StackPane {
 
-public class MainControlPane extends GridPane {
+    private final Button newContactButton;
+    private final NewContactForm newContactForm;
 
-    private final CreateContactMove createContactMove;
-    private List<Contact> contacts;
-    private final CheckActionMove checkActionMove;
+    public MainControlPane(CreateContactMove contactService, CheckActionMove checkActionMove) {
+        newContactButton = new Button("New Contact");
 
-    public MainControlPane() {
-        this.createContactMove = new CreateContactMove();
-        this.checkActionMove = new CheckActionMove();
 
-        ButtonBar buttonBar = new ButtonBar();
-        Button newContactButton = new Button("New Contact");
-        buttonBar.getButtons().add(newContactButton);
+        newContactForm = new NewContactForm(contactService, checkActionMove);
+        newContactForm.setVisible(false);
 
-        this.add(buttonBar, 0, 0);
+        this.getChildren().addAll(newContactButton, newContactForm);
 
-        newContactButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
-            add(new NewContactForm(createContactMove, checkActionMove), 0, 1);
+        newContactButton.setOnAction(e -> {
+            newContactButton.setVisible(false);
+            newContactForm.setVisible(true);
         });
     }
+
 }
