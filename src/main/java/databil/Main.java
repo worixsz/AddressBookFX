@@ -25,7 +25,7 @@ public class Main extends Application {
         this.searchActionByPrefixMove = new SearchActionByPrefixMove();
 
 
-        Scene scene = new Scene(new MainControlPane(contactService, checkActionMove, searchActionMove, searchActionByPrefixMove), 440, 500);
+        Scene scene = new Scene(new MainControlPane(contactService, checkActionMove, searchActionMove, searchActionByPrefixMove), 500, 600);
         stage.setScene(scene);
         stage.show();
     }

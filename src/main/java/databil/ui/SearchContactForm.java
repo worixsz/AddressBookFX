@@ -2,7 +2,9 @@ package databil.ui;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import model.Contact;
 import repository.CheckActionMove;
 import repository.SearchActionMove;
@@ -29,28 +31,31 @@ public class SearchContactForm extends GridPane {
         this.searchByPrefix = searchByPrefix;
         this.checkActionMove = checkActionMove1;
 
-        this.setPadding(new Insets(10));
-        this.setHgap(10);
-        this.setVgap(10);
+        this.setPadding(new Insets(20));
+        this.setHgap(20);
+        this.setVgap(20);
+        this.setStyle("-fx-background-color: #2C3E50; -fx-font-family: 'Segoe UI', sans-serif; -fx-border-radius: 15px;");
 
         resultArea.setEditable(false);
+        resultArea.setWrapText(true);
+        resultArea.setStyle("-fx-background-color: #BDC3C7; -fx-border-radius: 10px; -fx-font-size: 14px; -fx-padding: 15px; -fx-text-fill: #333333;");
 
-        Label nameLabel = new Label("Search by Name:");
-        Button searchByNameButton = new Button("Search");
+        // Update the label and button fonts to be slightly thicker
+        Label nameLabel = createStyledLabel("Search by Name:");
+        Button searchByNameButton = createStyledButton("Search");
         searchByNameButton.setOnAction(e -> performSearch("name"));
 
-        Label surnameLabel = new Label("Search by Surname:");
-        Button searchBySurnameButton = new Button("Search");
+        Label surnameLabel = createStyledLabel("Search by Surname:");
+        Button searchBySurnameButton = createStyledButton("Search");
         searchBySurnameButton.setOnAction(e -> performSearch("surname"));
 
-        Label addressLabel = new Label("Search by Address:");
-        Button searchByAddressButton = new Button("Search");
+        Label addressLabel = createStyledLabel("Search by Address:");
+        Button searchByAddressButton = createStyledButton("Search");
         searchByAddressButton.setOnAction(e -> performSearch("address"));
 
-        Label phoneLabel = new Label("Search by Phone:");
-        Button searchByPhoneButton = new Button("Search");
+        Label phoneLabel = createStyledLabel("Search by Phone:");
+        Button searchByPhoneButton = createStyledButton("Search");
         searchByPhoneButton.setOnAction(e -> performSearch("phone"));
-
 
         searchByPhoneField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.startsWith("+996 ")) {
@@ -70,6 +75,7 @@ public class SearchContactForm extends GridPane {
         List<Contact> results;
 
         try {
+            // Validate inputs and search for contact
             switch (searchType) {
                 case "name" -> {
                     input = searchByNameField.getText();
@@ -86,7 +92,6 @@ public class SearchContactForm extends GridPane {
                 case "phone" -> {
                     input = searchByPhoneField.getText();
                     checkActionMove.checkForValidPhoneNumber(input);
-
                     if (input.startsWith("+996 ")) {
                         input = input.substring(5);
                     }
@@ -99,6 +104,7 @@ public class SearchContactForm extends GridPane {
                 return;
             }
 
+            // Perform search based on the type
             switch (searchType) {
                 case "name" -> results = searchActionMove.searchContactByName(input);
                 case "surname" -> results = searchActionMove.searchContactBySurname(input);
@@ -148,5 +154,21 @@ public class SearchContactForm extends GridPane {
         }
 
         resultArea.setText(resultsText.toString());
+    }
+
+    private Label createStyledLabel(String text) {
+        Label label = new Label(text);
+        label.setFont(Font.font("Segoe UI", javafx.scene.text.FontWeight.BOLD, 14));
+        label.setTextFill(Color.WHITE);
+        return label;
+    }
+
+    private Button createStyledButton(String text) {
+        Button button = new Button(text);
+        button.setStyle("-fx-background-color: #34495E; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-background-radius: 12px; -fx-border-color: #BDC3C7;");
+        button.setPrefWidth(100);
+        button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: #2C3E50; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-background-radius: 12px;"));
+        button.setOnMouseExited(e -> button.setStyle("-fx-background-color: #34495E; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-background-radius: 12px;"));
+        return button;
     }
 }
