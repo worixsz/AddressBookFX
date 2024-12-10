@@ -40,10 +40,12 @@ public class SearchActionByPrefixMove implements SearchActionByPrefix {
 
     @Override
     public List<Contact> findByPhonePrefix(String phonePrefix) {
-        String withoutCountryCode = phonePrefix.replaceFirst("^\\+996\\s*", "");
         List<Contact> contacts = fileService.read();
+        String cleanPhonePrefix = phonePrefix.replace("+996 ", "");
+
         return contacts.stream()
-                .filter(contact -> contact.getPhone().startsWith("+996 " + withoutCountryCode))
+                .filter(contact -> contact.getPhone().startsWith("+996 " + cleanPhonePrefix))
                 .toList();
     }
+
 }
