@@ -98,11 +98,6 @@ public class CheckActionMove implements CheckAction {
 
     }
 
-    @Override
-    public void checkStringForEmpty(String input) {
-        if (input.trim().isEmpty()) {
-            throw new InputMismatchException("The input cannot be empty.");
-        }
-    }
+
 }
 
