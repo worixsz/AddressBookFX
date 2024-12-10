@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface SearchActionByPrefix {
 
-    void findByNamePrefix(List<Contact> contacts, String namePrefix);
+    List<Contact> findByNamePrefix(String namePrefix);
 
     void findBySurnamePrefix(List<Contact> contacts, String surnamePrefix);
 

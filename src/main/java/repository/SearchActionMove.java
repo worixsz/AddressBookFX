@@ -1,5 +1,6 @@
 package repository;
 
+import fileService.FileService;
 import model.Contact;
 import service.SearchAction;
 
@@ -7,6 +8,7 @@ import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class SearchActionMove implements SearchAction {
 
@@ -14,34 +16,25 @@ public class SearchActionMove implements SearchAction {
     Scanner SC = new Scanner(System.in);
     private final SearchActionByPrefixMove searchByPrefix;
     private final CheckActionMove checkActionMove;
+    private final FileService fileService;
+
 
     public SearchActionMove() {
+        fileService = new FileService();
         searchByPrefix = new SearchActionByPrefixMove();
         checkActionMove = new CheckActionMove();
     }
 
     @Override
-    public List<Contact> searchContactByName(List<Contact> contacts) {
-        List<Contact> foundContacts = new ArrayList<>();
-        try {
-            System.out.print("Enter name to search: ");
-            String next = SC.nextLine();
-            checkActionMove.checkStringForEmpty(next);
-            foundContacts = contacts.stream()
-                    .filter(contact -> contact.getName().equals(next))
-                    .toList();
-            if (!foundContacts.isEmpty()) {
-
-                foundContacts.forEach(contact -> System.out.println("🔍 Contact Found: " + contact));
-            } else {
-                System.out.println("❗No contact found with the such name: " + next);
-                searchByPrefix.findByNamePrefix(contacts, next);
-            }
-        } catch (InputMismatchException e) {
-            System.err.print("❌ Invalid input. Please enter the name to search.\n");
-            e.printStackTrace();
+    public List<Contact> searchContactByName(String name) {
+        List<Contact> existingContacts = fileService.read();
+        if (existingContacts == null || existingContacts.isEmpty()) {
+            return List.of();
         }
-        return foundContacts;
+
+        return existingContacts.stream()
+                .filter(contact -> contact.getName().equalsIgnoreCase(name))
+                .collect(Collectors.toList());
     }
 
 

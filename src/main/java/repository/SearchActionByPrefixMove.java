@@ -1,32 +1,48 @@
 package repository;
 
+import fileService.FileService;
 import model.Contact;
 import service.SearchActionByPrefix;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
 public class SearchActionByPrefixMove implements SearchActionByPrefix {
 
+    private final FileService fileService;
+
+    public SearchActionByPrefixMove() {
+        this.fileService = new FileService();
+    }
+
     @Override
-    public void findByNamePrefix(List<Contact> contacts, String namePrefix) {
+    public List<Contact> findByNamePrefix(String namePrefix) {
+        List<Contact> filteredList = new ArrayList<>();
         try {
-            System.out.println("Trying to find similar contacts by name...");
-            List<Contact> filteredList = contacts.stream()
+            List<Contact> contacts = fileService.read();
+            if (contacts == null || contacts.isEmpty()) {
+                System.out.println("❗No contacts available to search.");
+                return contacts;
+            }
+
+
+            filteredList = contacts.stream()
                     .filter(c -> c.getName().startsWith(namePrefix))
                     .toList();
+
             if (filteredList.isEmpty()) {
-                System.out.println("❗The are not similar contacts by name: " + namePrefix);
+                System.out.println("❗There are no similar contacts by name: " + namePrefix);
             } else {
                 filteredList.forEach(smContact -> System.out.println("🔍 Similar contact: " + smContact));
             }
-        } catch (NoSuchElementException e) {
+        } catch (Exception e) {
             System.err.println("❗An error occurred while searching for contacts: " + e.getMessage());
             e.printStackTrace();
         }
-
-
+        return filteredList;
     }
+
 
     @Override
     public void findBySurnamePrefix(List<Contact> contacts, String surnamePrefix) {
