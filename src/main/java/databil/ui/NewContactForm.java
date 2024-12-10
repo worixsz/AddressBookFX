@@ -22,7 +22,6 @@ public class NewContactForm extends GridPane {
     public NewContactForm(CreateContactMove contactService, CheckActionMove checkActionMove) {
         this.contacts = new Contact();
 
-        // Создание элементов формы
         Label nameLabel = new Label("Name");
         Label surnameLabel = new Label("Surname");
         Label addressLabel = new Label("Address");
@@ -33,13 +32,11 @@ public class NewContactForm extends GridPane {
         TextField addressField = new TextField();
         TextField phoneField = new TextField();
 
-        // Метки для ошибок
         Label nameErrorLabel = new Label();
         Label surnameErrorLabel = new Label();
         Label addressErrorLabel = new Label();
         Label phoneErrorLabel = new Label();
 
-        // Стили для ошибок
         nameErrorLabel.setStyle("-fx-text-fill: red;");
         surnameErrorLabel.setStyle("-fx-text-fill: red;");
         addressErrorLabel.setStyle("-fx-text-fill: red;");
@@ -48,7 +45,6 @@ public class NewContactForm extends GridPane {
         Button saveButton = new Button("Save");
         Button cancelButton = new Button("Cancel");
 
-        // Размещение элементов на GridPane
         add(nameLabel, 0, 0);
         add(nameField, 1, 0);
         add(nameErrorLabel, 2, 0);

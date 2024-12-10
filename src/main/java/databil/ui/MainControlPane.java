@@ -19,7 +19,7 @@ public class MainControlPane extends StackPane {
 
         this.getChildren().addAll(newContactButton, newContactForm);
 
-        newContactButton.setOnAction(e -> {
+        newContactButton.setOnAction(_ -> {
             newContactButton.setVisible(false);
             newContactForm.setVisible(true);
         });
