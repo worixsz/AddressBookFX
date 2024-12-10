@@ -89,7 +89,7 @@ public class CheckActionMove implements CheckAction {
     @Override
     public void checkForValidPhoneNumber(String number) {
         String phoneRegex = "^([+]?\\d{1,3}[\\s\\-]?\\(?\\d{1,4}\\)?[\\s\\-]?\\d{1,4}[\\s\\-]?\\d{1,4})$";
-
+        number = number.replaceAll("\\s+", "");
         if (number.trim().isEmpty()) {
             throw new InputMismatchException("The input cannot be empty.");
         } else if (!number.matches(phoneRegex)) {
