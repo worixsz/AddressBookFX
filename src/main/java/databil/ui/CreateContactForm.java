@@ -15,11 +15,11 @@ import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
 
-public class NewContactForm extends GridPane {
+public class CreateContactForm extends GridPane {
 
     private final Contact contacts;
 
-    public NewContactForm(CreateContactMove contactService, CheckActionMove checkActionMove) {
+    public CreateContactForm(CreateContactMove contactService, CheckActionMove checkActionMove) {
         this.contacts = new Contact();
 
         Label nameLabel = new Label("Name");
