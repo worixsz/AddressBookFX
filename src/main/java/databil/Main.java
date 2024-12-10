@@ -19,7 +19,7 @@ public class Main extends Application {
         this.checkActionMove = new CheckActionMove();
 
 
-        Scene scene = new Scene(new MainControlPane(contactService, checkActionMove), 640, 480);
+        Scene scene = new Scene(new MainControlPane(contactService, checkActionMove), 440, 500);
         stage.setScene(scene);
         stage.show();
     }
