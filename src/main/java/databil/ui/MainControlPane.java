@@ -6,6 +6,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import repository.CheckActionMove;
 import repository.CreateContactMove;
+import repository.SearchActionMove;
 import repository.SearchActionByPrefixMove;
 
 public class MainControlPane extends StackPane {
@@ -13,13 +14,14 @@ public class MainControlPane extends StackPane {
     private final CreateContactForm createContactForm;
     private final SearchContactForm searchContactForm;
 
-    public MainControlPane(CreateContactMove contactService, CheckActionMove checkActionMove) {
+    public MainControlPane(CreateContactMove contactService, CheckActionMove checkActionMove, SearchActionMove searchActionMove, SearchActionByPrefixMove searchActionByPrefixMove) {
 
-        this.searchContactForm = new SearchContactForm();
+        this.createContactForm = new CreateContactForm(contactService, checkActionMove);
+        this.searchContactForm = new SearchContactForm(searchActionMove, searchActionByPrefixMove, checkActionMove);
+
         Button createButton = new Button("CREATE CONTACT");
         Button searchButton = new Button("SEARCH CONTACT");
 
-        createContactForm = new CreateContactForm(contactService, checkActionMove);
         createContactForm.setVisible(false);
         searchContactForm.setVisible(false);
 
