@@ -20,7 +20,6 @@ public interface CheckAction {
 
     void checkForValidPhoneNumber(String number);
 
-    void checkStringForEmpty(String input);
 
 
 }

@@ -6,11 +6,11 @@ import java.util.List;
 
 public interface SearchActionByPrefix {
 
-    void findByNamePrefix(List<Contact> contacts, String namePrefix);
+    List<Contact> findByNamePrefix(String namePrefix);
 
-    void findBySurnamePrefix(List<Contact> contacts, String surnamePrefix);
+    List<Contact> findBySurnamePrefix(String surnamePrefix);
 
-    void findByAddressPrefix(List<Contact> contacts, String addressPrefix);
+    List<Contact> findByAddressPrefix(String addressPrefix);
 
-    void findByPhonePrefix(List<Contact> contacts, String phonePrefix);
+    List<Contact> findByPhonePrefix(String phonePrefix);
 }
