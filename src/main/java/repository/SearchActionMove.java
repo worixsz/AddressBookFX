@@ -10,7 +10,6 @@ public class SearchActionMove implements SearchAction {
 
     private final FileService fileService;
 
-
     public SearchActionMove() {
         fileService = new FileService();
 
