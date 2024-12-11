@@ -24,15 +24,12 @@ public class CreateContactForm extends VBox {
     public CreateContactForm(CreateContactMove contactService, CheckActionMove checkActionMove) {
         this.contacts = new Contact();
 
-        // Устанавливаем стили для панели
         this.setAlignment(Pos.CENTER);
         this.setStyle("-fx-background-color: #2C3E50; -fx-font-family: 'Segoe UI', sans-serif;");
-        this.setSpacing(10); // Задаем расстояние между элементами
+        this.setSpacing(10);
 
-        // Добавляем отступы (контейнерные) с увеличением отступов по бокам
-        this.setPadding(new Insets(20, 100, 20, 100)); // сверху, справа, снизу, слева
+        this.setPadding(new Insets(20, 100, 20, 100));
 
-        // Сообщение об успешном сохранении
         Text successMessage = new Text();
         successMessage.setFont(Font.font("Segoe UI", 14));
         successMessage.setFill(Color.LIMEGREEN);
@@ -57,11 +54,9 @@ public class CreateContactForm extends VBox {
         Button saveButton = createStyledButton("Save");
         Button cancelButton = createStyledButton("Cancel");
 
-        // Контейнер для кнопок
         HBox buttonBox = new HBox(10, saveButton, cancelButton);
         buttonBox.setAlignment(Pos.CENTER);
 
-        // Добавление компонентов в форму
         this.getChildren().addAll(
                 nameLabel, nameField, nameErrorLabel,
                 surnameLabel, surnameField, surnameErrorLabel,
@@ -71,15 +66,15 @@ public class CreateContactForm extends VBox {
                 successMessage
         );
 
-        // При изменении номера телефона добавляем +996, если его нет
+
         phoneField.textProperty().addListener((observable, oldValue, newValue) -> {
-            // Добавляем код страны только если он отсутствует
-            if (!newValue.startsWith("+996")) {
-                phoneField.setText("+996" + newValue.replaceAll("[^\\d]", ""));  // Убираем все нецифровые символы
+
+            if (!newValue.startsWith("+996 ")) {
+                phoneField.setText("+996" + " ");
             }
         });
 
-        // Логика обработки нажатий
+
         saveButton.addEventHandler(MOUSE_CLICKED, e -> {
             boolean isValid = true;
 
@@ -121,9 +116,9 @@ public class CreateContactForm extends VBox {
             try {
                 String phone = phoneField.getText();
 
-                // Убираем код страны перед сохранением, если он был добавлен
-                if (phone.startsWith("+996")) {
-                    phone = phone.substring(4);  // Убираем +996
+
+                if (phone.startsWith("+996 ")) {
+                    phone = phone.substring(5);
                 }
 
                 checkActionMove.checkForValidPhoneNumber(phone);
