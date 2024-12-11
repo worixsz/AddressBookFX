@@ -5,41 +5,46 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import repository.CheckActionMove;
-import repository.CreateContactMove;
-import repository.SearchActionMove;
-import repository.SearchActionByPrefixMove;
+import repository.*;
 
 public class MainControlPane extends StackPane {
 
     private final CreateContactForm createContactForm;
     private final SearchContactForm searchContactForm;
+    private final UpdateContactForm updateContactForm;
 
-    public MainControlPane(CreateContactMove contactService, CheckActionMove checkActionMove, SearchActionMove searchActionMove, SearchActionByPrefixMove searchActionByPrefixMove) {
-
+    public MainControlPane(CreateContactMove contactService,
+                           CheckActionMove checkActionMove,
+                           SearchActionMove searchActionMove,
+                           SearchActionByPrefixMove searchActionByPrefixMove,
+                           UpdateActionMove updateActionMove) {
+        this.updateContactForm = new UpdateContactForm(updateActionMove, searchActionMove, checkActionMove);
         this.createContactForm = new CreateContactForm(contactService, checkActionMove);
         this.searchContactForm = new SearchContactForm(searchActionMove, searchActionByPrefixMove, checkActionMove);
 
         Button createButton = new Button("CREATE CONTACT");
         Button searchButton = new Button("SEARCH CONTACT");
+        Button updateButton = new Button("UPDATE CONTACT");
         Button backButton = createStyledButton("BACK");
 
         createContactForm.setVisible(false);
         searchContactForm.setVisible(false);
+        updateContactForm.setVisible(false);
         backButton.setVisible(false);
 
-        VBox buttonBox = new VBox(10, createButton, searchButton);
+        VBox buttonBox = new VBox(15, createButton, searchButton, updateButton);
         buttonBox.setAlignment(Pos.TOP_CENTER);
 
         StackPane.setAlignment(backButton, Pos.BOTTOM_RIGHT);
         StackPane.setMargin(backButton, new Insets(10));
 
-        this.getChildren().addAll(buttonBox, createContactForm, searchContactForm, backButton);
+        this.getChildren().addAll(buttonBox, createContactForm, searchContactForm, updateContactForm, backButton);
 
         createButton.setOnAction(_ -> {
             buttonBox.setVisible(false);
             createContactForm.setVisible(true);
             searchContactForm.setVisible(false);
+            updateContactForm.setVisible(false);
             backButton.setVisible(true);
         });
 
@@ -47,6 +52,15 @@ public class MainControlPane extends StackPane {
             buttonBox.setVisible(false);
             searchContactForm.setVisible(true);
             createContactForm.setVisible(false);
+            updateContactForm.setVisible(false);
+            backButton.setVisible(true);
+        });
+
+        updateButton.setOnAction(_ -> {
+            buttonBox.setVisible(false);
+            searchContactForm.setVisible(false);
+            createContactForm.setVisible(false);
+            updateContactForm.setVisible(true);
             backButton.setVisible(true);
         });
 
@@ -54,6 +68,7 @@ public class MainControlPane extends StackPane {
             buttonBox.setVisible(true);
             createContactForm.setVisible(false);
             searchContactForm.setVisible(false);
+            updateContactForm.setVisible(false);
             backButton.setVisible(false);
         });
     }
