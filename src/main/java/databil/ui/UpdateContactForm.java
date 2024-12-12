@@ -141,8 +141,7 @@ public class UpdateContactForm extends GridPane {
         try {
             if (!phone2.isEmpty()) {
                 checkActionMove.checkForValidPhoneNumber(phone2);
-                String validNumber = checkActionMove.formatPhoneNumber(phone2);
-                phone2 = validNumber;
+                phone2 = checkActionMove.formatPhoneNumber(phone2);
             }
 
             checkActionMove.checkForValidName(name);
