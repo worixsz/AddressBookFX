@@ -108,7 +108,7 @@ public class UpdateContactForm extends GridPane {
         }
 
         try {
-            phone = normalizePhoneNumber(phone); // Нормализуем номер перед поиском
+            phone = normalizePhoneNumber(phone);
             List<Contact> contacts = updateByPhoneMove.findAllByPhone(phone);
 
             if (contacts.isEmpty()) {
@@ -142,10 +142,13 @@ public class UpdateContactForm extends GridPane {
         String phone2 = phoneFieldTwo.getText().trim();
 
         try {
-            if (!phone2.isEmpty()) {
-                phone2 = normalizePhoneNumber(phone2);
-                checkActionMove.checkForValidPhoneNumber(phone2);
+            if (phone2.isEmpty()) {
+                showAlert(Alert.AlertType.WARNING, "Error", "Please enter a new phone number.");
+                return;
             }
+
+            phone2 = normalizePhoneNumber(phone2);
+            checkActionMove.checkForValidPhoneNumber(phone2);
 
             checkActionMove.checkForValidName(name);
             checkActionMove.checkForValidSurname(surname);
@@ -155,7 +158,7 @@ public class UpdateContactForm extends GridPane {
                     name.isEmpty() ? selectedContact.getName() : name,
                     surname.isEmpty() ? selectedContact.getSurname() : surname,
                     address.isEmpty() ? selectedContact.getAddress() : address,
-                    phone2.isEmpty() ? selectedContact.getPhone() : phone2
+                    phone2
             );
 
             updateByPhoneMove.update(selectedContact, updatedContact);
@@ -166,6 +169,7 @@ public class UpdateContactForm extends GridPane {
             showAlert(Alert.AlertType.ERROR, "Validation Error", e.getMessage());
         }
     }
+
 
 
     private Label createStyledLabel(String text) {
