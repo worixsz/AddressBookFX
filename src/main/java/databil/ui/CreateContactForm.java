@@ -35,7 +35,6 @@ public class CreateContactForm extends VBox {
         successMessage.setFill(Color.LIMEGREEN);
         successMessage.setVisible(false);
 
-        // Создание и стилизация компонентов
         Label nameLabel = createStyledLabel("Name");
         Label surnameLabel = createStyledLabel("Surname");
         Label addressLabel = createStyledLabel("Address");

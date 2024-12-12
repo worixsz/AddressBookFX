@@ -2,6 +2,8 @@ package model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.Objects;
+
 public class Contact {
 
     @JsonProperty("name")
@@ -26,6 +28,19 @@ public class Contact {
         this.surname = surname;
         this.address = address;
         this.phone = phone;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Contact contact = (Contact) obj;
+        return phone.replaceAll("\\s", "").equals(contact.phone.replaceAll("\\s", ""));
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(phone.replaceAll("\\s", ""));
     }
 
 
