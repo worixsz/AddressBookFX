@@ -98,6 +98,19 @@ public class CheckActionMove implements CheckAction {
 
     }
 
+    @Override
+    public String normalizePhoneNumber(String phone) {
+        String cleanPhone = phone.replaceAll("\\D", "");
+
+
+        if (cleanPhone.length() != 12 || !cleanPhone.startsWith("996")) {
+            throw new InputMismatchException("Phone format incorrect.");
+        }
+
+        return "+996 " + cleanPhone.substring(3, 6) + " " + cleanPhone.substring(6, 9) + " " + cleanPhone.substring(9);
+    }
+
+
 
 }
 
