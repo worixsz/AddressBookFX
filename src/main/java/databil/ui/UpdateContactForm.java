@@ -15,6 +15,7 @@ import java.util.InputMismatchException;
 import java.util.List;
 
 import static javafx.scene.input.MouseEvent.MOUSE_CLICKED;
+
 public class UpdateContactForm extends GridPane {
 
     private final TextField searchField;
@@ -100,19 +101,26 @@ public class UpdateContactForm extends GridPane {
 
     private void handleSearch() {
         String phone = searchField.getText().trim();
+
         if (phone.isEmpty()) {
             showAlert(Alert.AlertType.WARNING, "Error", "Please enter a phone number.");
             return;
         }
 
-        List<Contact> contacts = updateByPhoneMove.findAllByPhone(phone);
+        try {
+            phone = normalizePhoneNumber(phone); // Нормализуем номер перед поиском
+            List<Contact> contacts = updateByPhoneMove.findAllByPhone(phone);
 
-        if (contacts.isEmpty()) {
-            showAlert(Alert.AlertType.INFORMATION, "No Results", "No contacts found for the given phone number.");
-        } else {
-            contactListView.getItems().setAll(contacts);
+            if (contacts.isEmpty()) {
+                showAlert(Alert.AlertType.INFORMATION, "No Results", "No contacts found for the given phone number.");
+            } else {
+                contactListView.getItems().setAll(contacts);
+            }
+        } catch (InputMismatchException e) {
+            showAlert(Alert.AlertType.ERROR, "Validation Error", e.getMessage());
         }
     }
+
 
     private void populateFields(Contact contact) {
         nameField.setText(contact.getName());
@@ -131,17 +139,12 @@ public class UpdateContactForm extends GridPane {
         String name = nameField.getText().trim();
         String surname = surnameField.getText().trim();
         String address = addressField.getText().trim();
-        String phone2 = phoneFieldTwo.getText().trim().replace("+996 ", ""); // Удаление префикса +996
-
-        if (name.isEmpty() && surname.isEmpty() && address.isEmpty() && phone2.isEmpty()) {
-            showAlert(Alert.AlertType.WARNING, "No Changes", "Please modify at least one field.");
-            return;
-        }
+        String phone2 = phoneFieldTwo.getText().trim();
 
         try {
             if (!phone2.isEmpty()) {
+                phone2 = normalizePhoneNumber(phone2);
                 checkActionMove.checkForValidPhoneNumber(phone2);
-                phone2 = checkActionMove.formatPhoneNumber(phone2);
             }
 
             checkActionMove.checkForValidName(name);
@@ -196,4 +199,17 @@ public class UpdateContactForm extends GridPane {
         phoneFieldTwo.clear();
         contactListView.getItems().clear();
     }
+
+
+    private String normalizePhoneNumber(String phone) {
+        String cleanPhone = phone.replaceAll("\\D", "");
+
+
+        if (cleanPhone.length() != 12 || !cleanPhone.startsWith("996")) {
+            throw new InputMismatchException("Phone format incorrect.");
+        }
+
+        return "+996 " + cleanPhone.substring(3, 6) + " " + cleanPhone.substring(6, 9) + " " + cleanPhone.substring(9);
+    }
+
 }
