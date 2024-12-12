@@ -20,6 +20,7 @@ public interface CheckAction {
 
     void checkForValidPhoneNumber(String number);
 
+    String normalizePhoneNumber(String phone);
 
 
 }

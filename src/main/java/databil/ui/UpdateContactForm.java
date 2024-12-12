@@ -108,7 +108,7 @@ public class UpdateContactForm extends GridPane {
         }
 
         try {
-            phone = normalizePhoneNumber(phone);
+            phone = checkActionMove.normalizePhoneNumber(phone);
             List<Contact> contacts = updateByPhoneMove.findAllByPhone(phone);
 
             if (contacts.isEmpty()) {
@@ -147,7 +147,7 @@ public class UpdateContactForm extends GridPane {
                 return;
             }
 
-            phone2 = normalizePhoneNumber(phone2);
+            phone2 = checkActionMove.normalizePhoneNumber(phone2);
             checkActionMove.checkForValidPhoneNumber(phone2);
 
             checkActionMove.checkForValidName(name);
@@ -169,7 +169,6 @@ public class UpdateContactForm extends GridPane {
             showAlert(Alert.AlertType.ERROR, "Validation Error", e.getMessage());
         }
     }
-
 
 
     private Label createStyledLabel(String text) {
@@ -204,16 +203,5 @@ public class UpdateContactForm extends GridPane {
         contactListView.getItems().clear();
     }
 
-
-    private String normalizePhoneNumber(String phone) {
-        String cleanPhone = phone.replaceAll("\\D", "");
-
-
-        if (cleanPhone.length() != 12 || !cleanPhone.startsWith("996")) {
-            throw new InputMismatchException("Phone format incorrect.");
-        }
-
-        return "+996 " + cleanPhone.substring(3, 6) + " " + cleanPhone.substring(6, 9) + " " + cleanPhone.substring(9);
-    }
 
 }
