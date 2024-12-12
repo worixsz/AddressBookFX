@@ -12,9 +12,9 @@ import repository.CheckActionMove;
 import repository.UpdateByPhoneMove;
 
 import java.util.InputMismatchException;
+import java.util.List;
 
 import static javafx.scene.input.MouseEvent.MOUSE_CLICKED;
-
 public class UpdateContactForm extends GridPane {
 
     private final TextField searchField;
@@ -69,6 +69,12 @@ public class UpdateContactForm extends GridPane {
         Label phoneTwoLabel = createStyledLabel("Enter a new phone number:");
         phoneFieldTwo = new TextField();
 
+        phoneFieldTwo.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.startsWith("+996 ")) {
+                phoneFieldTwo.setText("+996 ");
+            }
+        });
+
         Button updateButton = createStyledButton("Update Contact");
         updateButton.addEventHandler(MOUSE_CLICKED, e -> handleUpdate());
 
@@ -99,12 +105,12 @@ public class UpdateContactForm extends GridPane {
             return;
         }
 
-        Contact contact = updateByPhoneMove.findByPhone(phone);
+        List<Contact> contacts = updateByPhoneMove.findAllByPhone(phone);
 
-        if (contact == null) {
+        if (contacts.isEmpty()) {
             showAlert(Alert.AlertType.INFORMATION, "No Results", "No contacts found for the given phone number.");
         } else {
-            contactListView.getItems().setAll(contact);
+            contactListView.getItems().setAll(contacts);
         }
     }
 
@@ -125,7 +131,7 @@ public class UpdateContactForm extends GridPane {
         String name = nameField.getText().trim();
         String surname = surnameField.getText().trim();
         String address = addressField.getText().trim();
-        String phone2 = phoneFieldTwo.getText().trim();
+        String phone2 = phoneFieldTwo.getText().trim().replace("+996 ", ""); // Удаление префикса +996
 
         if (name.isEmpty() && surname.isEmpty() && address.isEmpty() && phone2.isEmpty()) {
             showAlert(Alert.AlertType.WARNING, "No Changes", "Please modify at least one field.");
@@ -135,8 +141,7 @@ public class UpdateContactForm extends GridPane {
         try {
             if (!phone2.isEmpty()) {
                 checkActionMove.checkForValidPhoneNumber(phone2);
-                String validNumber = checkActionMove.formatPhoneNumber(phone2);
-                phone2 = validNumber;
+                phone2 = checkActionMove.formatPhoneNumber(phone2);
             }
 
             checkActionMove.checkForValidName(name);

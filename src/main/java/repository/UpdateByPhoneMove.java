@@ -22,14 +22,22 @@ public class UpdateByPhoneMove {
         fileRepository.write(contacts);
     }
 
-
     public Contact findByPhone(String phone) {
         for (Contact contact : contacts) {
             if (contact.getPhone().equals(phone)) {
                 return contact;
             }
         }
-
         return null;
+    }
+
+    public List<Contact> findAllByPhone(String phone) {
+        List<Contact> matchingContacts = new ArrayList<>();
+        for (Contact contact : contacts) {
+            if (contact.getPhone().equals(phone)) {
+                matchingContacts.add(contact);
+            }
+        }
+        return matchingContacts;
     }
 }
