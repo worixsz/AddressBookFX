@@ -12,6 +12,7 @@ import repository.CheckActionMove;
 import repository.UpdateByPhoneMove;
 
 import java.util.InputMismatchException;
+import java.util.List;
 
 import static javafx.scene.input.MouseEvent.MOUSE_CLICKED;
 
@@ -99,14 +100,15 @@ public class UpdateContactForm extends GridPane {
             return;
         }
 
-        Contact contact = updateByPhoneMove.findByPhone(phone);
+        List<Contact> contacts = updateByPhoneMove.findAllByPhone(phone);
 
-        if (contact == null) {
+        if (contacts.isEmpty()) {
             showAlert(Alert.AlertType.INFORMATION, "No Results", "No contacts found for the given phone number.");
         } else {
-            contactListView.getItems().setAll(contact);
+            contactListView.getItems().setAll(contacts);
         }
     }
+
 
     private void populateFields(Contact contact) {
         nameField.setText(contact.getName());
