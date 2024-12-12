@@ -40,7 +40,6 @@ public class SearchContactForm extends GridPane {
         resultArea.setWrapText(true);
         resultArea.setStyle("-fx-background-color: #BDC3C7; -fx-border-radius: 10px; -fx-font-size: 14px; -fx-padding: 15px; -fx-text-fill: #333333;");
 
-        // Update the label and button fonts to be slightly thicker
         Label nameLabel = createStyledLabel("Search by Name:");
         Button searchByNameButton = createStyledButton("Search");
         searchByNameButton.setOnAction(e -> performSearch("name"));
@@ -75,7 +74,6 @@ public class SearchContactForm extends GridPane {
         List<Contact> results;
 
         try {
-            // Validate inputs and search for contact
             switch (searchType) {
                 case "name" -> {
                     input = searchByNameField.getText();
@@ -104,7 +102,6 @@ public class SearchContactForm extends GridPane {
                 return;
             }
 
-            // Perform search based on the type
             switch (searchType) {
                 case "name" -> results = searchActionMove.searchContactByName(input);
                 case "surname" -> results = searchActionMove.searchContactBySurname(input);
