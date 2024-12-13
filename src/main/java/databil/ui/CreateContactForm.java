@@ -66,7 +66,7 @@ public class CreateContactForm extends VBox {
         );
 
 
-        phoneField.textProperty().addListener((observable, oldValue, newValue) -> {
+        phoneField.textProperty().addListener((_, _, newValue) -> {
 
             if (!newValue.startsWith("+996 ")) {
                 phoneField.setText("+996" + " ");
@@ -74,7 +74,7 @@ public class CreateContactForm extends VBox {
         });
 
 
-        saveButton.addEventHandler(MOUSE_CLICKED, e -> {
+        saveButton.addEventHandler(MOUSE_CLICKED, _ -> {
             boolean isValid = true;
 
             nameErrorLabel.setText("");
@@ -144,7 +144,7 @@ public class CreateContactForm extends VBox {
             }
         });
 
-        cancelButton.addEventHandler(MOUSE_CLICKED, e -> {
+        cancelButton.addEventHandler(MOUSE_CLICKED, _ -> {
             nameField.clear();
             surnameField.clear();
             addressField.clear();
@@ -173,9 +173,23 @@ public class CreateContactForm extends VBox {
 
     private Button createStyledButton(String text) {
         Button button = new Button(text);
-        button.setStyle("-fx-background-color: #34495E; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-background-radius: 12px;");
-        button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: #2C3E50; -fx-text-fill: white;"));
-        button.setOnMouseExited(e -> button.setStyle("-fx-background-color: #34495E; -fx-text-fill: white;"));
+        button.setStyle("-fx-background-color: #34495E;" +
+                " -fx-text-fill: white; -fx-font-weight: bold;" +
+                " -fx-font-size: 12px; -fx-background-radius: 6px;" +
+                " -fx-border-radius: 5px;");
+        button.setPrefWidth(80);
+        button.setPrefHeight(20);
+
+        button.setOnMouseEntered(_ -> button.setStyle("-fx-background-color: #2C3E50;" +
+                " -fx-text-fill: white; -fx-font-weight: bold;" +
+                " -fx-font-size: 12px; -fx-background-radius: 6px;"));
+        button.setOnMouseExited(_ -> button.setStyle("-fx-background-color: #34495E;" +
+                " -fx-text-fill: white; -fx-font-weight: bold;" +
+                " -fx-font-size: 12px; -fx-background-radius: 6px;"));
+        button.setOnMouseClicked(_ -> button.setStyle("-fx-background-color: #2C3E50;" +
+                " -fx-text-fill: white; -fx-font-weight: bold;" +
+                " -fx-font-size: 12px; -fx-background-radius: 6px;"));
         return button;
     }
+
 }
