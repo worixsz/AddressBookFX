@@ -42,21 +42,21 @@ public class SearchContactForm extends GridPane {
 
         Label nameLabel = createStyledLabel("Search by Name:");
         Button searchByNameButton = createStyledButton("Search");
-        searchByNameButton.setOnAction(e -> performSearch("name"));
+        searchByNameButton.setOnAction(_ -> performSearch("name"));
 
         Label surnameLabel = createStyledLabel("Search by Surname:");
         Button searchBySurnameButton = createStyledButton("Search");
-        searchBySurnameButton.setOnAction(e -> performSearch("surname"));
+        searchBySurnameButton.setOnAction(_ -> performSearch("surname"));
 
         Label addressLabel = createStyledLabel("Search by Address:");
         Button searchByAddressButton = createStyledButton("Search");
-        searchByAddressButton.setOnAction(e -> performSearch("address"));
+        searchByAddressButton.setOnAction(_ -> performSearch("address"));
 
         Label phoneLabel = createStyledLabel("Search by Phone:");
         Button searchByPhoneButton = createStyledButton("Search");
-        searchByPhoneButton.setOnAction(e -> performSearch("phone"));
+        searchByPhoneButton.setOnAction(_ -> performSearch("phone"));
 
-        searchByPhoneField.textProperty().addListener((observable, oldValue, newValue) -> {
+        searchByPhoneField.textProperty().addListener((_, _, newValue) -> {
             if (!newValue.startsWith("+996 ")) {
                 searchByPhoneField.setText("+996 ");
             }
@@ -112,9 +112,7 @@ public class SearchContactForm extends GridPane {
 
             displayResults(input, results, searchType);
 
-        } catch (InputMismatchException e) {
-            resultArea.setText("❌ " + e.getMessage());
-        } catch (IllegalArgumentException e) {
+        } catch (InputMismatchException | IllegalArgumentException e) {
             resultArea.setText("❌ " + e.getMessage());
         }
     }
@@ -164,8 +162,8 @@ public class SearchContactForm extends GridPane {
         Button button = new Button(text);
         button.setStyle("-fx-background-color: #34495E; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-background-radius: 12px; -fx-border-color: #BDC3C7;");
         button.setPrefWidth(100);
-        button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: #2C3E50; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-background-radius: 12px;"));
-        button.setOnMouseExited(e -> button.setStyle("-fx-background-color: #34495E; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-background-radius: 12px;"));
+        button.setOnMouseEntered(_ -> button.setStyle("-fx-background-color: #2C3E50; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-background-radius: 12px;"));
+        button.setOnMouseExited(_ -> button.setStyle("-fx-background-color: #34495E; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-background-radius: 12px;"));
         return button;
     }
 }
