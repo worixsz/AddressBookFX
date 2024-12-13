@@ -6,7 +6,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import javafx.scene.text.TextAlignment;
 import model.Contact;
 import repository.CheckActionMove;
 import repository.UpdateActionMove;
@@ -42,34 +41,34 @@ public class UpdateContactForm extends GridPane {
 
         searchFieldByName = new TextField();
         Button searchButtonName = createStyledButton("Search");
-        searchButtonName.addEventHandler(MOUSE_CLICKED, e -> handleSearchByName());
+        searchButtonName.addEventHandler(MOUSE_CLICKED, _ -> handleSearchByName());
         HBox searchByNameBox = createHorizontalBox("Search By Name:", searchFieldByName, searchButtonName);
         searchByNameBox.setAlignment(Pos.CENTER_RIGHT);
         searchByNameBox.setPadding(new Insets(10));
 
         searchFieldBySurname = new TextField();
         Button searchButtonSurname = createStyledButton("Search");
-        searchButtonSurname.addEventHandler(MOUSE_CLICKED, e -> handleSearchBySurname());
+        searchButtonSurname.addEventHandler(MOUSE_CLICKED, _ -> handleSearchBySurname());
         HBox searchBySurnameBox = createHorizontalBox("Search By Surname:", searchFieldBySurname, searchButtonSurname);
         searchBySurnameBox.setAlignment(Pos.CENTER_RIGHT);
         searchBySurnameBox.setPadding(new Insets(10));
 
 
         searchFieldByPhone = new TextField();
-        searchFieldByPhone.textProperty().addListener((observable, oldValue, newValue) -> {
+        searchFieldByPhone.textProperty().addListener((_, _, newValue) -> {
             if (!newValue.startsWith("+996 ")) {
                 searchFieldByPhone.setText("+996 ");
             }
         });
         Button searchButtonPhone = createStyledButton("Search");
-        searchButtonPhone.addEventHandler(MOUSE_CLICKED, e -> handleSearchByPhone());
+        searchButtonPhone.addEventHandler(MOUSE_CLICKED, _ -> handleSearchByPhone());
         HBox searchByPhoneBox = createHorizontalBox("Search By Phone:", searchFieldByPhone, searchButtonPhone);
         searchByPhoneBox.setAlignment(Pos.CENTER_RIGHT);
         searchByPhoneBox.setPadding(new Insets(10));
 
         searchFieldByAddress = new TextField();
         Button searchButtonAddress = createStyledButton("Search");
-        searchButtonAddress.addEventHandler(MOUSE_CLICKED, e -> handleSearchByAddress());
+        searchButtonAddress.addEventHandler(MOUSE_CLICKED, _ -> handleSearchByAddress());
         HBox searchByAddressBox = createHorizontalBox("Search By Address:", searchFieldByAddress, searchButtonAddress);
         searchByAddressBox.setAlignment(Pos.CENTER_RIGHT);
         searchByAddressBox.setPadding(new Insets(10));
@@ -77,7 +76,7 @@ public class UpdateContactForm extends GridPane {
 
         contactListView = new ListView<>();
         contactListView.setPrefHeight(100);
-        contactListView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+        contactListView.getSelectionModel().selectedItemProperty().addListener((_, _, newSelection) -> {
             if (newSelection != null) {
                 populateFields(newSelection);
             }
@@ -87,13 +86,13 @@ public class UpdateContactForm extends GridPane {
         surnameField = new TextField();
         addressField = new TextField();
         phoneFieldTwo = new TextField();
-        phoneFieldTwo.textProperty().addListener((observable, oldValue, newValue) -> {
+        phoneFieldTwo.textProperty().addListener((_, _, newValue) -> {
             if (!newValue.startsWith("+996 ")) {
                 phoneFieldTwo.setText("+996 ");
             }
         });
         Button updateButton = createStyledButton("UPDATE");
-        updateButton.addEventHandler(MOUSE_CLICKED, e -> handleUpdate());
+        updateButton.addEventHandler(MOUSE_CLICKED, _ -> handleUpdate());
 
         GridPane updateFields = new GridPane();
         updateFields.setHgap(10);
@@ -301,13 +300,13 @@ public class UpdateContactForm extends GridPane {
         button.setPrefWidth(80);
         button.setPrefHeight(20);
 
-        button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: #2C3E50;" +
+        button.setOnMouseEntered(_ -> button.setStyle("-fx-background-color: #2C3E50;" +
                 " -fx-text-fill: white; -fx-font-weight: bold;" +
                 " -fx-font-size: 12px; -fx-background-radius: 6px;"));
-        button.setOnMouseExited(e -> button.setStyle("-fx-background-color: #34495E;" +
+        button.setOnMouseExited(_ -> button.setStyle("-fx-background-color: #34495E;" +
                 " -fx-text-fill: white; -fx-font-weight: bold;" +
                 " -fx-font-size: 12px; -fx-background-radius: 6px;"));
-        button.setOnMouseClicked(e -> button.setStyle("-fx-background-color: #2C3E50;" +
+        button.setOnMouseClicked(_ -> button.setStyle("-fx-background-color: #2C3E50;" +
                 " -fx-text-fill: white; -fx-font-weight: bold;" +
                 " -fx-font-size: 12px; -fx-background-radius: 6px;"));
         return button;

@@ -167,13 +167,13 @@ public class SearchContactForm extends GridPane {
         button.setPrefWidth(80);
         button.setPrefHeight(20);
 
-        button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: #2C3E50;" +
+        button.setOnMouseEntered(_ -> button.setStyle("-fx-background-color: #2C3E50;" +
                 " -fx-text-fill: white; -fx-font-weight: bold;" +
                 " -fx-font-size: 12px; -fx-background-radius: 6px;"));
-        button.setOnMouseExited(e -> button.setStyle("-fx-background-color: #34495E;" +
+        button.setOnMouseExited(_ -> button.setStyle("-fx-background-color: #34495E;" +
                 " -fx-text-fill: white; -fx-font-weight: bold;" +
                 " -fx-font-size: 12px; -fx-background-radius: 6px;"));
-        button.setOnMouseClicked(e -> button.setStyle("-fx-background-color: #2C3E50;" +
+        button.setOnMouseClicked(_ -> button.setStyle("-fx-background-color: #2C3E50;" +
                 " -fx-text-fill: white; -fx-font-weight: bold;" +
                 " -fx-font-size: 12px; -fx-background-radius: 6px;"));
         return button;

@@ -27,7 +27,7 @@ public class MainControlPane extends StackPane {
         Button createButton = new Button("CREATE CONTACT");
         Button searchButton = new Button("SEARCH CONTACT");
         Button updateButton = new Button("UPDATE CONTACT");
-        Button backButton = createStyledButton("BACK");
+        Button backButton = createStyledButton();
 
         createContactForm.setVisible(false);
         searchContactForm.setVisible(false);
@@ -76,8 +76,8 @@ public class MainControlPane extends StackPane {
         });
     }
 
-    private Button createStyledButton(String text) {
-        Button button = new Button(text);
+    private Button createStyledButton() {
+        Button button = new Button("BACK");
         button.setStyle("-fx-background-color: #34495E;" +
                 " -fx-text-fill: white; -fx-font-weight: bold;" +
                 " -fx-font-size: 12px; -fx-background-radius: 6px;" +
