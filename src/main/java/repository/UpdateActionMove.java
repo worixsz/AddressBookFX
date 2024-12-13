@@ -9,19 +9,19 @@ import java.util.List;
 
 public class UpdateActionMove implements UpdateAction {
 
-    private final FileService fileRepository;
+    private final FileService fileService;
     private final List<Contact> contacts;
 
     public UpdateActionMove() {
-        this.fileRepository = new FileService();
-        this.contacts = fileRepository.read() != null ? fileRepository.read() : new ArrayList<>();
+        this.fileService = new FileService();
+        this.contacts = fileService.read() != null ? fileService.read() : new ArrayList<>();
     }
 
     @Override
     public void update(Contact oldContact, Contact newContact) {
         contacts.remove(oldContact);
         contacts.add(newContact);
-        fileRepository.write(contacts);
+        fileService.write(contacts);
     }
 
 
