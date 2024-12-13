@@ -3,8 +3,7 @@ package databil.ui;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import model.Contact;
@@ -18,8 +17,9 @@ import static javafx.scene.input.MouseEvent.MOUSE_CLICKED;
 
 public class UpdateContactForm extends GridPane {
 
-    private final TextField searchFieldByPhone;
     private final TextField searchFieldByName;
+    private final TextField searchFieldBySurname;
+    private final TextField searchFieldByPhone;
     private final ListView<Contact> contactListView;
     private final TextField nameField;
     private final TextField surnameField;
@@ -40,80 +40,92 @@ public class UpdateContactForm extends GridPane {
 
         this.setStyle("-fx-background-color: #34495E; -fx-font-family: 'Segoe UI', sans-serif;");
 
-        //
-        Label searchFieldByNameLabel = createStyledLabel("Search By Name:");
+        // Поля и кнопки поиска
         searchFieldByName = new TextField();
-        Button searchButtonName = createStyledButton("search");
+        Button searchButtonName = createStyledButton("Search");
         searchButtonName.addEventHandler(MOUSE_CLICKED, e -> handleSearchByName());
+        HBox searchByNameBox = createHorizontalBox("Search By Name:", searchFieldByName, searchButtonName);
+        searchByNameBox.setAlignment(Pos.CENTER_RIGHT); // Устанавливаем выравнивание влево
+        searchByNameBox.setPadding(new Insets(10));
 
-        //
-        Label searchLabel = createStyledLabel("Search by Phone:");
+        searchFieldBySurname = new TextField();
+        Button searchButtonSurname = createStyledButton("Search");
+        searchButtonSurname.addEventHandler(MOUSE_CLICKED, e -> handleSearchBySurname());
+        HBox searchBySurnameBox = createHorizontalBox("Search By Surname:", searchFieldBySurname, searchButtonSurname);
+        searchBySurnameBox.setAlignment(Pos.CENTER_RIGHT); // Устанавливаем выравнивание влево
+        searchBySurnameBox.setPadding(new Insets(10)); // Устанавливаем отступы
+
+
         searchFieldByPhone = new TextField();
         searchFieldByPhone.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.startsWith("+996 ")) {
                 searchFieldByPhone.setText("+996 ");
             }
         });
-        Button searchButton = createStyledButton("search");
-        searchButton.addEventHandler(MOUSE_CLICKED, e -> handleSearch());
+        Button searchButtonPhone = createStyledButton("Search");
+        searchButtonPhone.addEventHandler(MOUSE_CLICKED, e -> handleSearch());
+        HBox searchByPhoneBox = createHorizontalBox("Search By Phone:", searchFieldByPhone, searchButtonPhone);
+        searchByPhoneBox.setAlignment(Pos.CENTER_RIGHT); // Устанавливаем выравнивание влево
+        searchByPhoneBox.setPadding(new Insets(10));
 
-        //
+        // Список контактов
         contactListView = new ListView<>();
+        contactListView.setPrefHeight(100);
         contactListView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
                 populateFields(newSelection);
             }
         });
 
-
-        Label nameLabel = createStyledLabel("Enter a new name:");
+        // Поля для обновления контакта
         nameField = new TextField();
-
-        Label surnameLabel = createStyledLabel("Enter a new surname:");
         surnameField = new TextField();
-
-        Label addressLabel = createStyledLabel("Enter a new address:");
         addressField = new TextField();
-
-        Label phoneTwoLabel = createStyledLabel("Enter a new phone number:");
         phoneFieldTwo = new TextField();
         phoneFieldTwo.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.startsWith("+996 ")) {
                 phoneFieldTwo.setText("+996 ");
             }
         });
-
         Button updateButton = createStyledButton("Update Contact");
         updateButton.addEventHandler(MOUSE_CLICKED, e -> handleUpdate());
 
+        GridPane updateFields = new GridPane();
+        updateFields.setHgap(10);
+        updateFields.setVgap(5);
+        updateFields.setPadding(new Insets(10));
+        updateFields.add(createStyledLabel("New Name:"), 0, 0);
+        updateFields.add(nameField, 1, 0);
+        updateFields.add(createStyledLabel("New Surname:"), 0, 1);
+        updateFields.add(surnameField, 1, 1);
+        updateFields.add(createStyledLabel("New Address:"), 0, 2);
+        updateFields.add(addressField, 1, 2);
+        updateFields.add(createStyledLabel("New Phone:"), 0, 3);
+        updateFields.add(phoneFieldTwo, 1, 3);
 
-        VBox searchByNameBox = new VBox(5, searchFieldByNameLabel, searchFieldByName, searchButtonName);
-        searchByNameBox.setPadding(new Insets(10));
-        searchByNameBox.setStyle("-fx-background-color: #2C3E50; -fx-background-radius: 8px;");
-
-        VBox searchByPhoneBox = new VBox(5, searchLabel, searchFieldByPhone, searchButton);
-        searchByPhoneBox.setPadding(new Insets(10));
-        searchByPhoneBox.setStyle("-fx-background-color: #2C3E50; -fx-background-radius: 8px;");
-
-        VBox searchContainer = new VBox(10, searchByNameBox, searchByPhoneBox, contactListView);
-        searchContainer.setPadding(new Insets(10));
-
-        add(searchContainer, 0, 0, 2, 1);
-
-        add(nameLabel, 0, 1);
-        add(nameField, 1, 1);
-
-        add(surnameLabel, 0, 2);
-        add(surnameField, 1, 2);
-
-        add(addressLabel, 0, 3);
-        add(addressField, 1, 3);
-
-        add(phoneTwoLabel, 0, 4);
-        add(phoneFieldTwo, 1, 4);
-
-        add(updateButton, 0, 5, 2, 1);
+        VBox mainContainer = new VBox(10, searchByNameBox, searchBySurnameBox, searchByPhoneBox, contactListView, updateFields, updateButton);
+        mainContainer.setPadding(new Insets(10));
+        mainContainer.setStyle("-fx-background-color: #2C3E50; -fx-background-radius: 5px;");
+        add(mainContainer, 0, 0);
     }
+
+    private HBox createHorizontalBox(String labelText, TextField textField, Button button) {
+        Label label = createStyledLabel(labelText);
+
+        // Create vertical boxes for label, textField, and button
+        VBox labelVBox = new VBox(label);
+        VBox textFieldVBox = new VBox(textField);
+        VBox buttonVBox = new VBox(button);
+
+        // Determine spacing based on the length of the label
+        int spacing = (int) Math.max(15, labelText.length() * 0.5); // Adjust spacing dynamically based on label length
+        HBox hBox = new HBox(spacing, labelVBox, textFieldVBox, buttonVBox);
+        hBox.setAlignment(Pos.CENTER_LEFT);
+        hBox.setPadding(new Insets(10));
+        return hBox;
+    }
+
+
 
     private void handleSearch() {
         String phone = searchFieldByPhone.getText().trim();
@@ -157,6 +169,29 @@ public class UpdateContactForm extends GridPane {
             showAlert(Alert.AlertType.ERROR, "Validation Error", e.getMessage());
         }
     }
+
+    private void handleSearchBySurname() {
+        String name = searchFieldBySurname.getText().trim();
+
+        if (name.isEmpty()) {
+            showAlert(Alert.AlertType.WARNING, "Error", "Please enter a surname.");
+            return;
+        }
+
+        try {
+            List<Contact> contacts = updateByPhoneMove.findAllBySurname(name);
+
+            if (contacts.isEmpty()) {
+                showAlert(Alert.AlertType.INFORMATION, "No Results", "No contacts found for the given surname.");
+            } else {
+                contactListView.getItems().setAll(contacts);
+            }
+        } catch (InputMismatchException e) {
+            showAlert(Alert.AlertType.ERROR, "Validation Error", e.getMessage());
+        }
+
+    }
+
 
     private void populateFields(Contact contact) {
         nameField.setText(contact.getName());
@@ -206,6 +241,14 @@ public class UpdateContactForm extends GridPane {
         }
     }
 
+    private void showAlert(Alert.AlertType alertType, String title, String message) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
     private Label createStyledLabel(String text) {
         Label label = new Label(text);
         label.setFont(Font.font("Segoe UI", 14));
@@ -215,18 +258,8 @@ public class UpdateContactForm extends GridPane {
 
     private Button createStyledButton(String text) {
         Button button = new Button(text);
-        button.setStyle("-fx-background-color: #34495E; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-background-radius: 12px;");
-        button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: #2C3E50; -fx-text-fill: white;"));
-        button.setOnMouseExited(e -> button.setStyle("-fx-background-color: #34495E; -fx-text-fill: white;"));
+        button.setStyle("-fx-background-color: #34495E; -fx-text-fill: white; -fx-font-size: 12px;");
         return button;
-    }
-
-    private void showAlert(Alert.AlertType alertType, String title, String message) {
-        Alert alert = new Alert(alertType);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
     }
 
     private void clearFields() {
