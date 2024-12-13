@@ -20,6 +20,7 @@ public class UpdateContactForm extends GridPane {
     private final TextField searchFieldByName;
     private final TextField searchFieldBySurname;
     private final TextField searchFieldByPhone;
+    private final TextField searchFieldByAddress;
     private final ListView<Contact> contactListView;
     private final TextField nameField;
     private final TextField surnameField;
@@ -40,20 +41,20 @@ public class UpdateContactForm extends GridPane {
 
         this.setStyle("-fx-background-color: #34495E; -fx-font-family: 'Segoe UI', sans-serif;");
 
-        // Поля и кнопки поиска
+
         searchFieldByName = new TextField();
         Button searchButtonName = createStyledButton("Search");
         searchButtonName.addEventHandler(MOUSE_CLICKED, e -> handleSearchByName());
         HBox searchByNameBox = createHorizontalBox("Search By Name:", searchFieldByName, searchButtonName);
-        searchByNameBox.setAlignment(Pos.CENTER_RIGHT); // Устанавливаем выравнивание влево
+        searchByNameBox.setAlignment(Pos.CENTER_RIGHT);
         searchByNameBox.setPadding(new Insets(10));
 
         searchFieldBySurname = new TextField();
         Button searchButtonSurname = createStyledButton("Search");
         searchButtonSurname.addEventHandler(MOUSE_CLICKED, e -> handleSearchBySurname());
         HBox searchBySurnameBox = createHorizontalBox("Search By Surname:", searchFieldBySurname, searchButtonSurname);
-        searchBySurnameBox.setAlignment(Pos.CENTER_RIGHT); // Устанавливаем выравнивание влево
-        searchBySurnameBox.setPadding(new Insets(10)); // Устанавливаем отступы
+        searchBySurnameBox.setAlignment(Pos.CENTER_RIGHT);
+        searchBySurnameBox.setPadding(new Insets(10));
 
 
         searchFieldByPhone = new TextField();
@@ -63,12 +64,19 @@ public class UpdateContactForm extends GridPane {
             }
         });
         Button searchButtonPhone = createStyledButton("Search");
-        searchButtonPhone.addEventHandler(MOUSE_CLICKED, e -> handleSearch());
+        searchButtonPhone.addEventHandler(MOUSE_CLICKED, e -> handleSearchByPhone());
         HBox searchByPhoneBox = createHorizontalBox("Search By Phone:", searchFieldByPhone, searchButtonPhone);
-        searchByPhoneBox.setAlignment(Pos.CENTER_RIGHT); // Устанавливаем выравнивание влево
+        searchByPhoneBox.setAlignment(Pos.CENTER_RIGHT);
         searchByPhoneBox.setPadding(new Insets(10));
 
-        // Список контактов
+        searchFieldByAddress = new TextField();
+        Button searchButtonAddress = createStyledButton("Search");
+        searchButtonAddress.addEventHandler(MOUSE_CLICKED, e -> handleSearchByAddress());
+        HBox searchByAddressBox = createHorizontalBox("Search By Address:", searchFieldByAddress, searchButtonAddress);
+        searchByAddressBox.setAlignment(Pos.CENTER_RIGHT);
+        searchByAddressBox.setPadding(new Insets(10));
+
+
         contactListView = new ListView<>();
         contactListView.setPrefHeight(100);
         contactListView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
@@ -77,7 +85,6 @@ public class UpdateContactForm extends GridPane {
             }
         });
 
-        // Поля для обновления контакта
         nameField = new TextField();
         surnameField = new TextField();
         addressField = new TextField();
@@ -87,7 +94,7 @@ public class UpdateContactForm extends GridPane {
                 phoneFieldTwo.setText("+996 ");
             }
         });
-        Button updateButton = createStyledButton("Update Contact");
+        Button updateButton = createStyledButton("UPDATE");
         updateButton.addEventHandler(MOUSE_CLICKED, e -> handleUpdate());
 
         GridPane updateFields = new GridPane();
@@ -103,22 +110,22 @@ public class UpdateContactForm extends GridPane {
         updateFields.add(createStyledLabel("New Phone:"), 0, 3);
         updateFields.add(phoneFieldTwo, 1, 3);
 
-        VBox mainContainer = new VBox(10, searchByNameBox, searchBySurnameBox, searchByPhoneBox, contactListView, updateFields, updateButton);
+        VBox mainContainer = new VBox(10, searchByNameBox, searchBySurnameBox, searchByPhoneBox, searchByAddressBox, contactListView, updateFields, updateButton);
         mainContainer.setPadding(new Insets(10));
         mainContainer.setStyle("-fx-background-color: #2C3E50; -fx-background-radius: 5px;");
         add(mainContainer, 0, 0);
     }
 
+
     private HBox createHorizontalBox(String labelText, TextField textField, Button button) {
         Label label = createStyledLabel(labelText);
 
-        // Create vertical boxes for label, textField, and button
         VBox labelVBox = new VBox(label);
         VBox textFieldVBox = new VBox(textField);
         VBox buttonVBox = new VBox(button);
 
-        // Determine spacing based on the length of the label
-        int spacing = (int) Math.max(15, labelText.length() * 0.5); // Adjust spacing dynamically based on label length
+
+        int spacing = (int) Math.max(15, labelText.length() * 0.5);
         HBox hBox = new HBox(spacing, labelVBox, textFieldVBox, buttonVBox);
         hBox.setAlignment(Pos.CENTER_LEFT);
         hBox.setPadding(new Insets(10));
@@ -126,8 +133,7 @@ public class UpdateContactForm extends GridPane {
     }
 
 
-
-    private void handleSearch() {
+    private void handleSearchByPhone() {
         String phone = searchFieldByPhone.getText().trim();
 
         if (phone.isEmpty()) {
@@ -171,18 +177,41 @@ public class UpdateContactForm extends GridPane {
     }
 
     private void handleSearchBySurname() {
-        String name = searchFieldBySurname.getText().trim();
+        String surname = searchFieldBySurname.getText().trim();
 
-        if (name.isEmpty()) {
+        if (surname.isEmpty()) {
             showAlert(Alert.AlertType.WARNING, "Error", "Please enter a surname.");
             return;
         }
 
         try {
-            List<Contact> contacts = updateByPhoneMove.findAllBySurname(name);
+            List<Contact> contacts = updateByPhoneMove.findAllBySurname(surname);
 
             if (contacts.isEmpty()) {
                 showAlert(Alert.AlertType.INFORMATION, "No Results", "No contacts found for the given surname.");
+            } else {
+                contactListView.getItems().setAll(contacts);
+            }
+        } catch (InputMismatchException e) {
+            showAlert(Alert.AlertType.ERROR, "Validation Error", e.getMessage());
+        }
+
+    }
+
+    private void handleSearchByAddress() {
+
+        String address = searchFieldByAddress.getText().trim();
+
+        if (address.isEmpty()) {
+            showAlert(Alert.AlertType.WARNING, "Error", "Please enter a address.");
+            return;
+        }
+
+        try {
+            List<Contact> contacts = updateByPhoneMove.findAllByAddress(address);
+
+            if (contacts.isEmpty()) {
+                showAlert(Alert.AlertType.INFORMATION, "No Results", "No contacts found for the given address.");
             } else {
                 contactListView.getItems().setAll(contacts);
             }
@@ -258,9 +287,25 @@ public class UpdateContactForm extends GridPane {
 
     private Button createStyledButton(String text) {
         Button button = new Button(text);
-        button.setStyle("-fx-background-color: #34495E; -fx-text-fill: white; -fx-font-size: 12px;");
+        button.setStyle("-fx-background-color: #34495E;" +
+                " -fx-text-fill: white; -fx-font-weight: bold;" +
+                " -fx-font-size: 12px; -fx-background-radius: 6px;" +
+                " -fx-border-radius: 5px;");
+        button.setPrefWidth(80);
+        button.setPrefHeight(20); // Set a smaller height
+
+        button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: #2C3E50;" +
+                " -fx-text-fill: white; -fx-font-weight: bold;" +
+                " -fx-font-size: 12px; -fx-background-radius: 6px;"));
+        button.setOnMouseExited(e -> button.setStyle("-fx-background-color: #34495E;" +
+                " -fx-text-fill: white; -fx-font-weight: bold;" +
+                " -fx-font-size: 12px; -fx-background-radius: 6px;"));
+        button.setOnMouseClicked(e -> button.setStyle("-fx-background-color: #2C3E50;" +
+                " -fx-text-fill: white; -fx-font-weight: bold;" +
+                " -fx-font-size: 12px; -fx-background-radius: 6px;"));
         return button;
     }
+
 
     private void clearFields() {
         searchFieldByPhone.clear();
