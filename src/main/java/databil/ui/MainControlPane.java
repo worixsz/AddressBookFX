@@ -17,7 +17,7 @@ public class MainControlPane extends StackPane {
                            CheckActionMove checkActionMove,
                            SearchActionMove searchActionMove,
                            SearchActionByPrefixMove searchActionByPrefixMove,
-                           UpdateByPhoneMove updateByPhoneMove
+                           UpdateActionMove updateByPhoneMove
     ) {
 
         this.createContactForm = new CreateContactForm(contactService, checkActionMove);
