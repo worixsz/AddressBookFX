@@ -41,19 +41,19 @@ public class SearchContactForm extends GridPane {
         resultArea.setStyle("-fx-background-color: #BDC3C7; -fx-border-radius: 10px; -fx-font-size: 14px; -fx-padding: 15px; -fx-text-fill: #333333;");
 
         Label nameLabel = createStyledLabel("Search by Name:");
-        Button searchByNameButton = createStyledButton("Search");
+        Button searchByNameButton = createStyledButton();
         searchByNameButton.setOnAction(_ -> performSearch("name"));
 
         Label surnameLabel = createStyledLabel("Search by Surname:");
-        Button searchBySurnameButton = createStyledButton("Search");
+        Button searchBySurnameButton = createStyledButton();
         searchBySurnameButton.setOnAction(_ -> performSearch("surname"));
 
         Label addressLabel = createStyledLabel("Search by Address:");
-        Button searchByAddressButton = createStyledButton("Search");
+        Button searchByAddressButton = createStyledButton();
         searchByAddressButton.setOnAction(_ -> performSearch("address"));
 
         Label phoneLabel = createStyledLabel("Search by Phone:");
-        Button searchByPhoneButton = createStyledButton("Search");
+        Button searchByPhoneButton = createStyledButton();
         searchByPhoneButton.setOnAction(_ -> performSearch("phone"));
 
         searchByPhoneField.textProperty().addListener((_, _, newValue) -> {
@@ -158,12 +158,27 @@ public class SearchContactForm extends GridPane {
         return label;
     }
 
-    private Button createStyledButton(String text) {
-        Button button = new Button(text);
-        button.setStyle("-fx-background-color: #34495E; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-background-radius: 12px; -fx-border-color: #BDC3C7;");
-        button.setPrefWidth(100);
-        button.setOnMouseEntered(_ -> button.setStyle("-fx-background-color: #2C3E50; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-background-radius: 12px;"));
-        button.setOnMouseExited(_ -> button.setStyle("-fx-background-color: #34495E; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-background-radius: 12px;"));
+    private Button createStyledButton() {
+        Button button = new Button("Search");
+        button.setStyle("-fx-background-color: #34495E;" +
+                " -fx-text-fill: white; -fx-font-weight: bold;" +
+                " -fx-font-size: 12px; -fx-background-radius: 6px;" +
+                " -fx-border-radius: 5px;");
+        button.setPrefWidth(80);
+        button.setPrefHeight(20);
+
+        button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: #2C3E50;" +
+                " -fx-text-fill: white; -fx-font-weight: bold;" +
+                " -fx-font-size: 12px; -fx-background-radius: 6px;"));
+        button.setOnMouseExited(e -> button.setStyle("-fx-background-color: #34495E;" +
+                " -fx-text-fill: white; -fx-font-weight: bold;" +
+                " -fx-font-size: 12px; -fx-background-radius: 6px;"));
+        button.setOnMouseClicked(e -> button.setStyle("-fx-background-color: #2C3E50;" +
+                " -fx-text-fill: white; -fx-font-weight: bold;" +
+                " -fx-font-size: 12px; -fx-background-radius: 6px;"));
         return button;
     }
+
+
+
 }
