@@ -13,7 +13,7 @@ public class Main extends Application {
     private SearchActionMove searchActionMove;
     private SearchActionByPrefixMove searchActionByPrefixMove;
 
-    private UpdateByPhoneMove updateByPhoneMove;
+    private UpdateActionMove updateByPhoneMove;
 
 
     @Override
@@ -23,7 +23,7 @@ public class Main extends Application {
         this.checkActionMove = new CheckActionMove();
         this.searchActionMove = new SearchActionMove();
         this.searchActionByPrefixMove = new SearchActionByPrefixMove();
-        this.updateByPhoneMove = new UpdateByPhoneMove();
+        this.updateByPhoneMove = new UpdateActionMove();
 
 
         Scene scene = new Scene(new MainControlPane(contactService, checkActionMove, searchActionMove, searchActionByPrefixMove, updateByPhoneMove), 500, 600);
