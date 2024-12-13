@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 public class SearchActionMove implements SearchAction {
 
     private final FileService fileService;
-    List<Contact> contacts;
+    private final List<Contact> contacts;
 
     public SearchActionMove() {
         this.fileService = new FileService();
