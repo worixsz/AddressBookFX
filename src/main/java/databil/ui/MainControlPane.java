@@ -39,7 +39,7 @@ public class MainControlPane extends StackPane {
         buttonBox.setAlignment(Pos.TOP_CENTER);
 
         StackPane.setAlignment(backButton, Pos.BOTTOM_RIGHT);
-        StackPane.setMargin(backButton, new Insets(10));
+        StackPane.setMargin(backButton, new Insets(5));
 
         this.getChildren().addAll(buttonBox, createContactForm, searchContactForm, updateContactForm, backButton);
 
@@ -78,10 +78,20 @@ public class MainControlPane extends StackPane {
 
     private Button createStyledButton(String text) {
         Button button = new Button(text);
-        button.setStyle("-fx-background-color: #34495E; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-background-radius: 12px; -fx-border-color: #BDC3C7;");
-        button.setPrefWidth(100);
-        button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: #2C3E50; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-background-radius: 12px;"));
-        button.setOnMouseExited(e -> button.setStyle("-fx-background-color: #34495E; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-background-radius: 12px;"));
+        button.setStyle("-fx-background-color: #34495E;" +
+                " -fx-text-fill: white; -fx-font-weight: bold;" +
+                " -fx-font-size: 12px; -fx-background-radius: 6px;" +
+                " -fx-border-radius: 5px;");
+        button.setPrefWidth(50);
+        button.setPrefHeight(10);
+        button.setOnMouseEntered(_ -> button.setStyle("-fx-background-color: #2C3E50;" +
+                " -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 12px;" +
+                " -fx-background-radius: 6px;"));
+        button.setOnMouseExited(_ -> button.setStyle("-fx-background-color: #34495E;" +
+                " -fx-text-fill: white;" +
+                " -fx-font-weight: bold; -fx-font-size: 12px;" +
+                " -fx-background-radius: 6px;"));
         return button;
     }
+
 }
