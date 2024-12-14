@@ -8,25 +8,24 @@ import repository.*;
 
 public class Main extends Application {
 
-    private CreateContactMove contactService;
+    private CreateContactMove createContactMove;
     private CheckActionMove checkActionMove;
     private SearchActionMove searchActionMove;
     private SearchActionByPrefixMove searchActionByPrefixMove;
-
     private UpdateActionMove updateByPhoneMove;
 
 
     @Override
     public void start(Stage stage) throws Exception {
 
-        this.contactService = new CreateContactMove();
+        this.createContactMove = new CreateContactMove();
         this.checkActionMove = new CheckActionMove();
         this.searchActionMove = new SearchActionMove();
         this.searchActionByPrefixMove = new SearchActionByPrefixMove();
         this.updateByPhoneMove = new UpdateActionMove();
 
 
-        Scene scene = new Scene(new MainControlPane(contactService, checkActionMove, searchActionMove, searchActionByPrefixMove, updateByPhoneMove), 500, 600);
+        Scene scene = new Scene(new MainControlPane(createContactMove, checkActionMove, searchActionMove, searchActionByPrefixMove, updateByPhoneMove), 500, 600);
         stage.setScene(scene);
         stage.show();
     }
