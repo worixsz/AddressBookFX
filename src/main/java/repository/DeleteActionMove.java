@@ -23,7 +23,7 @@ public class DeleteActionMove implements DeleteAction {
             if (contacts.isEmpty()) {
                 System.out.println("❌ No contacts available to delete.\n");
             } else {
-                checkMove.showContact(contacts);
+                //checkMove.showContact(contacts);
 
                 System.out.print("Enter the index of the contact to delete (1 to " + contacts.size() + "): ");
                 int index = Integer.parseInt(SC.nextLine()) - 1;

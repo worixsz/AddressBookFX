@@ -1,29 +1,12 @@
 package repository;
 
-import model.Contact;
 import service.CheckAction;
-
 import java.util.InputMismatchException;
-import java.util.List;
+
 
 
 public class CheckActionMove implements CheckAction {
 
-
-    public CheckActionMove() {
-
-    }
-
-    @Override
-    public void showContact(List<Contact> contacts) {
-
-        if (contacts == null || contacts.isEmpty()) {
-            System.out.println("❌ No contacts available.\n");
-        } else {
-            System.out.println("\n--- LIST OF ALL CONTACTS ---");
-            contacts.forEach(System.out::println);
-        }
-    }
 
 
     @Override
@@ -109,7 +92,6 @@ public class CheckActionMove implements CheckAction {
 
         return "+996 " + cleanPhone.substring(3, 6) + " " + cleanPhone.substring(6, 9) + " " + cleanPhone.substring(9);
     }
-
 
 
 }
