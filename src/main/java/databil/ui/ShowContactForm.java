@@ -1,16 +1,14 @@
 package databil.ui;
 
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ListView;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.control.Label;
+import javafx.scene.control.cell.PropertyValueFactory;
 import model.Contact;
 import repository.ShowActionMove;
 
@@ -18,12 +16,14 @@ import java.util.List;
 
 public class ShowContactForm extends GridPane {
 
-    private final ListView<Contact> contactListView = new ListView<>();
+    private final TableView<Contact> contactTableView = new TableView<>();
     private final ShowActionMove showActionMove;
+    private final ObservableList<Contact> contactList;
 
-    public ShowContactForm(ShowActionMove showActionMove) {
+    public ShowContactForm(ObservableList<Contact> contactList, ShowActionMove showActionMove) {
+        this.contactList = contactList;
         this.showActionMove = showActionMove;
-        this.setPadding(new Insets(100));
+        this.setPadding(new Insets(20));
         this.setAlignment(Pos.CENTER);
         this.setStyle("-fx-background-color: #2C3E50; -fx-font-family: 'Segoe UI', sans-serif;");
 
@@ -32,31 +32,31 @@ public class ShowContactForm extends GridPane {
     }
 
     private void setupUI() {
-        contactListView.setStyle("-fx-background-color: #34495E; -fx-text-fill: black;");
-        contactListView.setCellFactory(param -> new javafx.scene.control.ListCell<>() {
-            @Override
-            protected void updateItem(Contact contact, boolean empty) {
-                super.updateItem(contact, empty);
-                if (empty || contact == null) {
-                    setText(null);
-                } else {
-                    setText("name: " + contact.getName() +
-                            ", surname: " + contact.getSurname() +
-                            ", address: " + contact.getAddress() +
-                            ", phone number: " + contact.getPhone());
-                    setStyle("-fx-font-size: 15;");
-                }
-            }
-        });
+        TableColumn<Contact, String> nameColumn = new TableColumn<>("Name");
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        nameColumn.setMinWidth(100);
 
-        Label title = new Label("Contacts");
-        title.setFont(Font.font("Segoe UI", 18));
-        title.setTextFill(Color.WHITE);
+        TableColumn<Contact, String> surnameColumn = new TableColumn<>("Surname");
+        surnameColumn.setCellValueFactory(new PropertyValueFactory<>("surname"));
+        surnameColumn.setMinWidth(100);
 
-        VBox container = new VBox(10, title, contactListView);
+        TableColumn<Contact, String> addressColumn = new TableColumn<>("Address");
+        addressColumn.setCellValueFactory(new PropertyValueFactory<>("address"));
+        addressColumn.setMinWidth(100);
+
+        TableColumn<Contact, String> phoneColumn = new TableColumn<>("Phone Number");
+        phoneColumn.setCellValueFactory(new PropertyValueFactory<>("phone"));
+        phoneColumn.setMinWidth(150);
+
+        contactTableView.getColumns().addAll(nameColumn, surnameColumn, addressColumn, phoneColumn);
+        contactTableView.setItems(contactList);
+        contactTableView.refresh();
+        contactTableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        VBox container = new VBox(10, contactTableView);
         container.setPadding(new Insets(10));
         container.setAlignment(Pos.CENTER);
-        container.setPrefSize(2000, 400);
+        container.setPrefSize(600, 400);
 
         this.add(container, 0, 0);
     }
@@ -64,13 +64,11 @@ public class ShowContactForm extends GridPane {
     public void refreshContacts() {
         try {
             List<Contact> result = showActionMove.showContact();
-
-            ObservableList<Contact> observableContacts = FXCollections.observableArrayList(result);
-            contactListView.setItems(observableContacts);
+            contactList.setAll(result);
         } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("ERROR");
-            alert.setHeaderText("THERE ARE NO CONTACTS");
+            alert.setTitle("Error");
+            alert.setHeaderText("There are no contacts");
             alert.setContentText(e.getMessage());
             alert.showAndWait();
         }
