@@ -10,42 +10,56 @@ import repository.*;
 public class MainControlPane extends StackPane {
 
     private final CreateContactForm createContactForm;
+    private final ShowContactForm showContactForm;
     private final SearchContactForm searchContactForm;
     private final UpdateContactForm updateContactForm;
 
-    public MainControlPane(CreateContactMove contactService,
+    public MainControlPane(CreateContactMove createContactMove,
+                           ShowActionMove showActionMove,
                            CheckActionMove checkActionMove,
                            SearchActionMove searchActionMove,
                            SearchActionByPrefixMove searchActionByPrefixMove,
                            UpdateActionMove updateByPhoneMove
     ) {
 
-        this.createContactForm = new CreateContactForm(contactService, checkActionMove);
+        this.createContactForm = new CreateContactForm(createContactMove, checkActionMove);
+        this.showContactForm = new ShowContactForm(showActionMove);
         this.searchContactForm = new SearchContactForm(searchActionMove, searchActionByPrefixMove, checkActionMove);
         this.updateContactForm = new UpdateContactForm(checkActionMove);
 
         Button createButton = new Button("CREATE CONTACT");
+        Button showButton = new Button("  SHOW CONTACT  ");
         Button searchButton = new Button("SEARCH CONTACT");
         Button updateButton = new Button("UPDATE CONTACT");
         Button backButton = createStyledButton();
 
         createContactForm.setVisible(false);
+        showContactForm.setVisible(false);
         searchContactForm.setVisible(false);
         updateContactForm.setVisible(false);
 
         backButton.setVisible(false);
 
-        VBox buttonBox = new VBox(15, createButton, searchButton, updateButton);
+        VBox buttonBox = new VBox(15, createButton, showButton, searchButton, updateButton);
         buttonBox.setAlignment(Pos.TOP_CENTER);
 
         StackPane.setAlignment(backButton, Pos.BOTTOM_RIGHT);
         StackPane.setMargin(backButton, new Insets(5));
 
-        this.getChildren().addAll(buttonBox, createContactForm, searchContactForm, updateContactForm, backButton);
+        this.getChildren().addAll(buttonBox, createContactForm, showContactForm, searchContactForm, updateContactForm, backButton);
 
         createButton.setOnAction(_ -> {
             buttonBox.setVisible(false);
             createContactForm.setVisible(true);
+            searchContactForm.setVisible(false);
+            updateContactForm.setVisible(false);
+            backButton.setVisible(true);
+        });
+
+        showButton.setOnAction(_ -> {
+            buttonBox.setVisible(false);
+            createContactForm.setVisible(false);
+            showContactForm.setVisible(true);
             searchContactForm.setVisible(false);
             updateContactForm.setVisible(false);
             backButton.setVisible(true);
@@ -68,11 +82,12 @@ public class MainControlPane extends StackPane {
         });
 
         backButton.setOnAction(_ -> {
-            buttonBox.setVisible(true);
             createContactForm.setVisible(false);
+            showContactForm.setVisible(false);
             searchContactForm.setVisible(false);
             updateContactForm.setVisible(false);
             backButton.setVisible(false);
+            buttonBox.setVisible(true);
         });
     }
 
@@ -93,5 +108,4 @@ public class MainControlPane extends StackPane {
                 " -fx-background-radius: 6px;"));
         return button;
     }
-
 }
