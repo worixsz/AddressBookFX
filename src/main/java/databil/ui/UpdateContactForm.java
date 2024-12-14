@@ -1,5 +1,6 @@
 package databil.ui;
 
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -29,15 +30,15 @@ public class UpdateContactForm extends GridPane {
 
     private final UpdateActionMove updateByPhoneMove;
     private final CheckActionMove checkActionMove;
+    private final ObservableList<Contact> contactList;
 
-    public UpdateContactForm(CheckActionMove checkActionMove) {
+    public UpdateContactForm(ObservableList<Contact> contactList, CheckActionMove checkActionMove) {
         this.updateByPhoneMove = new UpdateActionMove();
         this.checkActionMove = checkActionMove;
+        this.contactList = contactList;
 
         this.setPadding(new Insets(20, 20, 20, 20));
-
         this.setStyle("-fx-background-color: #34495E; -fx-font-family: 'Segoe UI', sans-serif;");
-
 
         searchFieldByName = new TextField();
         Button searchButtonName = createStyledButton("Search");
@@ -52,7 +53,6 @@ public class UpdateContactForm extends GridPane {
         HBox searchBySurnameBox = createHorizontalBox("Search By Surname:", searchFieldBySurname, searchButtonSurname);
         searchBySurnameBox.setAlignment(Pos.CENTER_RIGHT);
         searchBySurnameBox.setPadding(new Insets(10));
-
 
         searchFieldByPhone = new TextField();
         searchFieldByPhone.textProperty().addListener((_, _, newValue) -> {
@@ -72,7 +72,6 @@ public class UpdateContactForm extends GridPane {
         HBox searchByAddressBox = createHorizontalBox("Search By Address:", searchFieldByAddress, searchButtonAddress);
         searchByAddressBox.setAlignment(Pos.CENTER_RIGHT);
         searchByAddressBox.setPadding(new Insets(10));
-
 
         contactListView = new ListView<>();
         contactListView.setPrefHeight(100);
@@ -120,10 +119,7 @@ public class UpdateContactForm extends GridPane {
         mainContainer.setPadding(new Insets(10));
         mainContainer.setStyle("-fx-background-color: #2C3E50; -fx-background-radius: 5px;");
         add(mainContainer, 0, 0);
-
-
     }
-
 
     private HBox createHorizontalBox(String labelText, TextField textField, Button button) {
         Label label = createStyledLabel(labelText);
@@ -137,7 +133,6 @@ public class UpdateContactForm extends GridPane {
         hBox.setPadding(new Insets(10));
         return hBox;
     }
-
 
     private void handleSearchByPhone() {
         String phone = searchFieldByPhone.getText().trim();
@@ -201,15 +196,13 @@ public class UpdateContactForm extends GridPane {
         } catch (InputMismatchException e) {
             showAlert(Alert.AlertType.ERROR, "Validation Error", e.getMessage());
         }
-
     }
 
     private void handleSearchByAddress() {
-
         String address = searchFieldByAddress.getText().trim();
 
         if (address.isEmpty()) {
-            showAlert(Alert.AlertType.WARNING, "Error", "Please enter a address.");
+            showAlert(Alert.AlertType.WARNING, "Error", "Please enter an address.");
             return;
         }
 
@@ -224,9 +217,7 @@ public class UpdateContactForm extends GridPane {
         } catch (InputMismatchException e) {
             showAlert(Alert.AlertType.ERROR, "Validation Error", e.getMessage());
         }
-
     }
-
 
     private void populateFields(Contact contact) {
         nameField.setText(contact.getName());
@@ -268,7 +259,11 @@ public class UpdateContactForm extends GridPane {
             );
 
             updateByPhoneMove.update(selectedContact, updatedContact);
+            contactList.remove(selectedContact);
+            contactList.add(updatedContact);
             showAlert(Alert.AlertType.INFORMATION, "Success", "Contact updated successfully.");
+
+
             clearFields();
 
         } catch (InputMismatchException e) {
@@ -312,7 +307,6 @@ public class UpdateContactForm extends GridPane {
         return button;
     }
 
-
     private void clearFields() {
         searchFieldByPhone.clear();
         searchFieldByName.clear();
@@ -322,4 +316,6 @@ public class UpdateContactForm extends GridPane {
         phoneFieldTwo.clear();
         contactListView.getItems().clear();
     }
+
+
 }

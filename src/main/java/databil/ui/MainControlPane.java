@@ -1,10 +1,13 @@
 package databil.ui;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import model.Contact;
 import repository.*;
 
 public class MainControlPane extends StackPane {
@@ -22,10 +25,12 @@ public class MainControlPane extends StackPane {
                            UpdateActionMove updateByPhoneMove
     ) {
 
-        this.createContactForm = new CreateContactForm(createContactMove, checkActionMove);
-        this.showContactForm = new ShowContactForm(showActionMove);
+        ObservableList<Contact> contactList = FXCollections.observableArrayList();
+        this.createContactForm = new CreateContactForm(contactList, createContactMove, checkActionMove);
+        this.showContactForm = new ShowContactForm(contactList, showActionMove);
         this.searchContactForm = new SearchContactForm(searchActionMove, searchActionByPrefixMove, checkActionMove);
-        this.updateContactForm = new UpdateContactForm(checkActionMove);
+        this.updateContactForm = new UpdateContactForm(contactList, checkActionMove);
+
 
         Button createButton = new Button("CREATE CONTACT");
         Button showButton = new Button("  SHOW CONTACT  ");
