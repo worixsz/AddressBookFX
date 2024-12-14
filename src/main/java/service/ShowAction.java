@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface ShowAction {
 
-    List<Contact> showContact(List<Contact> contacts);
+    List<Contact> showContact();
 }

@@ -21,16 +21,14 @@ public class ShowActionMove implements ShowAction {
     }
 
     @Override
-    public List<Contact> showContact(List<Contact> contacts) {
+    public List<Contact> showContact() {
         if (contactList.isEmpty()) {
             System.out.println("❌ No contacts available.\n");
         } else {
             System.out.println("\n--- LIST OF ALL CONTACTS ---");
-            for (Contact contact : contactList) {
-                System.out.println(contact);
-            }
+
         }
-        return contacts;
+        return contactList;
     }
 
 }
