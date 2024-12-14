@@ -1,5 +1,6 @@
 package databil.ui;
 
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -21,9 +22,8 @@ public class CreateContactForm extends VBox {
 
     private final Contact contacts;
 
-    public CreateContactForm(CreateContactMove contactService, CheckActionMove checkActionMove) {
+    public CreateContactForm(ObservableList<Contact> contactList, CreateContactMove contactService, CheckActionMove checkActionMove) {
         this.contacts = new Contact();
-
         this.setAlignment(Pos.CENTER);
         this.setStyle("-fx-background-color: #2C3E50; -fx-font-family: 'Segoe UI', sans-serif;");
         this.setSpacing(10);
@@ -132,8 +132,8 @@ public class CreateContactForm extends VBox {
             if (isValid) {
                 List<Contact> saveContact = new ArrayList<>();
                 saveContact.add(contacts);
+                contactList.add(contacts);
                 contactService.createContact(saveContact);
-
                 nameField.clear();
                 surnameField.clear();
                 addressField.clear();
