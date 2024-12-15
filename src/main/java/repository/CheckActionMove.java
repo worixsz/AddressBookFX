@@ -11,12 +11,11 @@ import java.util.List;
 
 public class CheckActionMove implements CheckAction {
 
-    private final FileService fileService;
     private final List<Contact> contacts;
 
 
     public CheckActionMove() {
-        fileService = new FileService();
+        FileService fileService = new FileService();
         this.contacts = fileService.read() != null ? fileService.read() : new ArrayList<>();
 
     }
@@ -26,12 +25,13 @@ public class CheckActionMove implements CheckAction {
         String formattedNumberKG = phone;
         try {
             String cleanPhone = phone.replaceAll("\\D", "");
-            System.out.println(phone.length());
             if (cleanPhone.length() != 9) {
                 throw new InputMismatchException("Phone format incorrect.");
+            } else {
+                formattedNumberKG = "+996 " + cleanPhone.replaceAll("(.{3})(.{3})(.{3})", "$1 $2 $3");
+                formattedNumberKG = formattedNumberKG.trim();
             }
-            formattedNumberKG = "+996 " + cleanPhone.replaceAll("(.{3})(.{3})(.{3})", "$1 $2 $3");
-            formattedNumberKG = formattedNumberKG.trim();
+
             return formattedNumberKG;
 
         } catch (IllegalArgumentException e) {
