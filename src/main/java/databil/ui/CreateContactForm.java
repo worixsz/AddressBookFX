@@ -12,7 +12,6 @@ import model.Contact;
 import repository.CheckActionMove;
 import repository.CreateContactMove;
 
-import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
 
@@ -20,9 +19,14 @@ import static javafx.scene.input.MouseEvent.MOUSE_CLICKED;
 
 public class CreateContactForm extends VBox {
 
+    private final TextField nameField = new TextField();
+    private final TextField surnameField = new TextField();
+    private final TextField addressField = new TextField();
+    private String formatPhoneNumber;
+
     private final Contact contacts;
 
-    public CreateContactForm(ObservableList<Contact> contactList, CreateContactMove contactService, CheckActionMove checkActionMove) {
+    public CreateContactForm(ObservableList<Contact> contactList, CreateContactMove createContactMove, CheckActionMove checkActionMove) {
         this.contacts = new Contact();
         this.setAlignment(Pos.CENTER);
         this.setStyle("-fx-background-color: #2C3E50; -fx-font-family: 'Segoe UI', sans-serif;");
@@ -40,11 +44,6 @@ public class CreateContactForm extends VBox {
         Label addressLabel = createStyledLabel("Address");
         Label phoneLabel = createStyledLabel("Phone");
 
-        TextField nameField = new TextField();
-        TextField surnameField = new TextField();
-        TextField addressField = new TextField();
-        TextField phoneField = new TextField();
-
         Label nameErrorLabel = createErrorLabel();
         Label surnameErrorLabel = createErrorLabel();
         Label addressErrorLabel = createErrorLabel();
@@ -53,6 +52,21 @@ public class CreateContactForm extends VBox {
         Button saveButton = createStyledButton("Save");
         Button cancelButton = createStyledButton("Cancel");
 
+        HBox phoneFieldContainer = new HBox();
+        phoneFieldContainer.setSpacing(5);
+        phoneFieldContainer.setStyle("-fx-background-color: #34495E; -fx-padding: 5; -fx-border-radius: 6px;");
+
+        Label phoneIndicator = new Label("+996");
+        phoneIndicator.setFont(Font.font("Segoe UI", 14));
+        phoneIndicator.setTextFill(Color.WHITE);
+        phoneIndicator.setAlignment(Pos.CENTER);
+
+        TextField phoneInput = new TextField();
+        phoneInput.setStyle("-fx-background-color: #2C3E50; -fx-text-fill: white; -fx-border-color: transparent;");
+        phoneInput.setFont(Font.font("Segoe UI", 14));
+
+        phoneFieldContainer.getChildren().addAll(phoneIndicator, phoneInput);
+
         HBox buttonBox = new HBox(10, saveButton, cancelButton);
         buttonBox.setAlignment(Pos.CENTER);
 
@@ -60,19 +74,10 @@ public class CreateContactForm extends VBox {
                 nameLabel, nameField, nameErrorLabel,
                 surnameLabel, surnameField, surnameErrorLabel,
                 addressLabel, addressField, addressErrorLabel,
-                phoneLabel, phoneField, phoneErrorLabel,
+                phoneLabel, phoneFieldContainer, phoneErrorLabel,
                 buttonBox,
                 successMessage
         );
-
-
-        phoneField.textProperty().addListener((_, _, newValue) -> {
-
-            if (!newValue.startsWith("+996 ")) {
-                phoneField.setText("+996" + " ");
-            }
-        });
-
 
         saveButton.addEventHandler(MOUSE_CLICKED, _ -> {
             boolean isValid = true;
@@ -85,7 +90,7 @@ public class CreateContactForm extends VBox {
 
             try {
                 String name = nameField.getText();
-                checkActionMove.checkForValidName(name);
+                checkActionMove.regexName(name);
                 contacts.setName(name);
 
             } catch (InputMismatchException ex) {
@@ -94,7 +99,7 @@ public class CreateContactForm extends VBox {
             }
             try {
                 String surname = surnameField.getText();
-                checkActionMove.checkForValidSurname(surname);
+                checkActionMove.regexSurname(surname);
                 contacts.setSurname(surname);
 
             } catch (InputMismatchException ex) {
@@ -104,7 +109,7 @@ public class CreateContactForm extends VBox {
 
             try {
                 String address = addressField.getText();
-                checkActionMove.checkForValidAddress(address);
+                checkActionMove.regexAddress(address);
                 contacts.setAddress(address);
 
             } catch (InputMismatchException ex) {
@@ -113,16 +118,11 @@ public class CreateContactForm extends VBox {
             }
 
             try {
-                String phone = phoneField.getText();
-
-
-                if (phone.startsWith("+996 ")) {
-                    phone = phone.substring(5);
-                }
-
-                checkActionMove.checkForValidPhoneNumber(phone);
-                String validNumber = checkActionMove.formatPhoneNumber(phone);
-                contacts.setPhone(validNumber);
+                String phone = checkActionMove.formatPhoneNumber(phoneInput.getText());
+                checkActionMove.regexPhoneNumber(phone);
+                checkActionMove.checkNumberForSave(phone);
+                contacts.setPhone(phone);
+                formatPhoneNumber = phone;
 
             } catch (InputMismatchException ex) {
                 phoneErrorLabel.setText(ex.getMessage());
@@ -130,14 +130,20 @@ public class CreateContactForm extends VBox {
             }
 
             if (isValid) {
-                List<Contact> saveContact = new ArrayList<>();
-                saveContact.add(contacts);
-                contactList.add(contacts);
-                contactService.createContact(saveContact);
+                Contact newContact = new Contact();
+                newContact.setId(createContactMove.generateUniqueId());
+                newContact.setName(nameField.getText().trim());
+                newContact.setSurname(surnameField.getText().trim());
+                newContact.setAddress(addressField.getText().trim());
+                newContact.setPhone(formatPhoneNumber.trim());
+
+                contactList.add(newContact);
+                createContactMove.createContact(List.of(newContact));
+
                 nameField.clear();
                 surnameField.clear();
                 addressField.clear();
-                phoneField.clear();
+                phoneInput.clear();
 
                 successMessage.setText("Success Saved");
                 successMessage.setVisible(true);
@@ -148,7 +154,7 @@ public class CreateContactForm extends VBox {
             nameField.clear();
             surnameField.clear();
             addressField.clear();
-            phoneField.clear();
+            phoneInput.clear();
             nameErrorLabel.setText("");
             surnameErrorLabel.setText("");
             addressErrorLabel.setText("");
@@ -156,7 +162,6 @@ public class CreateContactForm extends VBox {
             successMessage.setVisible(false);
         });
     }
-
 
     private Label createStyledLabel(String text) {
         Label label = new Label(text);
@@ -191,5 +196,4 @@ public class CreateContactForm extends VBox {
                 " -fx-font-size: 12px; -fx-background-radius: 6px;"));
         return button;
     }
-
 }
