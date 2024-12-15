@@ -8,26 +8,26 @@ import repository.*;
 
 public class Main extends Application {
 
-    private CreateContactMove createContactMove;
-    private ShowActionMove showActionMove;
-    private CheckActionMove checkActionMove;
-    private SearchActionMove searchActionMove;
-    private SearchActionByPrefixMove searchActionByPrefixMove;
-    private UpdateActionMove updateByPhoneMove;
+    private CreateServiceImpl contactCreateServiceImpl;
+    private ViewerServiceImpl contactViewerServiceImpl;
+    private DataProcessorImpl dataProcessorImpl;
+    private SearchServiceImpl searchServiceImpl;
+    private SearchPrefixServiceImpl contactSearcherPrefix;
+    private UpdateServiceImpl updateByPhoneMove;
 
 
     @Override
     public void start(Stage stage) throws Exception {
 
-        this.createContactMove = new CreateContactMove();
-        this.showActionMove = new ShowActionMove();
-        this.checkActionMove = new CheckActionMove();
-        this.searchActionMove = new SearchActionMove();
-        this.searchActionByPrefixMove = new SearchActionByPrefixMove();
-        this.updateByPhoneMove = new UpdateActionMove();
+        this.contactCreateServiceImpl = new CreateServiceImpl();
+        this.contactViewerServiceImpl = new ViewerServiceImpl();
+        this.dataProcessorImpl = new DataProcessorImpl();
+        this.searchServiceImpl = new SearchServiceImpl();
+        this.contactSearcherPrefix = new SearchPrefixServiceImpl();
+        this.updateByPhoneMove = new UpdateServiceImpl();
 
 
-        Scene scene = new Scene(new MainControlPane(createContactMove, showActionMove, checkActionMove, searchActionMove, searchActionByPrefixMove, updateByPhoneMove), 500, 600);
+        Scene scene = new Scene(new MainControlPane(contactCreateServiceImpl, contactViewerServiceImpl, dataProcessorImpl, searchServiceImpl, contactSearcherPrefix, updateByPhoneMove), 500, 600);
         stage.setScene(scene);
         stage.show();
     }

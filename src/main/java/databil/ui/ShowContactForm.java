@@ -10,19 +10,19 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.cell.PropertyValueFactory;
 import model.Contact;
-import repository.ShowActionMove;
+import repository.ViewerServiceImpl;
 
 import java.util.List;
 
 public class ShowContactForm extends GridPane {
 
     private final TableView<Contact> contactTableView = new TableView<>();
-    private final ShowActionMove showActionMove;
+    private final ViewerServiceImpl contactViewerServiceImpl;
     private final ObservableList<Contact> contactList;
 
-    public ShowContactForm(ObservableList<Contact> contactList, ShowActionMove showActionMove) {
+    public ShowContactForm(ObservableList<Contact> contactList, ViewerServiceImpl contactViewerServiceImpl) {
         this.contactList = contactList;
-        this.showActionMove = showActionMove;
+        this.contactViewerServiceImpl = contactViewerServiceImpl;
         this.setPadding(new Insets(20));
         this.setAlignment(Pos.CENTER);
         this.setStyle("-fx-background-color: #2C3E50; -fx-font-family: 'Segoe UI', sans-serif;");
@@ -63,7 +63,7 @@ public class ShowContactForm extends GridPane {
 
     public void refreshContacts() {
         try {
-            List<Contact> result = showActionMove.showContact();
+            List<Contact> result = contactViewerServiceImpl.showContact();
             contactList.setAll(result);
         } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
