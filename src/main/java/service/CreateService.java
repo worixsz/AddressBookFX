@@ -4,7 +4,7 @@ import model.Contact;
 
 import java.util.List;
 
-public interface CreateAction {
+public interface CreateService {
 
     void createContact(List<Contact> contacts);
 }
