@@ -2,19 +2,19 @@ package repository;
 
 import fileService.FileService;
 import model.Contact;
-import service.ShowAction;
+import service.ViewerService;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ShowActionMove implements ShowAction {
+public class ViewerServiceImpl implements ViewerService {
 
 
     private final FileService fileService;
 
     private final List<Contact> contactList;
 
-    public ShowActionMove() {
+    public ViewerServiceImpl() {
         fileService = new FileService();
         this.contactList = fileService.read() != null ? fileService.read() : new ArrayList<>();
 

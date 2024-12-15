@@ -17,19 +17,19 @@ public class MainControlPane extends StackPane {
     private final SearchContactForm searchContactForm;
     private final UpdateContactForm updateContactForm;
 
-    public MainControlPane(CreateContactMove createContactMove,
-                           ShowActionMove showActionMove,
-                           CheckActionMove checkActionMove,
-                           SearchActionMove searchActionMove,
-                           SearchActionByPrefixMove searchActionByPrefixMove,
-                           UpdateActionMove updateByPhoneMove
+    public MainControlPane(CreateServiceImpl contactCreateServiceImpl,
+                           ViewerServiceImpl contactViewerServiceImpl,
+                           DataProcessorImpl dataProcessorImpl,
+                           SearchServiceImpl searchServiceImpl,
+                           SearchPrefixServiceImpl contactSearcherPrefix,
+                           UpdateServiceImpl updateByPhoneMove
     ) {
 
         ObservableList<Contact> contactList = FXCollections.observableArrayList();
-        this.createContactForm = new CreateContactForm(contactList, createContactMove, checkActionMove);
-        this.showContactForm = new ShowContactForm(contactList, showActionMove);
-        this.searchContactForm = new SearchContactForm(searchActionMove, searchActionByPrefixMove, checkActionMove);
-        this.updateContactForm = new UpdateContactForm(contactList, checkActionMove);
+        this.createContactForm = new CreateContactForm(contactList, contactCreateServiceImpl, dataProcessorImpl);
+        this.showContactForm = new ShowContactForm(contactList, contactViewerServiceImpl);
+        this.searchContactForm = new SearchContactForm(searchServiceImpl, contactSearcherPrefix, dataProcessorImpl);
+        this.updateContactForm = new UpdateContactForm(contactList, dataProcessorImpl);
 
 
         Button createButton = new Button("CREATE CONTACT");

@@ -2,15 +2,15 @@ package repository;
 
 import fileService.FileService;
 import model.Contact;
-import service.SearchActionByPrefix;
+import service.SearchPrefixService;
 
 import java.util.List;
 
-public class SearchActionByPrefixMove implements SearchActionByPrefix {
+public class SearchPrefixServiceImpl implements SearchPrefixService {
 
     private final FileService fileService;
 
-    public SearchActionByPrefixMove() {
+    public SearchPrefixServiceImpl() {
         this.fileService = new FileService();
     }
 

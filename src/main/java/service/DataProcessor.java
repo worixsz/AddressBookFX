@@ -1,6 +1,6 @@
 package service;
 
-public interface CheckAction {
+public interface DataProcessor {
 
     String formatPhoneNumber(String number);
 
@@ -13,6 +13,8 @@ public interface CheckAction {
     void regexPhoneNumber(String number);
 
     void checkNumberForSave(String number);
+
+    long generateUniqueId();
 
 
 }

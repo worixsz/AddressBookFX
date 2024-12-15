@@ -4,7 +4,7 @@ import model.Contact;
 
 import java.util.List;
 
-public interface ShowAction {
+public interface ViewerService {
 
     List<Contact> showContact();
 }

@@ -8,12 +8,10 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import model.Contact;
-import repository.CheckActionMove;
-import repository.UpdateActionMove;
+import repository.DataProcessorImpl;
+import repository.UpdateServiceImpl;
 
 import java.util.List;
-
-import static javafx.scene.input.MouseEvent.MOUSE_CLICKED;
 
 public class UpdateContactForm extends BorderPane {
 
@@ -28,13 +26,13 @@ public class UpdateContactForm extends BorderPane {
     private TextField phoneField;
 
     private final ListView<Contact> contactListView;
-    private final UpdateActionMove updateByPhoneMove;
-    private final CheckActionMove checkActionMove;
+    private final UpdateServiceImpl updateByPhoneMove;
+    private final DataProcessorImpl dataProcessorImpl;
     private final ObservableList<Contact> contactList;
 
-    public UpdateContactForm(ObservableList<Contact> contactList, CheckActionMove checkActionMove) {
-        this.updateByPhoneMove = new UpdateActionMove();
-        this.checkActionMove = checkActionMove;
+    public UpdateContactForm(ObservableList<Contact> contactList, DataProcessorImpl dataProcessorImpl) {
+        this.updateByPhoneMove = new UpdateServiceImpl();
+        this.dataProcessorImpl = dataProcessorImpl;
         this.contactList = contactList;
 
 
@@ -73,13 +71,13 @@ public class UpdateContactForm extends BorderPane {
         addressSearchField = createInputField();
 
         Button nameSearchButton = createStyledButton("🔍");
-        nameSearchButton.setOnMouseClicked(e -> handleSearch(nameSearchField.getText().trim(), "name"));
+        nameSearchButton.setOnMouseClicked(_ -> handleSearch(nameSearchField.getText().trim(), "name"));
         Button surnameSearchButton = createStyledButton("🔍");
-        surnameSearchButton.setOnMouseClicked(e -> handleSearch(surnameSearchField.getText().trim(), "surname"));
+        surnameSearchButton.setOnMouseClicked(_ -> handleSearch(surnameSearchField.getText().trim(), "surname"));
         Button phoneSearchButton = createStyledButton("🔍");
-        phoneSearchButton.setOnMouseClicked(e -> handleSearch(phoneSearchField.getText().trim(), "phone"));
+        phoneSearchButton.setOnMouseClicked(_ -> handleSearch(phoneSearchField.getText().trim(), "phone"));
         Button addressSearchButton = createStyledButton("🔍");
-        addressSearchButton.setOnMouseClicked(e -> handleSearch(addressSearchField.getText().trim(), "address"));
+        addressSearchButton.setOnMouseClicked(_ -> handleSearch(addressSearchField.getText().trim(), "address"));
 
         HBox nameRow = new HBox(10, nameSearchLabel, nameSearchField, nameSearchButton);
         HBox surnameRow = new HBox(10, surnameSearchLabel, surnameSearchField, surnameSearchButton);
@@ -175,7 +173,7 @@ public class UpdateContactForm extends BorderPane {
             String phone = phoneField.getText().trim();
             String address = addressField.getText().trim();
 
-            String formattedPhone = checkActionMove.formatPhoneNumber(phone);
+            String formattedPhone = dataProcessorImpl.formatPhoneNumber(phone);
 
             Contact updatedContact = new Contact(
                     name.isEmpty() ? selectedContact.getName() : name,

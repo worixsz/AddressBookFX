@@ -4,7 +4,7 @@ import model.Contact;
 
 import java.util.List;
 
-public interface DeleteAction {
+public interface DeleteService {
 
     void deleteContactByIndex(List<Contact> contacts);
 

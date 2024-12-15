@@ -4,7 +4,7 @@ import model.Contact;
 
 import java.util.List;
 
-public interface SearchActionByPrefix {
+public interface SearchPrefixService {
 
     List<Contact> findByNamePrefix(String namePrefix);
 

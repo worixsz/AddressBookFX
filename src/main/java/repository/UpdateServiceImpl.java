@@ -2,23 +2,24 @@ package repository;
 
 import fileService.FileService;
 import model.Contact;
-import service.UpdateAction;
+import service.UpdateService;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class UpdateActionMove implements UpdateAction {
+public class UpdateServiceImpl implements UpdateService {
 
     private final FileService fileService;
     private final List<Contact> contacts;
 
-    public UpdateActionMove() {
+    public UpdateServiceImpl() {
         this.fileService = new FileService();
         this.contacts = fileService.read() != null ? fileService.read() : new ArrayList<>();
     }
 
     @Override
     public void update(Contact oldContact, Contact newContact) {
+        newContact.setId(oldContact.getId());
         contacts.remove(oldContact);
         contacts.add(newContact);
         fileService.write(contacts);

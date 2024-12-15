@@ -9,8 +9,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import model.Contact;
-import repository.CheckActionMove;
-import repository.CreateContactMove;
+import repository.DataProcessorImpl;
+import repository.CreateServiceImpl;
 
 import java.util.InputMismatchException;
 import java.util.List;
@@ -26,7 +26,7 @@ public class CreateContactForm extends VBox {
 
     private final Contact contacts;
 
-    public CreateContactForm(ObservableList<Contact> contactList, CreateContactMove createContactMove, CheckActionMove checkActionMove) {
+    public CreateContactForm(ObservableList<Contact> contactList, CreateServiceImpl contactCreateServiceImpl, DataProcessorImpl dataProcessorImpl) {
         this.contacts = new Contact();
         this.setAlignment(Pos.CENTER);
         this.setStyle("-fx-background-color: #1A2A36; -fx-font-family: 'Segoe UI', sans-serif;");
@@ -90,7 +90,7 @@ public class CreateContactForm extends VBox {
 
             try {
                 String name = nameField.getText();
-                checkActionMove.regexName(name);
+                dataProcessorImpl.regexName(name);
                 contacts.setName(name);
 
             } catch (InputMismatchException ex) {
@@ -99,7 +99,7 @@ public class CreateContactForm extends VBox {
             }
             try {
                 String surname = surnameField.getText();
-                checkActionMove.regexSurname(surname);
+                dataProcessorImpl.regexSurname(surname);
                 contacts.setSurname(surname);
 
             } catch (InputMismatchException ex) {
@@ -109,7 +109,7 @@ public class CreateContactForm extends VBox {
 
             try {
                 String address = addressField.getText();
-                checkActionMove.regexAddress(address);
+                dataProcessorImpl.regexAddress(address);
                 contacts.setAddress(address);
 
             } catch (InputMismatchException ex) {
@@ -118,9 +118,9 @@ public class CreateContactForm extends VBox {
             }
 
             try {
-                String phone = checkActionMove.formatPhoneNumber(phoneInput.getText());
-                checkActionMove.regexPhoneNumber(phone);
-                checkActionMove.checkNumberForSave(phone);
+                String phone = dataProcessorImpl.formatPhoneNumber(phoneInput.getText());
+                dataProcessorImpl.regexPhoneNumber(phone);
+                dataProcessorImpl.checkNumberForSave(phone);
                 contacts.setPhone(phone);
                 formatPhoneNumber = phone;
 
@@ -131,14 +131,14 @@ public class CreateContactForm extends VBox {
 
             if (isValid) {
                 Contact newContact = new Contact();
-                newContact.setId(createContactMove.generateUniqueId());
+                newContact.setId(dataProcessorImpl.generateUniqueId());
                 newContact.setName(nameField.getText().trim());
                 newContact.setSurname(surnameField.getText().trim());
                 newContact.setAddress(addressField.getText().trim());
                 newContact.setPhone(formatPhoneNumber.trim());
 
                 contactList.add(newContact);
-                createContactMove.createContact(List.of(newContact));
+                contactCreateServiceImpl.createContact(List.of(newContact));
 
                 nameField.clear();
                 surnameField.clear();

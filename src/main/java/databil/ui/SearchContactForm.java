@@ -6,18 +6,18 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import model.Contact;
-import repository.CheckActionMove;
-import repository.SearchActionMove;
-import repository.SearchActionByPrefixMove;
+import repository.DataProcessorImpl;
+import repository.SearchServiceImpl;
+import repository.SearchPrefixServiceImpl;
 
 import java.util.InputMismatchException;
 import java.util.List;
 
 public class SearchContactForm extends GridPane {
 
-    private final SearchActionMove searchActionMove;
-    private final SearchActionByPrefixMove searchByPrefix;
-    private final CheckActionMove checkActionMove;
+    private final SearchServiceImpl searchServiceImpl;
+    private final SearchPrefixServiceImpl searchByPrefix;
+    private final DataProcessorImpl dataProcessorImpl;
 
     private final TextField searchByNameField = new TextField();
     private final TextField searchBySurnameField = new TextField();
@@ -26,10 +26,10 @@ public class SearchContactForm extends GridPane {
 
     private final TextArea resultArea = new TextArea();
 
-    public SearchContactForm(SearchActionMove searchActionMove, SearchActionByPrefixMove searchByPrefix, CheckActionMove checkActionMove1) {
-        this.searchActionMove = searchActionMove;
+    public SearchContactForm(SearchServiceImpl searchServiceImpl, SearchPrefixServiceImpl searchByPrefix, DataProcessorImpl dataProcessorImpl1) {
+        this.searchServiceImpl = searchServiceImpl;
         this.searchByPrefix = searchByPrefix;
-        this.checkActionMove = checkActionMove1;
+        this.dataProcessorImpl = dataProcessorImpl1;
 
         this.setPadding(new Insets(20));
         this.setHgap(20);
@@ -77,15 +77,15 @@ public class SearchContactForm extends GridPane {
             switch (searchType) {
                 case "name" -> {
                     input = searchByNameField.getText();
-                    checkActionMove.regexName(input);
+                    dataProcessorImpl.regexName(input);
                 }
                 case "surname" -> {
                     input = searchBySurnameField.getText();
-                    checkActionMove.regexSurname(input);
+                    dataProcessorImpl.regexSurname(input);
                 }
                 case "address" -> {
                     input = searchByAddressField.getText();
-                    checkActionMove.regexAddress(input);
+                    dataProcessorImpl.regexAddress(input);
                 }
                 case "phone" -> {
                     input = searchByPhoneField.getText();
@@ -102,10 +102,10 @@ public class SearchContactForm extends GridPane {
             }
 
             switch (searchType) {
-                case "name" -> results = searchActionMove.searchContactByName(input);
-                case "surname" -> results = searchActionMove.searchContactBySurname(input);
-                case "address" -> results = searchActionMove.searchContactByAddress(input);
-                case "phone" -> results = searchActionMove.searchContactByPhone(input);
+                case "name" -> results = searchServiceImpl.searchContactByName(input);
+                case "surname" -> results = searchServiceImpl.searchContactBySurname(input);
+                case "address" -> results = searchServiceImpl.searchContactByAddress(input);
+                case "phone" -> results = searchServiceImpl.searchContactByPhone(input);
                 default -> throw new IllegalArgumentException("Invalid search type");
             }
 
