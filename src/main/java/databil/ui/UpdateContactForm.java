@@ -8,8 +8,8 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import model.Contact;
-import repository.CheckActionMove;
-import repository.UpdateActionMove;
+import repository.DataProcessorImpl;
+import repository.UpdateServiceImpl;
 
 import java.util.List;
 
@@ -26,13 +26,13 @@ public class UpdateContactForm extends BorderPane {
     private TextField phoneField;
 
     private final ListView<Contact> contactListView;
-    private final UpdateActionMove updateByPhoneMove;
-    private final CheckActionMove checkActionMove;
+    private final UpdateServiceImpl updateByPhoneMove;
+    private final DataProcessorImpl dataProcessorImpl;
     private final ObservableList<Contact> contactList;
 
-    public UpdateContactForm(ObservableList<Contact> contactList, CheckActionMove checkActionMove) {
-        this.updateByPhoneMove = new UpdateActionMove();
-        this.checkActionMove = checkActionMove;
+    public UpdateContactForm(ObservableList<Contact> contactList, DataProcessorImpl dataProcessorImpl) {
+        this.updateByPhoneMove = new UpdateServiceImpl();
+        this.dataProcessorImpl = dataProcessorImpl;
         this.contactList = contactList;
 
 
@@ -173,7 +173,7 @@ public class UpdateContactForm extends BorderPane {
             String phone = phoneField.getText().trim();
             String address = addressField.getText().trim();
 
-            String formattedPhone = checkActionMove.formatPhoneNumber(phone);
+            String formattedPhone = dataProcessorImpl.formatPhoneNumber(phone);
 
             Contact updatedContact = new Contact(
                     name.isEmpty() ? selectedContact.getName() : name,
