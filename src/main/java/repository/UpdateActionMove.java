@@ -60,9 +60,10 @@ public class UpdateActionMove implements UpdateAction {
 
     @Override
     public List<Contact> findAllByPhone(String phone) {
+        String cleanPhone = phone.replaceAll("\\s", "");
         List<Contact> matchingContacts = new ArrayList<>();
         for (Contact contact : contacts) {
-            if (contact.getPhone().equals(phone)) {
+            if (contact.getPhone().replaceAll("\\s", "").equalsIgnoreCase(cleanPhone)) {
                 matchingContacts.add(contact);
             }
         }

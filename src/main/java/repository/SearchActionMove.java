@@ -56,7 +56,7 @@ public class SearchActionMove implements SearchAction {
         String finalFormattedPhone = "+996 " + cleanPhone.replaceAll("(.{3})(.{3})(.{3})", "$1 $2 $3");
 
         return contacts.stream()
-                .filter(contact -> contact.getPhone().equals(finalFormattedPhone))
+                .filter(contact -> contact.getPhone().equalsIgnoreCase(finalFormattedPhone))
                 .collect(Collectors.toList());
 
 

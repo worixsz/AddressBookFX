@@ -3,6 +3,7 @@ package model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Objects;
+import java.util.UUID;
 
 public class Contact {
 
@@ -18,6 +19,9 @@ public class Contact {
     @JsonProperty("phone")
     private String phone;
 
+    @JsonProperty("id")
+    private long id;
+
     public Contact() {
     }
 
@@ -28,6 +32,7 @@ public class Contact {
         this.surname = surname;
         this.address = address;
         this.phone = phone;
+        this.id = 0L;
     }
 
     @Override
@@ -76,6 +81,13 @@ public class Contact {
         this.phone = phone;
     }
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     @Override
     public String toString() {
