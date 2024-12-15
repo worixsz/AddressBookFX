@@ -2,18 +2,18 @@ package repository;
 
 import fileService.FileService;
 import model.Contact;
-import service.SearchAction;
+import service.SearchService;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class SearchActionMove implements SearchAction {
+public class SearchServiceImpl implements SearchService {
 
     private final FileService fileService;
     private final List<Contact> contacts;
 
-    public SearchActionMove() {
+    public SearchServiceImpl() {
         this.fileService = new FileService();
         this.contacts = fileService.read() != null ? fileService.read() : new ArrayList<>();
 

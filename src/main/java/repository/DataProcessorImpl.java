@@ -2,21 +2,26 @@ package repository;
 
 import fileService.FileService;
 import model.Contact;
-import service.CheckAction;
+import service.DataProcessor;
 
-import java.util.ArrayList;
-import java.util.InputMismatchException;
-import java.util.List;
+import java.util.*;
 
 
-public class CheckActionMove implements CheckAction {
+public class DataProcessorImpl implements DataProcessor {
 
     private final List<Contact> contacts;
 
+    private final Set<Long> existingIds;
 
-    public CheckActionMove() {
+
+    public DataProcessorImpl() {
         FileService fileService = new FileService();
         this.contacts = fileService.read() != null ? fileService.read() : new ArrayList<>();
+        this.existingIds = new HashSet<>();
+
+        for (Contact contact : contacts) {
+            existingIds.add(contact.getId());
+        }
 
     }
 
@@ -99,6 +104,17 @@ public class CheckActionMove implements CheckAction {
         }
     }
 
+    @Override
+    public long generateUniqueId() {
+        Random random = new Random();
+        long uniqueId;
+        do {
+            uniqueId = 1_000_000_000L + (long) (random.nextDouble() * 9_000_000_000L);
+        } while (existingIds.contains(uniqueId));
+
+        existingIds.add(uniqueId);
+        return uniqueId;
+    }
 
 }
 

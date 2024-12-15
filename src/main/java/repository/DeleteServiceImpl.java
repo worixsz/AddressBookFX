@@ -1,18 +1,18 @@
 package repository;
 
 import model.Contact;
-import service.DeleteAction;
+import service.DeleteService;
 
 import java.util.List;
 import java.util.Scanner;
 
-public class DeleteActionMove implements DeleteAction {
+public class DeleteServiceImpl implements DeleteService {
 
     Scanner SC = new Scanner(System.in);
-    private final CheckActionMove checkMove;
+    private final DataProcessorImpl checkMove;
 
-    public DeleteActionMove() {
-        this.checkMove = new CheckActionMove();
+    public DeleteServiceImpl() {
+        this.checkMove = new DataProcessorImpl();
     }
 
     @Override
