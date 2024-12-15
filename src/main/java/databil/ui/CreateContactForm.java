@@ -29,13 +29,13 @@ public class CreateContactForm extends VBox {
     public CreateContactForm(ObservableList<Contact> contactList, CreateContactMove createContactMove, CheckActionMove checkActionMove) {
         this.contacts = new Contact();
         this.setAlignment(Pos.CENTER);
-        this.setStyle("-fx-background-color: #2C3E50; -fx-font-family: 'Segoe UI', sans-serif;");
-        this.setSpacing(10);
+        this.setStyle("-fx-background-color: #1A2A36; -fx-font-family: 'Segoe UI', sans-serif;");
+        this.setSpacing(3);
 
-        this.setPadding(new Insets(20, 100, 20, 100));
+        this.setPadding(new Insets(30, 100, 30, 100));
 
         Text successMessage = new Text();
-        successMessage.setFont(Font.font("Segoe UI", 14));
+        successMessage.setFont(Font.font("Segoe UI", 16));
         successMessage.setFill(Color.LIMEGREEN);
         successMessage.setVisible(false);
 
@@ -53,21 +53,21 @@ public class CreateContactForm extends VBox {
         Button cancelButton = createStyledButton("Cancel");
 
         HBox phoneFieldContainer = new HBox();
-        phoneFieldContainer.setSpacing(5);
-        phoneFieldContainer.setStyle("-fx-background-color: #34495E; -fx-padding: 5; -fx-border-radius: 6px;");
+        phoneFieldContainer.setSpacing(10);
+        phoneFieldContainer.setStyle("-fx-background-color: #2A3A50; -fx-padding: 10; -fx-border-radius: 8px;");
 
         Label phoneIndicator = new Label("+996");
-        phoneIndicator.setFont(Font.font("Segoe UI", 14));
+        phoneIndicator.setFont(Font.font("Segoe UI", 16));
         phoneIndicator.setTextFill(Color.WHITE);
         phoneIndicator.setAlignment(Pos.CENTER);
 
         TextField phoneInput = new TextField();
-        phoneInput.setStyle("-fx-background-color: #2C3E50; -fx-text-fill: white; -fx-border-color: transparent;");
-        phoneInput.setFont(Font.font("Segoe UI", 14));
+        phoneInput.setStyle("-fx-background-color: #1A2A36; -fx-text-fill: white; -fx-border-color: transparent;");
+        phoneInput.setFont(Font.font("Segoe UI", 16));
 
         phoneFieldContainer.getChildren().addAll(phoneIndicator, phoneInput);
 
-        HBox buttonBox = new HBox(10, saveButton, cancelButton);
+        HBox buttonBox = new HBox(15, saveButton, cancelButton);
         buttonBox.setAlignment(Pos.CENTER);
 
         this.getChildren().addAll(
@@ -145,7 +145,7 @@ public class CreateContactForm extends VBox {
                 addressField.clear();
                 phoneInput.clear();
 
-                successMessage.setText("Success Saved");
+                successMessage.setText("Successfully Saved!");
                 successMessage.setVisible(true);
             }
         });
@@ -165,7 +165,7 @@ public class CreateContactForm extends VBox {
 
     private Label createStyledLabel(String text) {
         Label label = new Label(text);
-        label.setFont(Font.font("Segoe UI", 14));
+        label.setFont(Font.font("Segoe UI", 16));
         label.setTextFill(Color.WHITE);
         return label;
     }
@@ -178,22 +178,22 @@ public class CreateContactForm extends VBox {
 
     private Button createStyledButton(String text) {
         Button button = new Button(text);
-        button.setStyle("-fx-background-color: #34495E;" +
+        button.setStyle("-fx-background-color: #2A3A50;" +
                 " -fx-text-fill: white; -fx-font-weight: bold;" +
-                " -fx-font-size: 12px; -fx-background-radius: 6px;" +
-                " -fx-border-radius: 5px;");
-        button.setPrefWidth(80);
+                " -fx-font-size: 14px; -fx-background-radius: 8px;" +
+                " -fx-border-radius: 6px;");
+        button.setPrefWidth(150);
         button.setPrefHeight(20);
 
-        button.setOnMouseEntered(_ -> button.setStyle("-fx-background-color: #2C3E50;" +
+        button.setOnMouseEntered(_ -> button.setStyle("-fx-background-color: #1A2A36;" +
                 " -fx-text-fill: white; -fx-font-weight: bold;" +
-                " -fx-font-size: 12px; -fx-background-radius: 6px;"));
-        button.setOnMouseExited(_ -> button.setStyle("-fx-background-color: #34495E;" +
+                " -fx-font-size: 14px; -fx-background-radius: 8px;"));
+        button.setOnMouseExited(_ -> button.setStyle("-fx-background-color: #2A3A50;" +
                 " -fx-text-fill: white; -fx-font-weight: bold;" +
-                " -fx-font-size: 12px; -fx-background-radius: 6px;"));
-        button.setOnMouseClicked(_ -> button.setStyle("-fx-background-color: #2C3E50;" +
+                " -fx-font-size: 14px; -fx-background-radius: 8px;"));
+        button.setOnMouseClicked(_ -> button.setStyle("-fx-background-color: #1A2A36;" +
                 " -fx-text-fill: white; -fx-font-weight: bold;" +
-                " -fx-font-size: 12px; -fx-background-radius: 6px;"));
+                " -fx-font-size: 14px; -fx-background-radius: 8px;"));
         return button;
     }
 }

@@ -37,17 +37,15 @@ public class UpdateContactForm extends BorderPane {
         this.checkActionMove = checkActionMove;
         this.contactList = contactList;
 
-        // Настройка стиля основного контейнера
-        this.setPadding(new Insets(20));
-        this.setStyle("-fx-background-color: linear-gradient(to bottom, #2C3E50, #34495E);");
 
-        // Верхняя панель для поиска (4 столбца)
+        this.setPadding(new Insets(20));
+        this.setStyle("-fx-background-color: #1A2A36; -fx-font-family: 'Segoe UI', sans-serif;");
+
         VBox searchBox = createSearchBox();
         this.setTop(searchBox);
 
-        // Центральная панель с результатами
         contactListView = new ListView<>();
-        contactListView.setStyle("-fx-background-color: #ECF0F1; -fx-font-size: 14px;");
+        contactListView.setStyle("-fx-background-color: #ECF0F1; -fx-font-size: 14px; -fx-background-radius: 10px;");
         contactListView.setPrefHeight(150);
         contactListView.getSelectionModel().selectedItemProperty().addListener((_, _, newSelection) -> {
             if (newSelection != null) populateFields(newSelection);
@@ -57,7 +55,6 @@ public class UpdateContactForm extends BorderPane {
         centerBox.setPadding(new Insets(10));
         this.setCenter(centerBox);
 
-        // Нижняя панель для обновления
         VBox bottomBox = createUpdateBox();
         this.setBottom(bottomBox);
     }
@@ -149,7 +146,8 @@ public class UpdateContactForm extends BorderPane {
             switch (type) {
                 case "name" -> results = updateByPhoneMove.findAllByName(query);
                 case "surname" -> results = updateByPhoneMove.findAllBySurname(query);
-                case "phone" -> results = updateByPhoneMove.findAllByPhone(query.startsWith("+996") ? query : "+996 " + query);
+                case "phone" ->
+                        results = updateByPhoneMove.findAllByPhone(query.startsWith("+996") ? query : "+996 " + query);
                 case "address" -> results = updateByPhoneMove.findAllByAddress(query);
                 default -> throw new IllegalArgumentException("Invalid search type");
             }
@@ -232,9 +230,22 @@ public class UpdateContactForm extends BorderPane {
 
     private Button createStyledButton(String text) {
         Button button = new Button(text);
-        button.setStyle("-fx-background-color: #1ABC9C; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 10px;");
-        button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: #16A085; -fx-text-fill: white;"));
-        button.setOnMouseExited(e -> button.setStyle("-fx-background-color: #1ABC9C; -fx-text-fill: white;"));
+        button.setStyle("-fx-background-color: #2A3A50;" +
+                " -fx-text-fill: white; -fx-font-weight: bold;" +
+                " -fx-font-size: 14px; -fx-background-radius: 8px;" +
+                " -fx-border-radius: 6px;");
+        button.setPrefWidth(70);
+        button.setPrefHeight(30);
+
+        button.setOnMouseEntered(_ -> button.setStyle("-fx-background-color: #1A2A36;" +
+                " -fx-text-fill: white; -fx-font-weight: bold;" +
+                " -fx-font-size: 14px; -fx-background-radius: 8px;"));
+        button.setOnMouseExited(_ -> button.setStyle("-fx-background-color: #2A3A50;" +
+                " -fx-text-fill: white; -fx-font-weight: bold;" +
+                " -fx-font-size: 14px; -fx-background-radius: 8px;"));
+        button.setOnMouseClicked(_ -> button.setStyle("-fx-background-color: #1A2A36;" +
+                " -fx-text-fill: white; -fx-font-weight: bold;" +
+                " -fx-font-size: 14px; -fx-background-radius: 8px;"));
         return button;
     }
 
