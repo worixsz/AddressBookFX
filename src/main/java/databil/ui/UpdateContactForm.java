@@ -11,23 +11,23 @@ import model.Contact;
 import repository.CheckActionMove;
 import repository.UpdateActionMove;
 
-import java.util.InputMismatchException;
 import java.util.List;
 
 import static javafx.scene.input.MouseEvent.MOUSE_CLICKED;
 
-public class UpdateContactForm extends GridPane {
+public class UpdateContactForm extends BorderPane {
 
-    private final TextField searchFieldByName;
-    private final TextField searchFieldBySurname;
-    private final TextField searchFieldByPhone;
-    private final TextField searchFieldByAddress;
+    private TextField nameSearchField;
+    private TextField surnameSearchField;
+    private TextField phoneSearchField;
+    private TextField addressSearchField;
+
+    private TextField nameField;
+    private TextField surnameField;
+    private TextField addressField;
+    private TextField phoneField;
+
     private final ListView<Contact> contactListView;
-    private final TextField nameField;
-    private final TextField surnameField;
-    private final TextField addressField;
-    private final TextField phoneFieldTwo;
-
     private final UpdateActionMove updateByPhoneMove;
     private final CheckActionMove checkActionMove;
     private final ObservableList<Contact> contactList;
@@ -37,193 +37,131 @@ public class UpdateContactForm extends GridPane {
         this.checkActionMove = checkActionMove;
         this.contactList = contactList;
 
-        this.setPadding(new Insets(20, 20, 20, 20));
-        this.setStyle("-fx-background-color: #34495E; -fx-font-family: 'Segoe UI', sans-serif;");
+        // Настройка стиля основного контейнера
+        this.setPadding(new Insets(20));
+        this.setStyle("-fx-background-color: linear-gradient(to bottom, #2C3E50, #34495E);");
 
-        searchFieldByName = new TextField();
-        Button searchButtonName = createStyledButton("Search");
-        searchButtonName.addEventHandler(MOUSE_CLICKED, _ -> handleSearchByName());
-        HBox searchByNameBox = createHorizontalBox("Search By Name:", searchFieldByName, searchButtonName);
-        searchByNameBox.setAlignment(Pos.CENTER_RIGHT);
-        searchByNameBox.setPadding(new Insets(10));
+        // Верхняя панель для поиска (4 столбца)
+        VBox searchBox = createSearchBox();
+        this.setTop(searchBox);
 
-        searchFieldBySurname = new TextField();
-        Button searchButtonSurname = createStyledButton("Search");
-        searchButtonSurname.addEventHandler(MOUSE_CLICKED, _ -> handleSearchBySurname());
-        HBox searchBySurnameBox = createHorizontalBox("Search By Surname:", searchFieldBySurname, searchButtonSurname);
-        searchBySurnameBox.setAlignment(Pos.CENTER_RIGHT);
-        searchBySurnameBox.setPadding(new Insets(10));
-
-        searchFieldByPhone = new TextField();
-        searchFieldByPhone.textProperty().addListener((_, _, newValue) -> {
-            if (!newValue.startsWith("+996 ")) {
-                searchFieldByPhone.setText("+996 ");
-            }
-        });
-        Button searchButtonPhone = createStyledButton("Search");
-        searchButtonPhone.addEventHandler(MOUSE_CLICKED, _ -> handleSearchByPhone());
-        HBox searchByPhoneBox = createHorizontalBox("Search By Phone:", searchFieldByPhone, searchButtonPhone);
-        searchByPhoneBox.setAlignment(Pos.CENTER_RIGHT);
-        searchByPhoneBox.setPadding(new Insets(10));
-
-        searchFieldByAddress = new TextField();
-        Button searchButtonAddress = createStyledButton("Search");
-        searchButtonAddress.addEventHandler(MOUSE_CLICKED, _ -> handleSearchByAddress());
-        HBox searchByAddressBox = createHorizontalBox("Search By Address:", searchFieldByAddress, searchButtonAddress);
-        searchByAddressBox.setAlignment(Pos.CENTER_RIGHT);
-        searchByAddressBox.setPadding(new Insets(10));
-
+        // Центральная панель с результатами
         contactListView = new ListView<>();
-        contactListView.setPrefHeight(100);
+        contactListView.setStyle("-fx-background-color: #ECF0F1; -fx-font-size: 14px;");
+        contactListView.setPrefHeight(150);
         contactListView.getSelectionModel().selectedItemProperty().addListener((_, _, newSelection) -> {
-            if (newSelection != null) {
-                populateFields(newSelection);
-            }
+            if (newSelection != null) populateFields(newSelection);
         });
 
-        nameField = new TextField();
-        surnameField = new TextField();
-        addressField = new TextField();
-        phoneFieldTwo = new TextField();
-        phoneFieldTwo.textProperty().addListener((_, _, newValue) -> {
-            if (!newValue.startsWith("+996 ")) {
-                phoneFieldTwo.setText("+996 ");
-            }
-        });
-        Button updateButton = createStyledButton("UPDATE");
-        updateButton.addEventHandler(MOUSE_CLICKED, _ -> handleUpdate());
+        VBox centerBox = new VBox(contactListView);
+        centerBox.setPadding(new Insets(10));
+        this.setCenter(centerBox);
+
+        // Нижняя панель для обновления
+        VBox bottomBox = createUpdateBox();
+        this.setBottom(bottomBox);
+    }
+
+    private VBox createSearchBox() {
+        Label nameSearchLabel = createStyledLabel("Name:             ");
+        nameSearchField = createInputField();
+
+        Label surnameSearchLabel = createStyledLabel("Surname:        ");
+        surnameSearchField = createInputField();
+
+        Label phoneSearchLabel = createStyledLabel("Phone (+996): ");
+        phoneSearchField = createInputField();
+
+        Label addressSearchLabel = createStyledLabel("Address:          ");
+        addressSearchField = createInputField();
+
+        Button nameSearchButton = createStyledButton("🔍");
+        nameSearchButton.setOnMouseClicked(e -> handleSearch(nameSearchField.getText().trim(), "name"));
+        Button surnameSearchButton = createStyledButton("🔍");
+        surnameSearchButton.setOnMouseClicked(e -> handleSearch(surnameSearchField.getText().trim(), "surname"));
+        Button phoneSearchButton = createStyledButton("🔍");
+        phoneSearchButton.setOnMouseClicked(e -> handleSearch(phoneSearchField.getText().trim(), "phone"));
+        Button addressSearchButton = createStyledButton("🔍");
+        addressSearchButton.setOnMouseClicked(e -> handleSearch(addressSearchField.getText().trim(), "address"));
+
+        HBox nameRow = new HBox(10, nameSearchLabel, nameSearchField, nameSearchButton);
+        HBox surnameRow = new HBox(10, surnameSearchLabel, surnameSearchField, surnameSearchButton);
+        HBox phoneRow = new HBox(10, phoneSearchLabel, phoneSearchField, phoneSearchButton);
+        HBox addressRow = new HBox(10, addressSearchLabel, addressSearchField, addressSearchButton);
+
+        nameRow.setPrefWidth(100);
+        surnameRow.setPrefWidth(100);
+        phoneRow.setPrefWidth(100);
+        addressRow.setPrefWidth(100);
+
+        nameRow.setAlignment(Pos.CENTER_LEFT);
+        surnameRow.setAlignment(Pos.CENTER_LEFT);
+        phoneRow.setAlignment(Pos.CENTER_LEFT);
+        addressRow.setAlignment(Pos.CENTER_LEFT);
+
+        VBox searchLayout = new VBox(10, nameRow, surnameRow, phoneRow, addressRow);
+        searchLayout.setAlignment(Pos.CENTER_LEFT);
+        searchLayout.setPadding(new Insets(20));
+
+        return searchLayout;
+    }
+
+
+    private VBox createUpdateBox() {
+        Label nameLabel = createStyledLabel("New Name:");
+        nameField = createInputField();
+
+        Label surnameLabel = createStyledLabel("New Surname:");
+        surnameField = createInputField();
+
+        Label phoneLabel = createStyledLabel("New Phone (+996):");
+        phoneField = createInputField();
+
+        Label addressLabel = createStyledLabel("New Address:");
+        addressField = createInputField();
+
+        Button updateButton = createStyledButton("Update");
+        updateButton.setOnMouseClicked(_ -> handleUpdate());
 
         GridPane updateFields = new GridPane();
         updateFields.setHgap(10);
         updateFields.setVgap(10);
-        updateFields.setPadding(new Insets(30));
-        updateFields.setAlignment(Pos.CENTER);
+        updateFields.setPadding(new Insets(20));
+        updateFields.addRow(0, nameLabel, nameField);
+        updateFields.addRow(1, surnameLabel, surnameField);
+        updateFields.addRow(2, phoneLabel, phoneField);
+        updateFields.addRow(3, addressLabel, addressField);
 
-        updateFields.add(createStyledLabel("New name"), 0, 0);
-        GridPane.setHgrow(nameField, Priority.ALWAYS);
-        updateFields.add(nameField, 1, 0);
-
-        updateFields.add(createStyledLabel("New surname"), 0, 1);
-        GridPane.setHgrow(surnameField, Priority.ALWAYS);
-        updateFields.add(surnameField, 1, 1);
-
-        updateFields.add(createStyledLabel("New phone number"), 0, 2);
-        GridPane.setHgrow(addressField, Priority.ALWAYS);
-        updateFields.add(addressField, 1, 2);
-
-        updateFields.add(createStyledLabel("New address"), 0, 3);
-        GridPane.setHgrow(phoneFieldTwo, Priority.ALWAYS);
-        updateFields.add(phoneFieldTwo, 1, 3);
-
-        VBox mainContainer = new VBox(10, searchByNameBox, searchBySurnameBox, searchByPhoneBox, searchByAddressBox, contactListView, updateFields, updateButton);
-        mainContainer.setPadding(new Insets(10));
-        mainContainer.setStyle("-fx-background-color: #2C3E50; -fx-background-radius: 5px;");
-        add(mainContainer, 0, 0);
+        VBox bottomBox = new VBox(10, updateFields, updateButton);
+        bottomBox.setAlignment(Pos.CENTER);
+        bottomBox.setPadding(new Insets(20));
+        return bottomBox;
     }
 
-    private HBox createHorizontalBox(String labelText, TextField textField, Button button) {
-        Label label = createStyledLabel(labelText);
-
-        VBox labelVBox = new VBox(label);
-        VBox textFieldVBox = new VBox(textField);
-        VBox buttonVBox = new VBox(button);
-        int spacing = (int) Math.max(15, labelText.length() * 0.5);
-        HBox hBox = new HBox(spacing, labelVBox, textFieldVBox, buttonVBox);
-        hBox.setAlignment(Pos.CENTER_LEFT);
-        hBox.setPadding(new Insets(10));
-        return hBox;
-    }
-
-    private void handleSearchByPhone() {
-        String phone = searchFieldByPhone.getText().trim();
-
-        if (phone.isEmpty()) {
-            showAlert(Alert.AlertType.WARNING, "Error", "Please enter a phone number.");
+    private void handleSearch(String query, String type) {
+        if (query.trim().isEmpty()) {
+            showAlert(Alert.AlertType.WARNING, "Error", "Please enter a search query.");
             return;
         }
 
         try {
-            phone = checkActionMove.normalizePhoneNumber(phone);
-            List<Contact> contacts = updateByPhoneMove.findAllByPhone(phone);
-
-            if (contacts.isEmpty()) {
-                showAlert(Alert.AlertType.INFORMATION, "No Results", "No contacts found for the given phone number.");
-            } else {
-                contactListView.getItems().setAll(contacts);
+            List<Contact> results;
+            switch (type) {
+                case "name" -> results = updateByPhoneMove.findAllByName(query);
+                case "surname" -> results = updateByPhoneMove.findAllBySurname(query);
+                case "phone" -> results = updateByPhoneMove.findAllByPhone(query.startsWith("+996") ? query : "+996 " + query);
+                case "address" -> results = updateByPhoneMove.findAllByAddress(query);
+                default -> throw new IllegalArgumentException("Invalid search type");
             }
-        } catch (InputMismatchException e) {
-            showAlert(Alert.AlertType.ERROR, "Validation Error", e.getMessage());
-        }
-    }
 
-    private void handleSearchByName() {
-        String name = searchFieldByName.getText().trim();
-
-        if (name.isEmpty()) {
-            showAlert(Alert.AlertType.WARNING, "Error", "Please enter a name.");
-            return;
-        }
-
-        try {
-            List<Contact> contacts = updateByPhoneMove.findAllByName(name);
-
-            if (contacts.isEmpty()) {
-                showAlert(Alert.AlertType.INFORMATION, "No Results", "No contacts found for the given name.");
+            if (results.isEmpty()) {
+                showAlert(Alert.AlertType.INFORMATION, "No Results", "No contacts found.");
             } else {
-                contactListView.getItems().setAll(contacts);
+                contactListView.getItems().setAll(results);
             }
-        } catch (InputMismatchException e) {
-            showAlert(Alert.AlertType.ERROR, "Validation Error", e.getMessage());
+        } catch (Exception e) {
+            showAlert(Alert.AlertType.ERROR, "Error", e.getMessage());
         }
-    }
-
-    private void handleSearchBySurname() {
-        String surname = searchFieldBySurname.getText().trim();
-
-        if (surname.isEmpty()) {
-            showAlert(Alert.AlertType.WARNING, "Error", "Please enter a surname.");
-            return;
-        }
-
-        try {
-            List<Contact> contacts = updateByPhoneMove.findAllBySurname(surname);
-
-            if (contacts.isEmpty()) {
-                showAlert(Alert.AlertType.INFORMATION, "No Results", "No contacts found for the given surname.");
-            } else {
-                contactListView.getItems().setAll(contacts);
-            }
-        } catch (InputMismatchException e) {
-            showAlert(Alert.AlertType.ERROR, "Validation Error", e.getMessage());
-        }
-    }
-
-    private void handleSearchByAddress() {
-        String address = searchFieldByAddress.getText().trim();
-
-        if (address.isEmpty()) {
-            showAlert(Alert.AlertType.WARNING, "Error", "Please enter an address.");
-            return;
-        }
-
-        try {
-            List<Contact> contacts = updateByPhoneMove.findAllByAddress(address);
-
-            if (contacts.isEmpty()) {
-                showAlert(Alert.AlertType.INFORMATION, "No Results", "No contacts found for the given address.");
-            } else {
-                contactListView.getItems().setAll(contacts);
-            }
-        } catch (InputMismatchException e) {
-            showAlert(Alert.AlertType.ERROR, "Validation Error", e.getMessage());
-        }
-    }
-
-    private void populateFields(Contact contact) {
-        nameField.setText(contact.getName());
-        surnameField.setText(contact.getSurname());
-        addressField.setText(contact.getAddress());
-        phoneFieldTwo.setText(contact.getPhone());
     }
 
     private void handleUpdate() {
@@ -233,89 +171,78 @@ public class UpdateContactForm extends GridPane {
             return;
         }
 
-        String name = nameField.getText().trim();
-        String surname = surnameField.getText().trim();
-        String address = addressField.getText().trim();
-        String phone2 = phoneFieldTwo.getText().trim();
-
         try {
-            if (phone2.isEmpty()) {
-                showAlert(Alert.AlertType.WARNING, "Error", "Please enter a new phone number.");
-                return;
-            }
+            String name = nameField.getText().trim();
+            String surname = surnameField.getText().trim();
+            String phone = phoneField.getText().trim();
+            String address = addressField.getText().trim();
 
-            phone2 = checkActionMove.normalizePhoneNumber(phone2);
-            checkActionMove.checkForValidPhoneNumber(phone2);
-
-            checkActionMove.checkForValidName(name);
-            checkActionMove.checkForValidSurname(surname);
-            checkActionMove.checkForValidAddress(address);
+            String formattedPhone = checkActionMove.formatPhoneNumber(phone);
 
             Contact updatedContact = new Contact(
                     name.isEmpty() ? selectedContact.getName() : name,
                     surname.isEmpty() ? selectedContact.getSurname() : surname,
                     address.isEmpty() ? selectedContact.getAddress() : address,
-                    phone2
+                    formattedPhone
             );
 
             updateByPhoneMove.update(selectedContact, updatedContact);
             contactList.remove(selectedContact);
             contactList.add(updatedContact);
             showAlert(Alert.AlertType.INFORMATION, "Success", "Contact updated successfully.");
-
-
             clearFields();
 
-        } catch (InputMismatchException e) {
+        } catch (Exception e) {
             showAlert(Alert.AlertType.ERROR, "Validation Error", e.getMessage());
         }
     }
 
-    private void showAlert(Alert.AlertType alertType, String title, String message) {
-        Alert alert = new Alert(alertType);
+    private void populateFields(Contact contact) {
+        nameField.setText(contact.getName());
+        surnameField.setText(contact.getSurname());
+        phoneField.setText(contact.getPhone());
+        addressField.setText(contact.getAddress());
+    }
+
+    private void clearFields() {
+        nameField.clear();
+        surnameField.clear();
+        phoneField.clear();
+        addressField.clear();
+        nameSearchField.clear();
+        surnameSearchField.clear();
+        phoneSearchField.clear();
+        addressSearchField.clear();
+        contactListView.getItems().clear();
+    }
+
+
+    private Label createStyledLabel(String text) {
+        Label label = new Label(text);
+        label.setFont(Font.font("Arial", 14));
+        label.setTextFill(Color.WHITE);
+        return label;
+    }
+
+    private TextField createInputField() {
+        TextField textField = new TextField();
+        textField.setStyle("-fx-background-color: #ECF0F1; -fx-text-fill: #34495E; -fx-font-size: 14px;");
+        return textField;
+    }
+
+    private Button createStyledButton(String text) {
+        Button button = new Button(text);
+        button.setStyle("-fx-background-color: #1ABC9C; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 10px;");
+        button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: #16A085; -fx-text-fill: white;"));
+        button.setOnMouseExited(e -> button.setStyle("-fx-background-color: #1ABC9C; -fx-text-fill: white;"));
+        return button;
+    }
+
+    private void showAlert(Alert.AlertType type, String title, String message) {
+        Alert alert = new Alert(type);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
     }
-
-    private Label createStyledLabel(String text) {
-        Label label = new Label(text);
-        label.setFont(Font.font("Segoe UI", 14));
-        label.setTextFill(Color.WHITE);
-        return label;
-    }
-
-    private Button createStyledButton(String text) {
-        Button button = new Button(text);
-        button.setStyle("-fx-background-color: #34495E;" +
-                " -fx-text-fill: white; -fx-font-weight: bold;" +
-                " -fx-font-size: 12px; -fx-background-radius: 6px;" +
-                " -fx-border-radius: 5px;");
-        button.setPrefWidth(80);
-        button.setPrefHeight(20);
-
-        button.setOnMouseEntered(_ -> button.setStyle("-fx-background-color: #2C3E50;" +
-                " -fx-text-fill: white; -fx-font-weight: bold;" +
-                " -fx-font-size: 12px; -fx-background-radius: 6px;"));
-        button.setOnMouseExited(_ -> button.setStyle("-fx-background-color: #34495E;" +
-                " -fx-text-fill: white; -fx-font-weight: bold;" +
-                " -fx-font-size: 12px; -fx-background-radius: 6px;"));
-        button.setOnMouseClicked(_ -> button.setStyle("-fx-background-color: #2C3E50;" +
-                " -fx-text-fill: white; -fx-font-weight: bold;" +
-                " -fx-font-size: 12px; -fx-background-radius: 6px;"));
-        return button;
-    }
-
-    private void clearFields() {
-        searchFieldByPhone.clear();
-        searchFieldByName.clear();
-        nameField.clear();
-        surnameField.clear();
-        addressField.clear();
-        phoneFieldTwo.clear();
-        contactListView.getItems().clear();
-    }
-
-
 }
