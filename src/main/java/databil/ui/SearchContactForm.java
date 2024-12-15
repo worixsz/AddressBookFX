@@ -77,19 +77,18 @@ public class SearchContactForm extends GridPane {
             switch (searchType) {
                 case "name" -> {
                     input = searchByNameField.getText();
-                    checkActionMove.checkForValidName(input);
+                    checkActionMove.regexName(input);
                 }
                 case "surname" -> {
                     input = searchBySurnameField.getText();
-                    checkActionMove.checkForValidSurname(input);
+                    checkActionMove.regexSurname(input);
                 }
                 case "address" -> {
                     input = searchByAddressField.getText();
-                    checkActionMove.checkForValidAddress(input);
+                    checkActionMove.regexAddress(input);
                 }
                 case "phone" -> {
                     input = searchByPhoneField.getText();
-                    checkActionMove.checkForValidPhoneNumber(input);
                     if (input.startsWith("+996 ")) {
                         input = input.substring(5);
                     }
@@ -178,7 +177,4 @@ public class SearchContactForm extends GridPane {
                 " -fx-font-size: 12px; -fx-background-radius: 6px;"));
         return button;
     }
-
-
-
 }
