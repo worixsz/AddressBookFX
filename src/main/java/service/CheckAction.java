@@ -1,26 +1,18 @@
 package service;
 
-import model.Contact;
-
-import java.util.List;
-
 public interface CheckAction {
-
-
-
-    void checkPhoneNumber(String number);
 
     String formatPhoneNumber(String number);
 
-    void checkForValidName(String name);
+    void regexName(String name);
 
-    void checkForValidSurname(String surname);
+    void regexSurname(String surname);
 
-    void checkForValidAddress(String address);
+    void regexAddress(String address);
 
-    void checkForValidPhoneNumber(String number);
+    void regexPhoneNumber(String number);
 
-    String normalizePhoneNumber(String phone);
+    void checkNumberForSave(String number);
 
 
 }
