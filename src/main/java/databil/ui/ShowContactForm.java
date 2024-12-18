@@ -25,7 +25,7 @@ public class ShowContactForm extends GridPane {
         this.contactViewerServiceImpl = contactViewerServiceImpl;
         this.setPadding(new Insets(20));
         this.setAlignment(Pos.CENTER);
-        this.setStyle("-fx-background-color: #2C3E50; -fx-font-family: 'Segoe UI', sans-serif;");
+        this.setStyle("-fx-background-color: #1A2A36; -fx-font-family: 'Segoe UI', sans-serif;");
 
         setupUI();
         refreshContacts();
