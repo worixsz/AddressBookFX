@@ -10,11 +10,10 @@ import java.util.stream.Collectors;
 
 public class SearchServiceImpl implements SearchService {
 
-    private final FileService fileService;
     private final List<Contact> contacts;
 
     public SearchServiceImpl() {
-        this.fileService = new FileService();
+        FileService fileService = new FileService();
         this.contacts = fileService.read() != null ? fileService.read() : new ArrayList<>();
 
     }
@@ -30,7 +29,6 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     public List<Contact> searchContactBySurname(String surname) {
-
 
         return contacts.stream()
                 .filter(contact -> contact.getSurname().equalsIgnoreCase(surname))
@@ -49,7 +47,6 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     public List<Contact> searchContactByPhone(String phone) {
-
 
         String cleanPhone = phone.replaceAll("\\D", "");
 
