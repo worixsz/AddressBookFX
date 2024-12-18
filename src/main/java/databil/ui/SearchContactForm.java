@@ -34,7 +34,7 @@ public class SearchContactForm extends GridPane {
         this.setPadding(new Insets(20));
         this.setHgap(20);
         this.setVgap(20);
-        this.setStyle("-fx-background-color: #2C3E50; -fx-font-family: 'Segoe UI', sans-serif; -fx-border-radius: 15px;");
+        this.setStyle("-fx-background-color: #1A2A36; -fx-font-family: 'Segoe UI', sans-serif;");
 
         resultArea.setEditable(false);
         resultArea.setWrapText(true);
