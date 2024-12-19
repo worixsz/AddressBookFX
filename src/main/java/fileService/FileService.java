@@ -3,6 +3,11 @@ package fileService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.sun.source.util.TaskListener;
+import io.reactivex.rxjava3.core.BackpressureStrategy;
+import io.reactivex.rxjava3.core.Flowable;
+import io.reactivex.rxjava3.core.FlowableEmitter;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import model.Contact;
 
 import java.io.File;
@@ -20,6 +25,7 @@ public class FileService {
     }
 
     public List<Contact> read() {
+
         try {
             File file = new File("contacts.json");
             if (!file.exists()) {
@@ -44,16 +50,30 @@ public class FileService {
 
 
     public void write(List<Contact> contacts) {
-        try {
-            File file = new File("contacts.json");
+        Flowable.create((FlowableEmitter<Void> emitter) -> {
+                    try {
+                        File file = new File("contacts.json");
 
-            ObjectNode rootNode = objectMapper.createObjectNode();
-            rootNode.set("contacts", objectMapper.valueToTree(contacts));
+                        ObjectNode rootNode = objectMapper.createObjectNode();
+                        rootNode.set("contacts", objectMapper.valueToTree(contacts));
 
-            objectMapper.writerWithDefaultPrettyPrinter().writeValue(file, rootNode);
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to write contacts to file", e);
-        }
+                        objectMapper.writerWithDefaultPrettyPrinter().writeValue(file, rootNode);
+
+                        emitter.onComplete();
+                    } catch (Exception e) {
+                        emitter.onError(e);
+                    }
+                }, BackpressureStrategy.BUFFER)
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.single())
+                .subscribe(
+                        (_) -> System.out.println("Contact success created!"),
+                        throwable -> System.err.println("Error of creating contact: " + throwable.getMessage())
+                );
     }
+
+
+
+
 
 }
