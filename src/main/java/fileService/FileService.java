@@ -48,7 +48,6 @@ public class FileService {
         }
     }
 
-
     public void write(List<Contact> contacts) {
         Flowable.create((FlowableEmitter<Void> emitter) -> {
                     try {
