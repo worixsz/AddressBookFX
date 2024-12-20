@@ -12,6 +12,7 @@ import model.Contact;
 import repository.DataProcessorImpl;
 import repository.UpdateServiceImpl;
 
+import java.util.InputMismatchException;
 import java.util.List;
 
 public class UpdateContactForm extends BorderPane {
@@ -189,6 +190,7 @@ public class UpdateContactForm extends BorderPane {
             String phone = phoneField.getText().trim();
 
             String formattedPhone = dataProcessorImpl.formatPhoneNumber(phone);
+            dataProcessorImpl.checkNumberForSave(formattedPhone);
 
             Contact updatedContact = new Contact(
                     name.isEmpty() ? selectedContact.getName() : name,
