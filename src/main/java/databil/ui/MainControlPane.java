@@ -61,7 +61,6 @@ public class MainControlPane extends StackPane {
 
         this.getChildren().addAll(title, buttonBox, createContactForm, showContactForm, searchContactForm, updateContactForm, backButton);
 
-        // Styling buttons
         String buttonStyle = "-fx-background-color: #2C3E50; " +
                 "-fx-text-fill: white; " +
                 "-fx-font-weight: bold; " +
