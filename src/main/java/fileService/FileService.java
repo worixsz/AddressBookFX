@@ -19,19 +19,17 @@ public class FileService {
 
     public FileService() {
         objectMapper = new ObjectMapper();
-
     }
 
     /**
      * Реактивный метод для чтения списка контактов из файла.
      * Используется Flowable для выполнения операции в фоновом потоке (Schedulers.io).
+     *
      * @return List<Contact> - список контактов.
      */
-
     public List<Contact> read() {
         try {
-
-            Flowable<Contact> clientFlowable = Flowable.create(emitter -> {
+            Flowable<Contact> contactFlowable = Flowable.create(emitter -> {
                 try {
                     File file = new File("contacts.json");
                     if (!file.exists()) {
@@ -48,7 +46,6 @@ public class FileService {
                                 objectMapper.getTypeFactory().constructCollectionType(List.class, Contact.class)
                         );
 
-
                         for (Contact contact : contacts) {
                             emitter.onNext(contact);
                         }
@@ -60,7 +57,7 @@ public class FileService {
                 }
             }, BackpressureStrategy.BUFFER);
 
-            return clientFlowable
+            return contactFlowable
                     .subscribeOn(Schedulers.io())
                     .observeOn(Schedulers.single())
                     .toList()
@@ -71,7 +68,12 @@ public class FileService {
         }
     }
 
-
+    /**
+     * Реактивный метод для записи списка контактов в файл.
+     * Используется Flowable для выполнения операции в фоновом потоке (Schedulers.io).
+     *
+     * @param contacts - список контактов.
+     */
     public void write(List<Contact> contacts) {
         Flowable.create((FlowableEmitter<Void> emitter) -> {
                     try {
@@ -90,10 +92,8 @@ public class FileService {
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.single())
                 .subscribe(
-                        (_) -> System.out.println("Contact success created!"),
-                        throwable -> System.err.println("Error of creating contact: " + throwable.getMessage())
+                        (_) -> System.out.println("Контакты успешно созданы!"),
+                        throwable -> System.err.println("Ошибка при создании контактов: " + throwable.getMessage())
                 );
     }
-
-
 }

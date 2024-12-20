@@ -137,7 +137,7 @@ public class CreateContactForm extends VBox {
             addressField.clear();
             phoneField.clear();
 
-            showAlert(Alert.AlertType.CONFIRMATION, "Success", "Contact  successfully saved.");
+            showAlert(Alert.AlertType.INFORMATION, "Success", "Contact  successfully saved.");
         }
     }
 

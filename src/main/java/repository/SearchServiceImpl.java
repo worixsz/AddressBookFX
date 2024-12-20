@@ -3,24 +3,22 @@ package repository;
 import fileService.FileService;
 import model.Contact;
 import service.SearchService;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class SearchServiceImpl implements SearchService {
 
-    private final List<Contact> contacts;
+    private final FileService fileService;
 
     public SearchServiceImpl() {
-        FileService fileService = new FileService();
-        this.contacts = fileService.read() != null ? fileService.read() : new ArrayList<>();
+        fileService = new FileService();
+
 
     }
 
     @Override
     public List<Contact> searchContactByName(String name) {
-
+        List<Contact> contacts = fileService.read();
         return contacts.stream()
                 .filter(contact -> contact.getName().equalsIgnoreCase(name))
                 .collect(Collectors.toList());
@@ -29,7 +27,7 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     public List<Contact> searchContactBySurname(String surname) {
-
+        List<Contact> contacts = fileService.read();
         return contacts.stream()
                 .filter(contact -> contact.getSurname().equalsIgnoreCase(surname))
                 .collect(Collectors.toList());
@@ -38,7 +36,7 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     public List<Contact> searchContactByAddress(String address) {
-
+        List<Contact> contacts = fileService.read();
         return contacts.stream()
                 .filter(contact -> contact.getAddress().equalsIgnoreCase(address))
                 .collect(Collectors.toList());
@@ -47,6 +45,7 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     public List<Contact> searchContactByPhone(String phone) {
+        List<Contact> contacts = fileService.read();
 
         String cleanPhone = phone.replaceAll("\\D", "");
 

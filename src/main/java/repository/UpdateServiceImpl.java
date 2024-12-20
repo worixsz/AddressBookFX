@@ -10,15 +10,14 @@ import java.util.List;
 public class UpdateServiceImpl implements UpdateService {
 
     private final FileService fileService;
-    private final List<Contact> contacts;
 
     public UpdateServiceImpl() {
         this.fileService = new FileService();
-        this.contacts = fileService.read() != null ? fileService.read() : new ArrayList<>();
     }
 
     @Override
     public void update(Contact oldContact, Contact newContact) {
+        List<Contact> contacts = fileService.read();
         newContact.setId(oldContact.getId());
         contacts.remove(oldContact);
         contacts.add(newContact);
@@ -28,6 +27,8 @@ public class UpdateServiceImpl implements UpdateService {
 
     @Override
     public List<Contact> findAllByName(String name) {
+        List<Contact> contacts = fileService.read();
+
         List<Contact> matchingContacts = new ArrayList<>();
         for (Contact contact : contacts) {
             if (contact.getName().equalsIgnoreCase(name)) {
@@ -39,6 +40,8 @@ public class UpdateServiceImpl implements UpdateService {
 
     @Override
     public List<Contact> findAllBySurname(String surname) {
+        List<Contact> contacts = fileService.read();
+
         List<Contact> matchingContacts = new ArrayList<>();
         for (Contact contact : contacts) {
             if (contact.getSurname().equalsIgnoreCase(surname)) {
@@ -50,6 +53,8 @@ public class UpdateServiceImpl implements UpdateService {
 
     @Override
     public List<Contact> findAllByAddress(String address) {
+        List<Contact> contacts = fileService.read();
+
         List<Contact> matchingContacts = new ArrayList<>();
         for (Contact contact : contacts) {
             if (contact.getAddress().equalsIgnoreCase(address)) {
@@ -61,6 +66,7 @@ public class UpdateServiceImpl implements UpdateService {
 
     @Override
     public List<Contact> findAllByPhone(String phone) {
+        List<Contact> contacts = fileService.read();
         String cleanPhone = phone.replaceAll("\\s", "");
         List<Contact> matchingContacts = new ArrayList<>();
         for (Contact contact : contacts) {
