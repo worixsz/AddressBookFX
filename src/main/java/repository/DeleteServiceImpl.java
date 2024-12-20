@@ -9,10 +9,10 @@ import java.util.Scanner;
 public class DeleteServiceImpl implements DeleteService {
 
     Scanner SC = new Scanner(System.in);
-    private final DataProcessorImpl checkMove;
+    private final DataProcessorImpl dataProcessor;
 
     public DeleteServiceImpl() {
-        this.checkMove = new DataProcessorImpl();
+        this.dataProcessor = new DataProcessorImpl();
     }
 
     @Override

@@ -4,6 +4,7 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -25,7 +26,7 @@ public class UpdateContactForm extends BorderPane {
     private TextField addressField;
     private TextField phoneField;
 
-    private final ListView<Contact> contactListView;
+    private final TableView<Contact> contactTableView;
     private final UpdateServiceImpl updateByPhoneMove;
     private final DataProcessorImpl dataProcessorImpl;
     private final ObservableList<Contact> contactList;
@@ -35,26 +36,41 @@ public class UpdateContactForm extends BorderPane {
         this.dataProcessorImpl = dataProcessorImpl;
         this.contactList = contactList;
 
-
         this.setPadding(new Insets(20));
         this.setStyle("-fx-background-color: #1A2A36; -fx-font-family: 'Segoe UI', sans-serif;");
 
         VBox searchBox = createSearchBox();
         this.setTop(searchBox);
 
-        contactListView = new ListView<>();
-        contactListView.setStyle("-fx-background-color: #ECF0F1; -fx-font-size: 14px; -fx-background-radius: 10px;");
-        contactListView.setPrefHeight(150);
-        contactListView.getSelectionModel().selectedItemProperty().addListener((_, _, newSelection) -> {
+        contactTableView = new TableView<>();
+        contactTableView.setStyle("-fx-background-color: #ECF0F1; -fx-font-size: 14px; -fx-background-radius: 5px;");
+
+        TableColumn<Contact, String> nameColumn = createTableColumn("Name", "name");
+        nameColumn.setMinWidth(100);
+        TableColumn<Contact, String> surnameColumn = createTableColumn("Surname", "surname");
+        surnameColumn.setMinWidth(100);
+        TableColumn<Contact, String> addressColumn = createTableColumn("Address", "address");
+        addressColumn.setMinWidth(100);
+        TableColumn<Contact, String> phoneColumn = createTableColumn("Phone", "phone");
+        phoneColumn.setMinWidth(150);
+
+        contactTableView.getColumns().addAll(nameColumn, surnameColumn, addressColumn, phoneColumn);
+        contactTableView.getSelectionModel().selectedItemProperty().addListener((_, _, newSelection) -> {
             if (newSelection != null) populateFields(newSelection);
         });
 
-        VBox centerBox = new VBox(contactListView);
+        VBox centerBox = new VBox(contactTableView);
         centerBox.setPadding(new Insets(10));
         this.setCenter(centerBox);
 
         VBox bottomBox = createUpdateBox();
         this.setBottom(bottomBox);
+    }
+
+    private TableColumn<Contact, String> createTableColumn(String title, String property) {
+        TableColumn<Contact, String> column = new TableColumn<>(title);
+        column.setCellValueFactory(new PropertyValueFactory<>(property));
+        return column;
     }
 
     private VBox createSearchBox() {
@@ -64,20 +80,20 @@ public class UpdateContactForm extends BorderPane {
         Label surnameSearchLabel = createStyledLabel("Surname:        ");
         surnameSearchField = createInputField();
 
-        Label phoneSearchLabel = createStyledLabel("Phone (+996): ");
-        phoneSearchField = createInputField();
-
         Label addressSearchLabel = createStyledLabel("Address:          ");
         addressSearchField = createInputField();
+
+        Label phoneSearchLabel = createStyledLabel("Phone (+996): ");
+        phoneSearchField = createInputField();
 
         Button nameSearchButton = createStyledButton("🔍");
         nameSearchButton.setOnMouseClicked(_ -> handleSearch(nameSearchField.getText().trim(), "name"));
         Button surnameSearchButton = createStyledButton("🔍");
         surnameSearchButton.setOnMouseClicked(_ -> handleSearch(surnameSearchField.getText().trim(), "surname"));
-        Button phoneSearchButton = createStyledButton("🔍");
-        phoneSearchButton.setOnMouseClicked(_ -> handleSearch(phoneSearchField.getText().trim(), "phone"));
         Button addressSearchButton = createStyledButton("🔍");
         addressSearchButton.setOnMouseClicked(_ -> handleSearch(addressSearchField.getText().trim(), "address"));
+        Button phoneSearchButton = createStyledButton("🔍");
+        phoneSearchButton.setOnMouseClicked(_ -> handleSearch(phoneSearchField.getText().trim(), "phone"));
 
         HBox nameRow = new HBox(10, nameSearchLabel, nameSearchField, nameSearchButton);
         HBox surnameRow = new HBox(10, surnameSearchLabel, surnameSearchField, surnameSearchButton);
@@ -94,13 +110,12 @@ public class UpdateContactForm extends BorderPane {
         phoneRow.setAlignment(Pos.CENTER_LEFT);
         addressRow.setAlignment(Pos.CENTER_LEFT);
 
-        VBox searchLayout = new VBox(10, nameRow, surnameRow, phoneRow, addressRow);
+        VBox searchLayout = new VBox(10, nameRow, surnameRow, addressRow, phoneRow);
         searchLayout.setAlignment(Pos.CENTER_LEFT);
         searchLayout.setPadding(new Insets(20));
 
         return searchLayout;
     }
-
 
     private VBox createUpdateBox() {
         Label nameLabel = createStyledLabel("New Name:");
@@ -109,11 +124,11 @@ public class UpdateContactForm extends BorderPane {
         Label surnameLabel = createStyledLabel("New Surname:");
         surnameField = createInputField();
 
-        Label phoneLabel = createStyledLabel("New Phone (+996):");
-        phoneField = createInputField();
-
         Label addressLabel = createStyledLabel("New Address:");
         addressField = createInputField();
+
+        Label phoneLabel = createStyledLabel("New Phone (+996):");
+        phoneField = createInputField();
 
         Button updateButton = createStyledButton("Update");
         updateButton.setOnMouseClicked(_ -> handleUpdate());
@@ -124,8 +139,8 @@ public class UpdateContactForm extends BorderPane {
         updateFields.setPadding(new Insets(20));
         updateFields.addRow(0, nameLabel, nameField);
         updateFields.addRow(1, surnameLabel, surnameField);
-        updateFields.addRow(2, phoneLabel, phoneField);
-        updateFields.addRow(3, addressLabel, addressField);
+        updateFields.addRow(2, addressLabel, addressField);
+        updateFields.addRow(3, phoneLabel, phoneField);
 
         VBox bottomBox = new VBox(10, updateFields, updateButton);
         bottomBox.setAlignment(Pos.CENTER);
@@ -144,16 +159,16 @@ public class UpdateContactForm extends BorderPane {
             switch (type) {
                 case "name" -> results = updateByPhoneMove.findAllByName(query);
                 case "surname" -> results = updateByPhoneMove.findAllBySurname(query);
+                case "address" -> results = updateByPhoneMove.findAllByAddress(query);
                 case "phone" ->
                         results = updateByPhoneMove.findAllByPhone(query.startsWith("+996") ? query : "+996 " + query);
-                case "address" -> results = updateByPhoneMove.findAllByAddress(query);
                 default -> throw new IllegalArgumentException("Invalid search type");
             }
 
             if (results.isEmpty()) {
                 showAlert(Alert.AlertType.INFORMATION, "No Results", "No contacts found.");
             } else {
-                contactListView.getItems().setAll(results);
+                contactTableView.getItems().setAll(results);
             }
         } catch (Exception e) {
             showAlert(Alert.AlertType.ERROR, "Error", e.getMessage());
@@ -161,7 +176,7 @@ public class UpdateContactForm extends BorderPane {
     }
 
     private void handleUpdate() {
-        Contact selectedContact = contactListView.getSelectionModel().getSelectedItem();
+        Contact selectedContact = contactTableView.getSelectionModel().getSelectedItem();
         if (selectedContact == null) {
             showAlert(Alert.AlertType.WARNING, "No Selection", "Please select a contact to update.");
             return;
@@ -170,8 +185,8 @@ public class UpdateContactForm extends BorderPane {
         try {
             String name = nameField.getText().trim();
             String surname = surnameField.getText().trim();
-            String phone = phoneField.getText().trim();
             String address = addressField.getText().trim();
+            String phone = phoneField.getText().trim();
 
             String formattedPhone = dataProcessorImpl.formatPhoneNumber(phone);
 
@@ -209,9 +224,8 @@ public class UpdateContactForm extends BorderPane {
         surnameSearchField.clear();
         phoneSearchField.clear();
         addressSearchField.clear();
-        contactListView.getItems().clear();
+        contactTableView.getItems().clear();
     }
-
 
     private Label createStyledLabel(String text) {
         Label label = new Label(text);
