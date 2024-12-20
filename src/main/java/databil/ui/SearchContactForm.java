@@ -5,6 +5,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import model.Contact;
 import repository.DataProcessorImpl;
 import repository.SearchServiceImpl;
@@ -70,8 +71,8 @@ public class SearchContactForm extends GridPane {
     }
 
     private void performSearch(String searchType) {
-        String input;
-        List<Contact> results;
+        String input = "";
+        List<Contact> results = List.of();
 
         try {
             switch (searchType) {
@@ -93,11 +94,11 @@ public class SearchContactForm extends GridPane {
                         input = input.substring(5);
                     }
                 }
-                default -> throw new IllegalArgumentException("Invalid search type");
+                default -> showAlert(Alert.AlertType.WARNING, "❗", "Please enter a value to search.");
             }
 
             if (input.trim().isEmpty()) {
-                resultArea.setText("❗ Please enter a value to search.");
+                showAlert(Alert.AlertType.WARNING, "❗", "Please enter a value to search.");
                 return;
             }
 
@@ -106,13 +107,13 @@ public class SearchContactForm extends GridPane {
                 case "surname" -> results = searchServiceImpl.searchContactBySurname(input);
                 case "address" -> results = searchServiceImpl.searchContactByAddress(input);
                 case "phone" -> results = searchServiceImpl.searchContactByPhone(input);
-                default -> throw new IllegalArgumentException("Invalid search type");
+                default -> showAlert(Alert.AlertType.ERROR, "❗", "Invalid search type");
             }
 
             displayResults(input, results, searchType);
 
         } catch (InputMismatchException | IllegalArgumentException e) {
-            resultArea.setText("❌ " + e.getMessage());
+            showAlert(Alert.AlertType.ERROR, "Validation Error", e.getMessage());
         }
     }
 
@@ -121,7 +122,6 @@ public class SearchContactForm extends GridPane {
 
         if (results.isEmpty()) {
             resultsText.append("No exact matches found for ").append(searchType).append(": ").append(input).append("\n");
-
             resultsText.append("Looking for similar results by parameters of contact...\n");
 
             List<Contact> prefixResults = switch (searchType) {
@@ -133,7 +133,8 @@ public class SearchContactForm extends GridPane {
             };
 
             if (prefixResults.isEmpty()) {
-                resultsText.append("No similar contacts found by prefix: ").append(input);
+                showAlert(Alert.AlertType.WARNING, "❗", "No similar contacts found by prefix");
+
             } else {
                 resultsText.append("Similar contacts by prefix:\n");
                 for (Contact contact : prefixResults) {
@@ -152,7 +153,7 @@ public class SearchContactForm extends GridPane {
 
     private Label createStyledLabel(String text) {
         Label label = new Label(text);
-        label.setFont(Font.font("Segoe UI", javafx.scene.text.FontWeight.BOLD, 14));
+        label.setFont(Font.font("Segoe UI", FontWeight.BOLD, 14));
         label.setTextFill(Color.WHITE);
         return label;
     }
@@ -176,5 +177,13 @@ public class SearchContactForm extends GridPane {
                 " -fx-text-fill: white; -fx-font-weight: bold;" +
                 " -fx-font-size: 12px; -fx-background-radius: 6px;"));
         return button;
+    }
+
+    private void showAlert(Alert.AlertType type, String title, String message) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

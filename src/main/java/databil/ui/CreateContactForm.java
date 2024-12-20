@@ -38,10 +38,10 @@ public class CreateContactForm extends VBox {
         successMessage.setFill(Color.LIMEGREEN);
         successMessage.setVisible(false);
 
-        HBox nameRow = createInputRow("Name:                ", nameField);
-        HBox surnameRow = createInputRow("Surname:          ", surnameField);
-        HBox addressRow = createInputRow("Address:           ", addressField);
-        HBox phoneRow = createInputRow("Phone(+996):", phoneField);
+        HBox nameRow = createInputRow("Name:                 ", nameField);
+        HBox surnameRow = createInputRow("Surname:           ", surnameField);
+        HBox addressRow = createInputRow("Address:            ", addressField);
+        HBox phoneRow = createInputRow("Phone(+996): ", phoneField);
 
         Button saveButton = createStyledButton("Save");
         Button cancelButton = createStyledButton("Cancel");
@@ -87,6 +87,7 @@ public class CreateContactForm extends VBox {
             contacts.setName(name);
 
         } catch (InputMismatchException ex) {
+            showAlert(Alert.AlertType.ERROR, "Validation Error", ex.getMessage());
             isValid = false;
         }
         try {
@@ -95,6 +96,7 @@ public class CreateContactForm extends VBox {
             contacts.setSurname(surname);
 
         } catch (InputMismatchException ex) {
+            showAlert(Alert.AlertType.ERROR, "Validation Error", ex.getMessage());
             isValid = false;
         }
 
@@ -104,6 +106,7 @@ public class CreateContactForm extends VBox {
             contacts.setAddress(address);
 
         } catch (InputMismatchException ex) {
+            showAlert(Alert.AlertType.ERROR, "Validation Error", ex.getMessage());
             isValid = false;
         }
 
@@ -114,6 +117,7 @@ public class CreateContactForm extends VBox {
             contacts.setPhone(formatPhoneNumber);
 
         } catch (InputMismatchException ex) {
+            showAlert(Alert.AlertType.ERROR, "Validation Error", ex.getMessage());
             isValid = false;
         }
 
@@ -133,8 +137,7 @@ public class CreateContactForm extends VBox {
             addressField.clear();
             phoneField.clear();
 
-            successMessage.setText("Successfully Saved!");
-            successMessage.setVisible(true);
+            showAlert(Alert.AlertType.CONFIRMATION, "Success", "Contact  successfully saved.");
         }
     }
 
@@ -173,5 +176,13 @@ public class CreateContactForm extends VBox {
                 " -fx-text-fill: white; -fx-font-weight: bold;" +
                 " -fx-font-size: 14px; -fx-background-radius: 8px;"));
         return button;
+    }
+
+    private void showAlert(Alert.AlertType type, String title, String message) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }
