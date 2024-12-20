@@ -64,20 +64,20 @@ public class UpdateContactForm extends BorderPane {
         Label surnameSearchLabel = createStyledLabel("Surname:        ");
         surnameSearchField = createInputField();
 
-        Label phoneSearchLabel = createStyledLabel("Phone (+996): ");
-        phoneSearchField = createInputField();
-
         Label addressSearchLabel = createStyledLabel("Address:          ");
         addressSearchField = createInputField();
+
+        Label phoneSearchLabel = createStyledLabel("Phone (+996): ");
+        phoneSearchField = createInputField();
 
         Button nameSearchButton = createStyledButton("🔍");
         nameSearchButton.setOnMouseClicked(_ -> handleSearch(nameSearchField.getText().trim(), "name"));
         Button surnameSearchButton = createStyledButton("🔍");
         surnameSearchButton.setOnMouseClicked(_ -> handleSearch(surnameSearchField.getText().trim(), "surname"));
-        Button phoneSearchButton = createStyledButton("🔍");
-        phoneSearchButton.setOnMouseClicked(_ -> handleSearch(phoneSearchField.getText().trim(), "phone"));
         Button addressSearchButton = createStyledButton("🔍");
         addressSearchButton.setOnMouseClicked(_ -> handleSearch(addressSearchField.getText().trim(), "address"));
+        Button phoneSearchButton = createStyledButton("🔍");
+        phoneSearchButton.setOnMouseClicked(_ -> handleSearch(phoneSearchField.getText().trim(), "phone"));
 
         HBox nameRow = new HBox(10, nameSearchLabel, nameSearchField, nameSearchButton);
         HBox surnameRow = new HBox(10, surnameSearchLabel, surnameSearchField, surnameSearchButton);
@@ -94,7 +94,7 @@ public class UpdateContactForm extends BorderPane {
         phoneRow.setAlignment(Pos.CENTER_LEFT);
         addressRow.setAlignment(Pos.CENTER_LEFT);
 
-        VBox searchLayout = new VBox(10, nameRow, surnameRow, phoneRow, addressRow);
+        VBox searchLayout = new VBox(10, nameRow, surnameRow, addressRow,phoneRow);
         searchLayout.setAlignment(Pos.CENTER_LEFT);
         searchLayout.setPadding(new Insets(20));
 
@@ -109,11 +109,11 @@ public class UpdateContactForm extends BorderPane {
         Label surnameLabel = createStyledLabel("New Surname:");
         surnameField = createInputField();
 
-        Label phoneLabel = createStyledLabel("New Phone (+996):");
-        phoneField = createInputField();
-
         Label addressLabel = createStyledLabel("New Address:");
         addressField = createInputField();
+
+        Label phoneLabel = createStyledLabel("New Phone (+996):");
+        phoneField = createInputField();
 
         Button updateButton = createStyledButton("Update");
         updateButton.setOnMouseClicked(_ -> handleUpdate());
@@ -124,8 +124,8 @@ public class UpdateContactForm extends BorderPane {
         updateFields.setPadding(new Insets(20));
         updateFields.addRow(0, nameLabel, nameField);
         updateFields.addRow(1, surnameLabel, surnameField);
-        updateFields.addRow(2, phoneLabel, phoneField);
-        updateFields.addRow(3, addressLabel, addressField);
+        updateFields.addRow(2, addressLabel, addressField);
+        updateFields.addRow(3, phoneLabel, phoneField);
 
         VBox bottomBox = new VBox(10, updateFields, updateButton);
         bottomBox.setAlignment(Pos.CENTER);
@@ -144,9 +144,9 @@ public class UpdateContactForm extends BorderPane {
             switch (type) {
                 case "name" -> results = updateByPhoneMove.findAllByName(query);
                 case "surname" -> results = updateByPhoneMove.findAllBySurname(query);
+                case "address" -> results = updateByPhoneMove.findAllByAddress(query);
                 case "phone" ->
                         results = updateByPhoneMove.findAllByPhone(query.startsWith("+996") ? query : "+996 " + query);
-                case "address" -> results = updateByPhoneMove.findAllByAddress(query);
                 default -> throw new IllegalArgumentException("Invalid search type");
             }
 
