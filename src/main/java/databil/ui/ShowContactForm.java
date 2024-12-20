@@ -34,32 +34,42 @@ public class ShowContactForm extends GridPane {
     private void setupUI() {
         TableColumn<Contact, String> nameColumn = new TableColumn<>("Name");
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        nameColumn.setMinWidth(100);
+        nameColumn.setMinWidth(90);
+        nameColumn.setStyle("-fx-font-family: 'Segoe UI', sans-serif; -fx-text-fill: #1A2A36;");
 
         TableColumn<Contact, String> surnameColumn = new TableColumn<>("Surname");
         surnameColumn.setCellValueFactory(new PropertyValueFactory<>("surname"));
-        surnameColumn.setMinWidth(100);
+        surnameColumn.setMinWidth(90);
+        surnameColumn.setStyle("-fx-font-family: 'Segoe UI', sans-serif; -fx-text-fill: #1A2A36;");
 
         TableColumn<Contact, String> addressColumn = new TableColumn<>("Address");
         addressColumn.setCellValueFactory(new PropertyValueFactory<>("address"));
-        addressColumn.setMinWidth(100);
+        addressColumn.setMinWidth(90);
+        addressColumn.setStyle("-fx-font-family: 'Segoe UI', sans-serif; -fx-text-fill: #1A2A36;");
 
         TableColumn<Contact, String> phoneColumn = new TableColumn<>("Phone Number");
         phoneColumn.setCellValueFactory(new PropertyValueFactory<>("phone"));
         phoneColumn.setMinWidth(150);
+        phoneColumn.setStyle("-fx-font-family: 'Segoe UI', sans-serif; -fx-text-fill: #1A2A36;");
 
         contactTableView.getColumns().addAll(nameColumn, surnameColumn, addressColumn, phoneColumn);
         contactTableView.setItems(contactList);
-        contactTableView.refresh();
         contactTableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
-        VBox container = new VBox(10, contactTableView);
+        contactTableView.setStyle(
+                "-fx-border-color: transparent; " +
+                        "-fx-border-radius: 15px; " +
+                        "-fx-background-radius: 15px; " +
+                        "-fx-padding: 10;"
+        );
+
+        VBox container = new VBox(30, contactTableView);
         container.setPadding(new Insets(10));
         container.setAlignment(Pos.CENTER);
-        container.setPrefSize(600, 400);
 
         this.add(container, 0, 0);
     }
+
 
     public void refreshContacts() {
         try {
