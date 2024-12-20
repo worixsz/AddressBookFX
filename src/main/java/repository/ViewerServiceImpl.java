@@ -10,12 +10,10 @@ import java.util.List;
 public class ViewerServiceImpl implements ViewerService {
 
 
-    private final FileService fileService;
-
     private final List<Contact> contactList;
 
     public ViewerServiceImpl() {
-        fileService = new FileService();
+        FileService fileService = new FileService();
         this.contactList = fileService.read() != null ? fileService.read() : new ArrayList<>();
 
     }
