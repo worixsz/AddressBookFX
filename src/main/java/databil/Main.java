@@ -14,6 +14,7 @@ public class Main extends Application {
     private SearchServiceImpl searchServiceImpl;
     private SearchPrefixServiceImpl contactSearcherPrefix;
     private UpdateServiceImpl updateByPhoneMove;
+    private DeleteServiceImpl deleteService;
 
 
     @Override
@@ -25,9 +26,12 @@ public class Main extends Application {
         this.searchServiceImpl = new SearchServiceImpl();
         this.contactSearcherPrefix = new SearchPrefixServiceImpl();
         this.updateByPhoneMove = new UpdateServiceImpl();
+        this.deleteService = new DeleteServiceImpl();
 
-
-        Scene scene = new Scene(new MainControlPane(contactCreateServiceImpl, contactViewerServiceImpl, dataProcessorImpl, searchServiceImpl, contactSearcherPrefix, updateByPhoneMove), 500, 600);
+        Scene scene = new Scene(new MainControlPane(
+                contactCreateServiceImpl, contactViewerServiceImpl, dataProcessorImpl,
+                searchServiceImpl, contactSearcherPrefix, updateByPhoneMove, deleteService),
+                500, 600);
         stage.setScene(scene);
         stage.show();
     }
