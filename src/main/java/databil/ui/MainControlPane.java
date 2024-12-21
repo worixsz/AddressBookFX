@@ -18,13 +18,15 @@ public class MainControlPane extends StackPane {
     private final ShowContactForm showContactForm;
     private final SearchContactForm searchContactForm;
     private final UpdateContactForm updateContactForm;
+    private final DeleteContactForm deleteContactForm;
 
     public MainControlPane(CreateServiceImpl contactCreateServiceImpl,
                            ViewerServiceImpl contactViewerServiceImpl,
                            DataProcessorImpl dataProcessorImpl,
                            SearchServiceImpl searchServiceImpl,
                            SearchPrefixServiceImpl contactSearcherPrefix,
-                           UpdateServiceImpl updateByPhoneMove
+                           UpdateServiceImpl updateByPhoneMove,
+                           DeleteServiceImpl deleteContactImpl
     ) {
 
         ObservableList<Contact> contactList = FXCollections.observableArrayList();
@@ -32,21 +34,24 @@ public class MainControlPane extends StackPane {
         this.showContactForm = new ShowContactForm(contactList, contactViewerServiceImpl);
         this.searchContactForm = new SearchContactForm(searchServiceImpl, contactSearcherPrefix, dataProcessorImpl);
         this.updateContactForm = new UpdateContactForm(contactList, dataProcessorImpl);
+        this.deleteContactForm = new DeleteContactForm(contactList, deleteContactImpl);
 
         Button createButton = new Button("CREATE CONTACT");
         Button showButton = new Button("  SHOW CONTACT  ");
         Button searchButton = new Button("SEARCH CONTACT");
         Button updateButton = new Button("UPDATE CONTACT");
+        Button deleteButton = new Button(" DELETE CONTACT ");
         Button backButton = createStyledButton();
 
         createContactForm.setVisible(false);
         showContactForm.setVisible(false);
         searchContactForm.setVisible(false);
         updateContactForm.setVisible(false);
+        deleteContactForm.setVisible(false);
 
         backButton.setVisible(false);
 
-        VBox buttonBox = new VBox(15, createButton, showButton, searchButton, updateButton);
+        VBox buttonBox = new VBox(15, createButton, showButton, searchButton, updateButton, deleteButton);
         buttonBox.setAlignment(Pos.CENTER);
 
         StackPane.setAlignment(backButton, Pos.BOTTOM_RIGHT);
@@ -59,7 +64,7 @@ public class MainControlPane extends StackPane {
         StackPane.setMargin(title, new Insets(50, 0, 0, 0));
         this.setStyle("-fx-background-color: #1A2A36; -fx-font-family: 'Segoe UI', sans-serif;");
 
-        this.getChildren().addAll(title, buttonBox, createContactForm, showContactForm, searchContactForm, updateContactForm, backButton);
+        this.getChildren().addAll(title, buttonBox, createContactForm, showContactForm, searchContactForm, updateContactForm, deleteContactForm, backButton);
 
         String buttonStyle = "-fx-background-color: #2C3E50; " +
                 "-fx-text-fill: white; " +
@@ -72,6 +77,7 @@ public class MainControlPane extends StackPane {
         showButton.setStyle(buttonStyle);
         searchButton.setStyle(buttonStyle);
         updateButton.setStyle(buttonStyle);
+        deleteButton.setStyle(buttonStyle);
 
         createButton.setOnAction(_ -> {
             buttonBox.setVisible(false);
@@ -106,11 +112,22 @@ public class MainControlPane extends StackPane {
             backButton.setVisible(true);
         });
 
+        deleteButton.setOnAction(_ -> {
+            buttonBox.setVisible(false);
+            updateContactForm.setVisible(false);
+            createContactForm.setVisible(false);
+            searchContactForm.setVisible(false);
+            deleteContactForm.setVisible(true);
+            backButton.setVisible(true);
+        });
+
+
         backButton.setOnAction(_ -> {
             createContactForm.setVisible(false);
             showContactForm.setVisible(false);
             searchContactForm.setVisible(false);
             updateContactForm.setVisible(false);
+            deleteContactForm.setVisible(false);
             backButton.setVisible(false);
             buttonBox.setVisible(true);
         });
