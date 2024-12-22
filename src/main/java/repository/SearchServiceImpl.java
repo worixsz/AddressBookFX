@@ -1,8 +1,13 @@
 package repository;
 
 import fileService.FileService;
+import io.reactivex.rxjava3.core.BackpressureStrategy;
+import io.reactivex.rxjava3.core.Flowable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import model.Contact;
 import service.SearchService;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,17 +52,39 @@ public class SearchServiceImpl implements SearchService {
     public List<Contact> searchContactByPhone(String phone) {
         List<Contact> contacts = fileService.read();
 
-        String cleanPhone = phone.replaceAll("\\D", "");
+        try {
+            Flowable<Contact> contactFlowable = Flowable.create(emitter -> {
 
-        String finalFormattedPhone = "+996 " + cleanPhone.replaceAll("(.{3})(.{3})(.{3})", "$1 $2 $3");
+                    try {
+                        String cleanPhone = phone.replaceAll("\\D", "");
+                        String formattedPhone = "+996 " + cleanPhone.replaceAll("(.{3})(.{3})(.{3})", "$1 $2 $3");
 
-        return contacts.stream()
-                .filter(contact -> contact.getPhone().equalsIgnoreCase(finalFormattedPhone))
-                .collect(Collectors.toList());
+                        for (Contact contact : contacts) {
+                            if (contact.getPhone().equalsIgnoreCase(formattedPhone)) {
+                                emitter.onNext(contact);
+                            }
+                        }
+
+                        emitter.onComplete();
+                    } catch (Exception e) {
+                        emitter.onError(e);
+                    }
+                },BackpressureStrategy.BUFFER);
+
+
+                return contactFlowable
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(Schedulers.single())
+                        .toList()
+                        .blockingGet();
+
+            } catch(Exception e){
+                e.printStackTrace();
+                return new ArrayList<>();
+            }
+
+        }
 
 
     }
-
-
-}
 
