@@ -24,16 +24,39 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public List<Contact> searchContactByName(String name) {
         List<Contact> contacts = fileService.read();
-        return contacts.stream()
-                .filter(contact -> contact.getName().equalsIgnoreCase(name))
-                .collect(Collectors.toList());
+        try {
+            Flowable<Contact> contactFlowable = Flowable.create(emitter -> {
+                try {
+                    for (Contact contact : contacts) {
+                        if (contact.getName().equalsIgnoreCase(name)) {
+                            emitter.onNext(contact);
+                        }
+                    }
+                    emitter.onComplete();
+
+                } catch (Exception es) {
+                    emitter.onError(es);
+                }
+            }, BackpressureStrategy.BUFFER);
+
+            return contactFlowable
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(Schedulers.single())
+                    .toList()
+                    .blockingGet();
+
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+
     }
 
 
     @Override
     public List<Contact> searchContactBySurname(String surname) {
         List<Contact> contacts = fileService.read();
-
         try {
             Flowable<Contact> contactFlowable = Flowable.create(emitter -> {
                 try {
@@ -58,7 +81,7 @@ public class SearchServiceImpl implements SearchService {
                     .blockingGet();
 
         } catch (Exception e) {
-            return new ArrayList<>();
+            throw new RuntimeException(e);
         }
 
     }
@@ -89,7 +112,7 @@ public class SearchServiceImpl implements SearchService {
                     .blockingGet();
 
         } catch (Exception e) {
-            return new ArrayList<>();
+            throw new RuntimeException(e);
         }
     }
 
@@ -125,7 +148,7 @@ public class SearchServiceImpl implements SearchService {
                     .blockingGet();
 
         } catch (Exception e) {
-            return new ArrayList<>();
+            throw new RuntimeException(e);
         }
 
     }
