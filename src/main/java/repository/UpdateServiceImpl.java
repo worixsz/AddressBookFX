@@ -8,7 +8,6 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 import model.Contact;
 import service.UpdateService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class UpdateServiceImpl implements UpdateService {
