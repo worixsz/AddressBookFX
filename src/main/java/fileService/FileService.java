@@ -92,8 +92,8 @@ public class FileService {
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.single())
                 .subscribe(
-                        (_) -> System.out.println("Контакты успешно созданы!"),
-                        throwable -> System.err.println("Ошибка при создании контактов: " + throwable.getMessage())
+                        (_) -> System.out.println("Contact success created!"),
+                        throwable -> System.err.println("Error of creating contact: " + throwable.getMessage())
                 );
     }
 }
