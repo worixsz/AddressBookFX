@@ -36,18 +36,18 @@ public class Contact {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
-        Contact contact = (Contact) obj;
-        return phone.replaceAll("\\s", "").equals(contact.phone.replaceAll("\\s", ""));
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Contact contact = (Contact) o;
+        return id == contact.id && Objects.equals(name, contact.name) && Objects.equals(surname, contact.surname)
+                && Objects.equals(address, contact.address) && Objects.equals(phone, contact.phone);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(phone.replaceAll("\\s", ""));
+        return Objects.hash(name, surname, address, phone, id);
     }
-
 
     public String getName() {
         return name;
