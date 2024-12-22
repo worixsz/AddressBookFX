@@ -133,7 +133,7 @@ public class SearchContactForm extends GridPane {
             };
 
             if (prefixResults.isEmpty()) {
-                showAlert(Alert.AlertType.WARNING, "❗", "No similar contacts found by prefix");
+                resultsText.append("No similar contacts found by prefix");
 
             } else {
                 resultsText.append("Similar contacts by prefix:\n");
