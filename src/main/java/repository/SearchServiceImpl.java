@@ -42,9 +42,31 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public List<Contact> searchContactByAddress(String address) {
         List<Contact> contacts = fileService.read();
-        return contacts.stream()
-                .filter(contact -> contact.getAddress().equalsIgnoreCase(address))
-                .collect(Collectors.toList());
+        try {
+            Flowable<Contact> contactFlowable = Flowable.create(emitter -> {
+                try {
+                    for (Contact contact : contacts) {
+                        if (contact.getAddress().equalsIgnoreCase(address)) {
+                            emitter.onNext(contact);
+                        }
+                    }
+                    emitter.onComplete();
+                } catch (Exception es) {
+                    emitter.onError(es);
+                }
+
+            }, BackpressureStrategy.BUFFER);
+
+            return contactFlowable
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(Schedulers.single())
+                    .toList()
+                    .blockingGet();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
     }
 
 
@@ -55,36 +77,36 @@ public class SearchServiceImpl implements SearchService {
         try {
             Flowable<Contact> contactFlowable = Flowable.create(emitter -> {
 
-                    try {
-                        String cleanPhone = phone.replaceAll("\\D", "");
-                        String formattedPhone = "+996 " + cleanPhone.replaceAll("(.{3})(.{3})(.{3})", "$1 $2 $3");
+                try {
+                    String cleanPhone = phone.replaceAll("\\D", "");
+                    String formattedPhone = "+996 " + cleanPhone.replaceAll("(.{3})(.{3})(.{3})", "$1 $2 $3");
 
-                        for (Contact contact : contacts) {
-                            if (contact.getPhone().equalsIgnoreCase(formattedPhone)) {
-                                emitter.onNext(contact);
-                            }
+                    for (Contact contact : contacts) {
+                        if (contact.getPhone().equalsIgnoreCase(formattedPhone)) {
+                            emitter.onNext(contact);
                         }
-
-                        emitter.onComplete();
-                    } catch (Exception e) {
-                        emitter.onError(e);
                     }
-                },BackpressureStrategy.BUFFER);
+
+                    emitter.onComplete();
+                } catch (Exception e) {
+                    emitter.onError(e);
+                }
+            }, BackpressureStrategy.BUFFER);
 
 
-                return contactFlowable
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(Schedulers.single())
-                        .toList()
-                        .blockingGet();
+            return contactFlowable
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(Schedulers.single())
+                    .toList()
+                    .blockingGet();
 
-            } catch(Exception e){
-                e.printStackTrace();
-                return new ArrayList<>();
-            }
-
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<>();
         }
 
-
     }
+
+
+}
 
