@@ -1,6 +1,10 @@
 package repository;
 
 import fileService.FileService;
+import io.reactivex.rxjava3.core.BackpressureStrategy;
+import io.reactivex.rxjava3.core.Flowable;
+import io.reactivex.rxjava3.core.FlowableEmitter;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import model.Contact;
 import service.CreateService;
 
@@ -23,14 +27,36 @@ public class CreateServiceImpl implements CreateService {
 
     @Override
     public void createContact(List<Contact> contacts) {
-        for (Contact contact : contacts) {
-            if (contact.getId() == 0) {
-                contact.setId(dataProcessorImpl.generateUniqueId());
-            }
-        }
-        contactsList.addAll(contacts);
-        fileService.write(contactsList);
+        Flowable.create((FlowableEmitter<Void> emitter) -> {
+                    synchronized (contactsList) {
+                        try {
+                            for (Contact contact : contacts) {
+                                if (contact.getId() == 0) {
+                                    try {
+                                        contact.setId(dataProcessorImpl.generateUniqueId());
+                                    } catch (Exception idException) {
+                                        System.err.println("Error of generating id for contact: " + contact);
+                                        continue;
+                                    }
+                                }
+                            }
+                            contactsList.addAll(contacts);
+                            fileService.write(contactsList);
+
+                            emitter.onComplete();
+                        } catch (Exception e) {
+                            emitter.onError(e);
+                        }
+                    }
+                }, BackpressureStrategy.BUFFER)
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.single())
+                .subscribe(
+                        (_) -> System.out.println("Contact success created!"),
+                        throwable -> System.err.println("Error of creating contact: " + throwable.getMessage())
+                );
     }
 
 
 }
+
