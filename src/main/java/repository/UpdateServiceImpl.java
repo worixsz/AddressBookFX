@@ -74,27 +74,27 @@ public class UpdateServiceImpl implements UpdateService {
     public List<Contact> findAllByAddress(String address) {
         List<Contact> contacts = fileService.read();
 
-        List<Contact> matchingContacts = new ArrayList<>();
-        for (Contact contact : contacts) {
-            if (contact.getAddress().equalsIgnoreCase(address)) {
-                matchingContacts.add(contact);
-            }
-        }
-        return matchingContacts;
+        return Flowable.fromIterable(contacts)
+                .filter(contact -> contact.getAddress().equalsIgnoreCase(address))
+                .toList()
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.single())
+                .blockingGet();
     }
 
-    @Override
-    public List<Contact> findAllByPhone(String phone) {
-        List<Contact> contacts = fileService.read();
-        String cleanPhone = phone.replaceAll("\\s", "");
-        List<Contact> matchingContacts = new ArrayList<>();
-        for (Contact contact : contacts) {
-            if (contact.getPhone().replaceAll("\\s", "").equalsIgnoreCase(cleanPhone)) {
-                matchingContacts.add(contact);
-            }
-        }
-        return matchingContacts;
-    }
+//    @Override
+//    public List<Contact> findAllByPhone(String phone) {
+//        List<Contact> contacts = fileService.read();
+//        String cleanPhone = phone.replaceAll("\\s", "");
+//
+//        return Flowable.fromIterable(contacts)
+//                .filter(contact -> contact.getPhone().replaceAll("\\s", "").equalsIgnoreCase(cleanPhone))
+//                .toList()
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(Schedulers.single())
+//                .blockingGet();
+//
+//    }
 
 
 }
