@@ -62,13 +62,12 @@ public class UpdateServiceImpl implements UpdateService {
     public List<Contact> findAllBySurname(String surname) {
         List<Contact> contacts = fileService.read();
 
-        List<Contact> matchingContacts = new ArrayList<>();
-        for (Contact contact : contacts) {
-            if (contact.getSurname().equalsIgnoreCase(surname)) {
-                matchingContacts.add(contact);
-            }
-        }
-        return matchingContacts;
+        return Flowable.fromIterable(contacts)
+                .filter(contact -> contact.getSurname().equalsIgnoreCase(surname))
+                .toList()
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.single())
+                .blockingGet();
     }
 
     @Override
