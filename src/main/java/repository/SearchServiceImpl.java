@@ -63,7 +63,6 @@ public class SearchServiceImpl implements SearchService {
                             emitter.onNext(contact);
                         }
                     }
-
                     emitter.onComplete();
                 } catch (Exception es) {
                     emitter.onError(es);
@@ -130,7 +129,6 @@ public class SearchServiceImpl implements SearchService {
                             emitter.onNext(contact);
                         }
                     }
-
                     emitter.onComplete();
                 } catch (Exception e) {
                     emitter.onError(e);

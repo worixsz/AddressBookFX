@@ -28,25 +28,23 @@ public class CreateServiceImpl implements CreateService {
     @Override
     public void createContact(List<Contact> contacts) {
         Flowable.create((FlowableEmitter<Void> emitter) -> {
-                    synchronized (contactsList) {
-                        try {
-                            for (Contact contact : contacts) {
-                                if (contact.getId() == 0) {
-                                    try {
-                                        contact.setId(dataProcessorImpl.generateUniqueId());
-                                    } catch (Exception idException) {
-                                        System.err.println("Error of generating id for contact: " + contact);
-                                        continue;
-                                    }
+                    try {
+                        for (Contact contact : contacts) {
+                            if (contact.getId() == 0) {
+                                try {
+                                    contact.setId(dataProcessorImpl.generateUniqueId());
+                                } catch (Exception idException) {
+                                    System.err.println("Error of generating id for contact: " + contact);
+                                    continue;
                                 }
                             }
-                            contactsList.addAll(contacts);
-                            fileService.write(contactsList);
-
-                            emitter.onComplete();
-                        } catch (Exception e) {
-                            emitter.onError(e);
                         }
+                        contactsList.addAll(contacts);
+                        fileService.write(contactsList);
+
+                        emitter.onComplete();
+                    } catch (Exception e) {
+                        emitter.onError(e);
                     }
                 }, BackpressureStrategy.BUFFER)
                 .subscribeOn(Schedulers.io())
