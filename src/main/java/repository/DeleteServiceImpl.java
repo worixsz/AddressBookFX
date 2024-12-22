@@ -32,10 +32,8 @@ public class DeleteServiceImpl implements DeleteService {
                         fileService.write(contactList);
                         emitter.onComplete();
 
-
                     } catch (Exception es) {
                         emitter.onError(es);
-
                     }
 
                 }, BackpressureStrategy.BUFFER)
