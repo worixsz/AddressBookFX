@@ -82,19 +82,19 @@ public class UpdateServiceImpl implements UpdateService {
                 .blockingGet();
     }
 
-//    @Override
-//    public List<Contact> findAllByPhone(String phone) {
-//        List<Contact> contacts = fileService.read();
-//        String cleanPhone = phone.replaceAll("\\s", "");
-//
-//        return Flowable.fromIterable(contacts)
-//                .filter(contact -> contact.getPhone().replaceAll("\\s", "").equalsIgnoreCase(cleanPhone))
-//                .toList()
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(Schedulers.single())
-//                .blockingGet();
-//
-//    }
+    @Override
+    public List<Contact> findAllByPhone(String phone) {
+        List<Contact> contacts = fileService.read();
+        String cleanPhone = phone.replaceAll("\\s", "");
+
+        return Flowable.fromIterable(contacts)
+                .filter(contact -> contact.getPhone().replaceAll("\\s", "").equalsIgnoreCase(cleanPhone))
+                .toList()
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.single())
+                .blockingGet();
+
+    }
 
 
 }
