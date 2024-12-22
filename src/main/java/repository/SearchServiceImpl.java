@@ -6,10 +6,7 @@ import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import model.Contact;
 import service.SearchService;
-
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class SearchServiceImpl implements SearchService {
 
