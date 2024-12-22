@@ -33,9 +33,34 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public List<Contact> searchContactBySurname(String surname) {
         List<Contact> contacts = fileService.read();
-        return contacts.stream()
-                .filter(contact -> contact.getSurname().equalsIgnoreCase(surname))
-                .collect(Collectors.toList());
+
+        try {
+            Flowable<Contact> contactFlowable = Flowable.create(emitter -> {
+                try {
+
+                    for (Contact contact : contacts) {
+                        if (contact.getSurname().equalsIgnoreCase(surname)) {
+                            emitter.onNext(contact);
+                        }
+                    }
+
+                    emitter.onComplete();
+                } catch (Exception es) {
+                    emitter.onError(es);
+                }
+
+            }, BackpressureStrategy.BUFFER);
+
+            return contactFlowable
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(Schedulers.single())
+                    .toList()
+                    .blockingGet();
+
+        } catch (Exception e) {
+            return new ArrayList<>();
+        }
+
     }
 
 
@@ -64,7 +89,6 @@ public class SearchServiceImpl implements SearchService {
                     .blockingGet();
 
         } catch (Exception e) {
-            e.printStackTrace();
             return new ArrayList<>();
         }
     }
@@ -101,7 +125,6 @@ public class SearchServiceImpl implements SearchService {
                     .blockingGet();
 
         } catch (Exception e) {
-            e.printStackTrace();
             return new ArrayList<>();
         }
 
