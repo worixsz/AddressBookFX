@@ -213,9 +213,15 @@ public class UpdateContactForm extends BorderPane {
     private void populateFields(Contact contact) {
         nameField.setText(contact.getName());
         surnameField.setText(contact.getSurname());
-        phoneField.setText(contact.getPhone());
         addressField.setText(contact.getAddress());
+
+
+        String phoneWithoutPrefix = contact.getPhone().startsWith("+996")
+                ? contact.getPhone().substring(4).trim()
+                : contact.getPhone();
+        phoneField.setText(phoneWithoutPrefix);
     }
+
 
     private void clearFields() {
         nameField.clear();
