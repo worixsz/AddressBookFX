@@ -33,7 +33,6 @@ public class UpdateServiceImpl implements UpdateService {
                         emitter.onError(e);
 
                     }
-
                 }, BackpressureStrategy.BUFFER)
                 .subscribeOn(Schedulers.io()).
                 observeOn(Schedulers.single())
@@ -50,13 +49,13 @@ public class UpdateServiceImpl implements UpdateService {
     public List<Contact> findAllByName(String name) {
         List<Contact> contacts = fileService.read();
 
-        List<Contact> matchingContacts = new ArrayList<>();
-        for (Contact contact : contacts) {
-            if (contact.getName().equalsIgnoreCase(name)) {
-                matchingContacts.add(contact);
-            }
-        }
-        return matchingContacts;
+        return Flowable.fromIterable(contacts)
+                .filter(contact -> contact.getName().equalsIgnoreCase(name))
+                .toList()
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.single())
+                .blockingGet();
+
     }
 
     @Override
