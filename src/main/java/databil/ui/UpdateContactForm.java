@@ -13,6 +13,7 @@ import repository.DataProcessorImpl;
 import repository.SearchServiceImpl;
 import repository.UpdateServiceImpl;
 
+import java.util.InputMismatchException;
 import java.util.List;
 
 public class UpdateContactForm extends BorderPane {
@@ -133,6 +134,7 @@ public class UpdateContactForm extends BorderPane {
         Label phoneLabel = createStyledLabel("New Phone (+996):");
         phoneField = createInputField();
 
+
         Button updateButton = createStyledButton("Update");
         updateButton.setOnMouseClicked(_ -> handleUpdate());
 
@@ -167,11 +169,21 @@ public class UpdateContactForm extends BorderPane {
                 default -> throw new IllegalArgumentException("Invalid search type");
             }
 
+            switch (type) {
+                case "name" -> dataProcessorImpl.regexName(query);
+                case "surname" -> dataProcessorImpl.regexSurname(query);
+                case "address" -> dataProcessorImpl.regexAddress(query);
+                case "phone" -> dataProcessorImpl.regexPhoneNumber(query);
+                default -> throw new IllegalArgumentException("Invalid search type");
+            }
+
             if (results.isEmpty()) {
                 showAlert(Alert.AlertType.INFORMATION, "No Results", "No contacts found.");
             } else {
                 contactTableView.getItems().setAll(results);
             }
+        } catch (InputMismatchException e) {
+            showAlert(Alert.AlertType.ERROR, "Validation Error", e.getMessage());
         } catch (Exception e) {
             showAlert(Alert.AlertType.ERROR, "Error", e.getMessage());
         }
@@ -191,25 +203,36 @@ public class UpdateContactForm extends BorderPane {
             String phone = phoneField.getText().trim();
 
             String formattedPhone = dataProcessorImpl.formatPhoneNumber(phone);
-            dataProcessorImpl.checkNumberForSave(formattedPhone);
 
             Contact updatedContact = new Contact(
                     name.isEmpty() ? selectedContact.getName() : name,
                     surname.isEmpty() ? selectedContact.getSurname() : surname,
                     address.isEmpty() ? selectedContact.getAddress() : address,
-                    formattedPhone
+                    phone.isEmpty() ? selectedContact.getPhone() : formattedPhone
             );
+
+            if (!name.isEmpty()) dataProcessorImpl.regexName(name);
+            if (!surname.isEmpty()) dataProcessorImpl.regexSurname(surname);
+            if (!address.isEmpty()) dataProcessorImpl.regexAddress(address);
+            if (!phone.isEmpty()) {
+                dataProcessorImpl.regexPhoneNumber(phone);
+                dataProcessorImpl.checkNumberForSave(formattedPhone);
+            }
 
             updateByPhoneMove.update(selectedContact, updatedContact);
             contactList.remove(selectedContact);
             contactList.add(updatedContact);
+
             showAlert(Alert.AlertType.INFORMATION, "Success", "Contact updated successfully.");
             clearFields();
 
-        } catch (Exception e) {
+        } catch (InputMismatchException e) {
             showAlert(Alert.AlertType.ERROR, "Validation Error", e.getMessage());
+        } catch (Exception e) {
+            showAlert(Alert.AlertType.ERROR, "Error", e.getMessage());
         }
     }
+
 
     private void populateFields(Contact contact) {
         nameField.setText(contact.getName());
