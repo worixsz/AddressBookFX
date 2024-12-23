@@ -8,11 +8,4 @@ public interface UpdateService {
 
     void update(Contact oldContact, Contact newContact);
 
-    List<Contact> findAllByPhone(String phone);
-
-    List<Contact> findAllByName(String name);
-
-    List<Contact> findAllBySurname(String phone);
-
-    List<Contact> findAllByAddress(String phone);
 }

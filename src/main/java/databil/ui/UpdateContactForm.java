@@ -10,6 +10,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import model.Contact;
 import repository.DataProcessorImpl;
+import repository.SearchServiceImpl;
 import repository.UpdateServiceImpl;
 
 import java.util.InputMismatchException;
@@ -31,9 +32,11 @@ public class UpdateContactForm extends BorderPane {
     private final UpdateServiceImpl updateByPhoneMove;
     private final DataProcessorImpl dataProcessorImpl;
     private final ObservableList<Contact> contactList;
+    private final SearchServiceImpl searchService;
 
-    public UpdateContactForm(ObservableList<Contact> contactList, DataProcessorImpl dataProcessorImpl) {
+    public UpdateContactForm(ObservableList<Contact> contactList, DataProcessorImpl dataProcessorImpl, SearchServiceImpl searchService) {
         this.updateByPhoneMove = new UpdateServiceImpl();
+        this.searchService = searchService;
         this.dataProcessorImpl = dataProcessorImpl;
         this.contactList = contactList;
 
@@ -131,6 +134,7 @@ public class UpdateContactForm extends BorderPane {
         Label phoneLabel = createStyledLabel("New Phone (+996):");
         phoneField = createInputField();
 
+
         Button updateButton = createStyledButton("Update");
         updateButton.setOnMouseClicked(_ -> handleUpdate());
 
@@ -158,11 +162,18 @@ public class UpdateContactForm extends BorderPane {
         try {
             List<Contact> results;
             switch (type) {
-                case "name" -> results = updateByPhoneMove.findAllByName(query);
-                case "surname" -> results = updateByPhoneMove.findAllBySurname(query);
-                case "address" -> results = updateByPhoneMove.findAllByAddress(query);
-                case "phone" ->
-                        results = updateByPhoneMove.findAllByPhone(query.startsWith("+996") ? query : "+996 " + query);
+                case "name" -> results = searchService.searchContactByName(query);
+                case "surname" -> results = searchService.searchContactBySurname(query);
+                case "address" -> results = searchService.searchContactByAddress(query);
+                case "phone" -> results = searchService.searchContactByPhone(query);
+                default -> throw new IllegalArgumentException("Invalid search type");
+            }
+
+            switch (type) {
+                case "name" -> dataProcessorImpl.regexName(query);
+                case "surname" -> dataProcessorImpl.regexSurname(query);
+                case "address" -> dataProcessorImpl.regexAddress(query);
+                case "phone" -> dataProcessorImpl.regexPhoneNumber(query);
                 default -> throw new IllegalArgumentException("Invalid search type");
             }
 
@@ -171,6 +182,8 @@ public class UpdateContactForm extends BorderPane {
             } else {
                 contactTableView.getItems().setAll(results);
             }
+        } catch (InputMismatchException e) {
+            showAlert(Alert.AlertType.ERROR, "Validation Error", e.getMessage());
         } catch (Exception e) {
             showAlert(Alert.AlertType.ERROR, "Error", e.getMessage());
         }
@@ -190,25 +203,36 @@ public class UpdateContactForm extends BorderPane {
             String phone = phoneField.getText().trim();
 
             String formattedPhone = dataProcessorImpl.formatPhoneNumber(phone);
-            dataProcessorImpl.checkNumberForSave(formattedPhone);
 
             Contact updatedContact = new Contact(
                     name.isEmpty() ? selectedContact.getName() : name,
                     surname.isEmpty() ? selectedContact.getSurname() : surname,
                     address.isEmpty() ? selectedContact.getAddress() : address,
-                    formattedPhone
+                    phone.isEmpty() ? selectedContact.getPhone() : formattedPhone
             );
+
+            if (!name.isEmpty()) dataProcessorImpl.regexName(name);
+            if (!surname.isEmpty()) dataProcessorImpl.regexSurname(surname);
+            if (!address.isEmpty()) dataProcessorImpl.regexAddress(address);
+            if (!phone.isEmpty()) {
+                dataProcessorImpl.regexPhoneNumber(phone);
+                dataProcessorImpl.checkNumberForSave(formattedPhone);
+            }
 
             updateByPhoneMove.update(selectedContact, updatedContact);
             contactList.remove(selectedContact);
             contactList.add(updatedContact);
+
             showAlert(Alert.AlertType.INFORMATION, "Success", "Contact updated successfully.");
             clearFields();
 
-        } catch (Exception e) {
+        } catch (InputMismatchException e) {
             showAlert(Alert.AlertType.ERROR, "Validation Error", e.getMessage());
+        } catch (Exception e) {
+            showAlert(Alert.AlertType.ERROR, "Error", e.getMessage());
         }
     }
+
 
     private void populateFields(Contact contact) {
         nameField.setText(contact.getName());

@@ -44,56 +44,5 @@ public class UpdateServiceImpl implements UpdateService {
     }
 
 
-    @Override
-    public List<Contact> findAllByName(String name) {
-        List<Contact> contacts = fileService.read();
-
-        return Flowable.fromIterable(contacts)
-                .filter(contact -> contact.getName().equalsIgnoreCase(name))
-                .toList()
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.single())
-                .blockingGet();
-
-    }
-
-    @Override
-    public List<Contact> findAllBySurname(String surname) {
-        List<Contact> contacts = fileService.read();
-
-        return Flowable.fromIterable(contacts)
-                .filter(contact -> contact.getSurname().equalsIgnoreCase(surname))
-                .toList()
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.single())
-                .blockingGet();
-    }
-
-    @Override
-    public List<Contact> findAllByAddress(String address) {
-        List<Contact> contacts = fileService.read();
-
-        return Flowable.fromIterable(contacts)
-                .filter(contact -> contact.getAddress().equalsIgnoreCase(address))
-                .toList()
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.single())
-                .blockingGet();
-    }
-
-    @Override
-    public List<Contact> findAllByPhone(String phone) {
-        List<Contact> contacts = fileService.read();
-        String cleanPhone = phone.replaceAll("\\s", "");
-
-        return Flowable.fromIterable(contacts)
-                .filter(contact -> contact.getPhone().replaceAll("\\s", "").equalsIgnoreCase(cleanPhone))
-                .toList()
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.single())
-                .blockingGet();
-
-    }
-
 
 }
