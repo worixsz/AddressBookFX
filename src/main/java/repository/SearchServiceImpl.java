@@ -6,6 +6,7 @@ import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import model.Contact;
 import service.SearchService;
+
 import java.util.List;
 
 public class SearchServiceImpl implements SearchService {
@@ -21,64 +22,26 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public List<Contact> searchContactByName(String name) {
         List<Contact> contacts = fileService.read();
-        try {
-            Flowable<Contact> contactFlowable = Flowable.create(emitter -> {
-                try {
-                    for (Contact contact : contacts) {
-                        if (contact.getName().equalsIgnoreCase(name)) {
-                            emitter.onNext(contact);
-                        }
-                    }
-                    emitter.onComplete();
 
-                } catch (Exception es) {
-                    emitter.onError(es);
-                }
-            }, BackpressureStrategy.BUFFER);
-
-            return contactFlowable
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(Schedulers.single())
-                    .toList()
-                    .blockingGet();
-
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-
+        return Flowable.fromIterable(contacts)
+                .filter(contact -> contact.getName().equalsIgnoreCase(name))
+                .toList()
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.single())
+                .blockingGet();
     }
 
 
     @Override
     public List<Contact> searchContactBySurname(String surname) {
         List<Contact> contacts = fileService.read();
-        try {
-            Flowable<Contact> contactFlowable = Flowable.create(emitter -> {
-                try {
 
-                    for (Contact contact : contacts) {
-                        if (contact.getSurname().equalsIgnoreCase(surname)) {
-                            emitter.onNext(contact);
-                        }
-                    }
-                    emitter.onComplete();
-                } catch (Exception es) {
-                    emitter.onError(es);
-                }
-
-            }, BackpressureStrategy.BUFFER);
-
-            return contactFlowable
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(Schedulers.single())
-                    .toList()
-                    .blockingGet();
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        return Flowable.fromIterable(contacts)
+                .filter(contact -> contact.getSurname().equalsIgnoreCase(surname))
+                .toList()
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.single())
+                .blockingGet();
 
     }
 
@@ -86,30 +49,13 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public List<Contact> searchContactByAddress(String address) {
         List<Contact> contacts = fileService.read();
-        try {
-            Flowable<Contact> contactFlowable = Flowable.create(emitter -> {
-                try {
-                    for (Contact contact : contacts) {
-                        if (contact.getAddress().equalsIgnoreCase(address)) {
-                            emitter.onNext(contact);
-                        }
-                    }
-                    emitter.onComplete();
-                } catch (Exception es) {
-                    emitter.onError(es);
-                }
 
-            }, BackpressureStrategy.BUFFER);
-
-            return contactFlowable
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(Schedulers.single())
-                    .toList()
-                    .blockingGet();
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        return Flowable.fromIterable(contacts)
+                .filter(contact -> contact.getAddress().equalsIgnoreCase(address))
+                .toList()
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.single())
+                .blockingGet();
     }
 
 
@@ -117,34 +63,15 @@ public class SearchServiceImpl implements SearchService {
     public List<Contact> searchContactByPhone(String phone) {
         List<Contact> contacts = fileService.read();
 
-        try {
-            Flowable<Contact> contactFlowable = Flowable.create(emitter -> {
+        String cleanPhone = phone.replaceAll("\\D", "");
+        String formattedPhone = "+996 " + cleanPhone.replaceAll("(.{3})(.{3})(.{3})", "$1 $2 $3");
 
-                try {
-                    String cleanPhone = phone.replaceAll("\\D", "");
-                    String formattedPhone = "+996 " + cleanPhone.replaceAll("(.{3})(.{3})(.{3})", "$1 $2 $3");
-
-                    for (Contact contact : contacts) {
-                        if (contact.getPhone().equalsIgnoreCase(formattedPhone)) {
-                            emitter.onNext(contact);
-                        }
-                    }
-                    emitter.onComplete();
-                } catch (Exception e) {
-                    emitter.onError(e);
-                }
-            }, BackpressureStrategy.BUFFER);
-
-
-            return contactFlowable
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(Schedulers.single())
-                    .toList()
-                    .blockingGet();
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        return Flowable.fromIterable(contacts)
+                .filter(contact -> contact.getPhone().equalsIgnoreCase(formattedPhone))
+                .toList()
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.single())
+                .blockingGet();
 
     }
 
