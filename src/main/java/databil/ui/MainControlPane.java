@@ -33,7 +33,7 @@ public class MainControlPane extends StackPane {
         this.createContactForm = new CreateContactForm(contactList, contactCreateServiceImpl, dataProcessorImpl);
         this.showContactForm = new ShowContactForm(contactList, contactViewerServiceImpl);
         this.searchContactForm = new SearchContactForm(searchServiceImpl, contactSearcherPrefix, dataProcessorImpl);
-        this.updateContactForm = new UpdateContactForm(contactList, dataProcessorImpl);
+        this.updateContactForm = new UpdateContactForm(contactList, dataProcessorImpl, searchServiceImpl);
         this.deleteContactForm = new DeleteContactForm(contactList, deleteContactImpl);
 
         Button createButton = new Button("CREATE CONTACT");

@@ -10,9 +10,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import model.Contact;
 import repository.DataProcessorImpl;
+import repository.SearchServiceImpl;
 import repository.UpdateServiceImpl;
 
-import java.util.InputMismatchException;
 import java.util.List;
 
 public class UpdateContactForm extends BorderPane {
@@ -31,9 +31,11 @@ public class UpdateContactForm extends BorderPane {
     private final UpdateServiceImpl updateByPhoneMove;
     private final DataProcessorImpl dataProcessorImpl;
     private final ObservableList<Contact> contactList;
+    private final SearchServiceImpl searchService;
 
-    public UpdateContactForm(ObservableList<Contact> contactList, DataProcessorImpl dataProcessorImpl) {
+    public UpdateContactForm(ObservableList<Contact> contactList, DataProcessorImpl dataProcessorImpl, SearchServiceImpl searchService) {
         this.updateByPhoneMove = new UpdateServiceImpl();
+        this.searchService = searchService;
         this.dataProcessorImpl = dataProcessorImpl;
         this.contactList = contactList;
 
@@ -158,11 +160,10 @@ public class UpdateContactForm extends BorderPane {
         try {
             List<Contact> results;
             switch (type) {
-                case "name" -> results = updateByPhoneMove.findAllByName(query);
-                case "surname" -> results = updateByPhoneMove.findAllBySurname(query);
-                case "address" -> results = updateByPhoneMove.findAllByAddress(query);
-                case "phone" ->
-                        results = updateByPhoneMove.findAllByPhone(query.startsWith("+996") ? query : "+996 " + query);
+                case "name" -> results = searchService.searchContactByName(query);
+                case "surname" -> results = searchService.searchContactBySurname(query);
+                case "address" -> results = searchService.searchContactByAddress(query);
+                case "phone" -> results = searchService.searchContactByPhone(query);
                 default -> throw new IllegalArgumentException("Invalid search type");
             }
 
