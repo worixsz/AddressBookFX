@@ -35,7 +35,6 @@ public class CreateServiceImpl implements CreateService {
                                     contact.setId(dataProcessorImpl.generateUniqueId());
                                 } catch (Exception idException) {
                                     System.err.println("Error of generating id for contact: " + contact);
-                                    continue;
                                 }
                             }
                         }
