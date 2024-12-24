@@ -1,6 +1,8 @@
 package repository;
 
 import fileService.FileService;
+import io.reactivex.rxjava3.core.Flowable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import model.Contact;
 import service.SearchPrefixService;
 
@@ -17,25 +19,37 @@ public class SearchPrefixServiceImpl implements SearchPrefixService {
     @Override
     public List<Contact> findByNamePrefix(String namePrefix) {
         List<Contact> contacts = fileService.read();
-        return contacts.stream()
+
+        return Flowable.fromIterable(contacts)
                 .filter(contact -> contact.getName().startsWith(namePrefix))
-                .toList();
+                .toList()
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.single())
+                .blockingGet();
     }
 
     @Override
     public List<Contact> findBySurnamePrefix(String surnamePrefix) {
         List<Contact> contacts = fileService.read();
-        return contacts.stream()
+
+        return Flowable.fromIterable(contacts)
                 .filter(contact -> contact.getSurname().startsWith(surnamePrefix))
-                .toList();
+                .toList()
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.single())
+                .blockingGet();
     }
 
     @Override
     public List<Contact> findByAddressPrefix(String addressPrefix) {
         List<Contact> contacts = fileService.read();
-        return contacts.stream()
+
+        return Flowable.fromIterable(contacts)
                 .filter(contact -> contact.getAddress().startsWith(addressPrefix))
-                .toList();
+                .toList()
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.single())
+                .blockingGet();
     }
 
     @Override
@@ -43,9 +57,12 @@ public class SearchPrefixServiceImpl implements SearchPrefixService {
         List<Contact> contacts = fileService.read();
         String cleanPhonePrefix = phonePrefix.replace("+996 ", "");
 
-        return contacts.stream()
+        return Flowable.fromIterable(contacts)
                 .filter(contact -> contact.getPhone().startsWith("+996 " + cleanPhonePrefix))
-                .toList();
+                .toList()
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.single())
+                .blockingGet();
     }
 
 }

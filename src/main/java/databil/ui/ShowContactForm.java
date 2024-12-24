@@ -1,5 +1,7 @@
 package databil.ui;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -9,6 +11,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.util.Duration;
 import model.Contact;
 import repository.ViewerServiceImpl;
 
@@ -28,7 +31,7 @@ public class ShowContactForm extends GridPane {
         this.setStyle("-fx-background-color: #1A2A36; -fx-font-family: 'Segoe UI', sans-serif;");
 
         setupUI();
-        refreshContacts();
+        autoRefresh();
     }
 
     private void setupUI() {
@@ -71,10 +74,14 @@ public class ShowContactForm extends GridPane {
     }
 
 
-    public void refreshContacts() {
+    public void autoRefresh() {
         try {
             List<Contact> result = contactViewerServiceImpl.showContact();
             contactList.setAll(result);
+            Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(5), event -> autoRefresh()));
+            timeline.setCycleCount(Timeline.INDEFINITE);
+            timeline.play();
+
         } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
@@ -83,4 +90,6 @@ public class ShowContactForm extends GridPane {
             alert.showAndWait();
         }
     }
+
+
 }
