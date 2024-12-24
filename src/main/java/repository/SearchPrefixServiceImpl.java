@@ -31,6 +31,7 @@ public class SearchPrefixServiceImpl implements SearchPrefixService {
     @Override
     public List<Contact> findBySurnamePrefix(String surnamePrefix) {
         List<Contact> contacts = fileService.read();
+
         return Flowable.fromIterable(contacts)
                 .filter(contact -> contact.getSurname().startsWith(surnamePrefix))
                 .toList()
@@ -42,6 +43,7 @@ public class SearchPrefixServiceImpl implements SearchPrefixService {
     @Override
     public List<Contact> findByAddressPrefix(String addressPrefix) {
         List<Contact> contacts = fileService.read();
+
         return Flowable.fromIterable(contacts)
                 .filter(contact -> contact.getAddress().startsWith(addressPrefix))
                 .toList()
@@ -55,9 +57,12 @@ public class SearchPrefixServiceImpl implements SearchPrefixService {
         List<Contact> contacts = fileService.read();
         String cleanPhonePrefix = phonePrefix.replace("+996 ", "");
 
-        return contacts.stream()
+        return Flowable.fromIterable(contacts)
                 .filter(contact -> contact.getPhone().startsWith("+996 " + cleanPhonePrefix))
-                .toList();
+                .toList()
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.single())
+                .blockingGet();
     }
 
 }
