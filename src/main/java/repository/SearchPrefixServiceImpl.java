@@ -42,9 +42,12 @@ public class SearchPrefixServiceImpl implements SearchPrefixService {
     @Override
     public List<Contact> findByAddressPrefix(String addressPrefix) {
         List<Contact> contacts = fileService.read();
-        return contacts.stream()
+        return Flowable.fromIterable(contacts)
                 .filter(contact -> contact.getAddress().startsWith(addressPrefix))
-                .toList();
+                .toList()
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.single())
+                .blockingGet();
     }
 
     @Override
