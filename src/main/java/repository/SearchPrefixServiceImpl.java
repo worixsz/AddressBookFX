@@ -26,16 +26,17 @@ public class SearchPrefixServiceImpl implements SearchPrefixService {
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.single())
                 .blockingGet();
-
-
     }
 
     @Override
     public List<Contact> findBySurnamePrefix(String surnamePrefix) {
         List<Contact> contacts = fileService.read();
-        return contacts.stream()
+        return Flowable.fromIterable(contacts)
                 .filter(contact -> contact.getSurname().startsWith(surnamePrefix))
-                .toList();
+                .toList()
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.single())
+                .blockingGet();
     }
 
     @Override
