@@ -87,7 +87,7 @@ public class DeleteContactForm extends GridPane {
 
 
     private Button createStyledButton() {
-        Button button = new Button("delete");
+        Button button = new Button("🗑");
         button.setStyle("-fx-background-color: #34495E;" +
                 " -fx-text-fill: white; -fx-font-weight: bold;" +
                 " -fx-font-size: 12px; -fx-background-radius: 6px;" +
