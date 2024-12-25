@@ -15,7 +15,6 @@ public class SearchServiceImpl implements SearchService {
     public SearchServiceImpl() {
         fileService = new FileService();
 
-
     }
 
     @Override

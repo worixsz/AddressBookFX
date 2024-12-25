@@ -16,7 +16,6 @@ public class ViewerServiceImpl implements ViewerService {
     public ViewerServiceImpl() {
         fileService = new FileService();
 
-
     }
 
     @Override
