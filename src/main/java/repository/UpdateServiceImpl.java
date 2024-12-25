@@ -40,9 +40,7 @@ public class UpdateServiceImpl implements UpdateService {
                         throwable -> System.err.println("Error of updating contact: " + throwable.getMessage())
                 );
 
-
     }
-
 
 
 }
