@@ -25,7 +25,9 @@ public class CreateContactForm extends VBox {
 
     private final Contact contacts;
 
-    public CreateContactForm(ObservableList<Contact> contactList, CreateServiceImpl contactCreateServiceImpl, DataProcessorImpl dataProcessorImpl) {
+    public CreateContactForm(ObservableList<Contact> contactList,
+                             CreateServiceImpl contactCreateServiceImpl,
+                             DataProcessorImpl dataProcessorImpl) {
         this.contacts = new Contact();
         this.setAlignment(Pos.CENTER);
         this.setStyle("-fx-background-color: #1A2A36; -fx-font-family: 'Segoe UI', sans-serif;");
@@ -58,9 +60,12 @@ public class CreateContactForm extends VBox {
                 successMessage
         );
 
-        saveButton.addEventHandler(MouseEvent.MOUSE_CLICKED, _ -> handleSave(contactList, contactCreateServiceImpl, dataProcessorImpl, successMessage));
-
-        cancelButton.addEventHandler(MouseEvent.MOUSE_CLICKED, _ -> handleCancel(nameField, surnameField, addressField, phoneField, successMessage));
+        saveButton
+                .addEventHandler(MouseEvent.MOUSE_CLICKED,
+                        _ -> handleSave(contactList, contactCreateServiceImpl, dataProcessorImpl, successMessage));
+        cancelButton
+                .addEventHandler(MouseEvent.MOUSE_CLICKED,
+                        _ -> handleCancel(nameField, surnameField, addressField, phoneField, successMessage));
     }
 
     private HBox createInputRow(String labelText, TextField textField) {
@@ -75,7 +80,10 @@ public class CreateContactForm extends VBox {
         return row;
     }
 
-    private void handleSave(ObservableList<Contact> contactList, CreateServiceImpl contactCreateServiceImpl, DataProcessorImpl dataProcessorImpl, Text successMessage) {
+    private void handleSave(ObservableList<Contact> contactList,
+                            CreateServiceImpl contactCreateServiceImpl,
+                            DataProcessorImpl dataProcessorImpl,
+                            Text successMessage) {
         String formatPhoneNumber = "";
         boolean isValid = true;
 
@@ -141,7 +149,11 @@ public class CreateContactForm extends VBox {
         }
     }
 
-    private void handleCancel(TextField nameField, TextField surnameField, TextField addressField, TextField phoneField, Text successMessage) {
+    private void handleCancel(TextField nameField,
+                              TextField surnameField,
+                              TextField addressField,
+                              TextField phoneField,
+                              Text successMessage) {
         nameField.clear();
         surnameField.clear();
         addressField.clear();
