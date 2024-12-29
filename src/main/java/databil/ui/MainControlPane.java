@@ -59,12 +59,15 @@ public class MainControlPane extends StackPane {
 
         Text title = new Text("ADDRESS BOOK");
         title.setFont(Font.font("Segoe UI", 50));
-        title.setStyle("-fx-fill: linear-gradient(to bottom, #FFFFFF, #D0D0D0); -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 20), 10, 0, 0, 5);");
+        title.setStyle("-fx-fill: linear-gradient(to bottom, #FFFFFF, #D0D0D0);" +
+                " -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 20), 10, 0, 0, 5);");
         StackPane.setAlignment(title, Pos.TOP_CENTER);
         StackPane.setMargin(title, new Insets(50, 0, 0, 0));
         this.setStyle("-fx-background-color: #1A2A36; -fx-font-family: 'Segoe UI', sans-serif;");
 
-        this.getChildren().addAll(title, buttonBox, createContactForm, showContactForm, searchContactForm, updateContactForm, deleteContactForm, backButton);
+        this.getChildren().addAll(title, buttonBox, createContactForm,
+                showContactForm, searchContactForm, updateContactForm,
+                deleteContactForm, backButton);
 
         String buttonStyle = "-fx-background-color: #2C3E50; " +
                 "-fx-text-fill: white; " +
@@ -143,7 +146,8 @@ public class MainControlPane extends StackPane {
         button.setPrefHeight(30);
         button.setOnMouseEntered(_ -> button.setStyle("-fx-background-color: #2C3E50;" +
                 " -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px;" +
-                " -fx-background-radius: 8px; -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.5), 10, 0, 0, 2);"));
+                " -fx-background-radius: 8px; -fx-effect:" +
+                " dropshadow(three-pass-box, rgba(0, 0, 0, 0.5), 10, 0, 0, 2);"));
         button.setOnMouseExited(_ -> button.setStyle("-fx-background-color: #34495E;" +
                 " -fx-text-fill: white;" +
                 " -fx-font-weight: bold; -fx-font-size: 14px;" +
