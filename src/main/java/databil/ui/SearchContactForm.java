@@ -27,7 +27,9 @@ public class SearchContactForm extends GridPane {
 
     private final TextArea resultArea = new TextArea();
 
-    public SearchContactForm(SearchServiceImpl searchServiceImpl, SearchPrefixServiceImpl searchByPrefix, DataProcessorImpl dataProcessorImpl1) {
+    public SearchContactForm(SearchServiceImpl searchServiceImpl,
+                             SearchPrefixServiceImpl searchByPrefix,
+                             DataProcessorImpl dataProcessorImpl1) {
         this.searchServiceImpl = searchServiceImpl;
         this.searchByPrefix = searchByPrefix;
         this.dataProcessorImpl = dataProcessorImpl1;
@@ -39,7 +41,9 @@ public class SearchContactForm extends GridPane {
 
         resultArea.setEditable(false);
         resultArea.setWrapText(true);
-        resultArea.setStyle("-fx-background-color: #BDC3C7; -fx-border-radius: 10px; -fx-font-size: 14px; -fx-padding: 15px; -fx-text-fill: #333333;");
+        resultArea.setStyle("-fx-background-color: #BDC3C7;" +
+                " -fx-border-radius: 10px; -fx-font-size:" +
+                " 14px; -fx-padding: 15px; -fx-text-fill: #333333;");
 
         Label nameLabel = createStyledLabel("Search by Name:");
         Button searchByNameButton = createStyledButton();
@@ -121,7 +125,8 @@ public class SearchContactForm extends GridPane {
         StringBuilder resultsText = new StringBuilder();
 
         if (results.isEmpty()) {
-            resultsText.append("No exact matches found for ").append(searchType).append(": ").append(input).append("\n");
+            resultsText.append("No exact matches found for ")
+                    .append(searchType).append(": ").append(input).append("\n");
             resultsText.append("Looking for similar results by parameters of contact...\n");
 
             List<Contact> prefixResults = switch (searchType) {
