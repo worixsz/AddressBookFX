@@ -34,7 +34,9 @@ public class UpdateContactForm extends BorderPane {
     private final ObservableList<Contact> contactList;
     private final SearchServiceImpl searchService;
 
-    public UpdateContactForm(ObservableList<Contact> contactList, DataProcessorImpl dataProcessorImpl, SearchServiceImpl searchService) {
+    public UpdateContactForm(ObservableList<Contact> contactList,
+                             DataProcessorImpl dataProcessorImpl,
+                             SearchServiceImpl searchService) {
         this.updateByPhoneMove = new UpdateServiceImpl();
         this.searchService = searchService;
         this.dataProcessorImpl = dataProcessorImpl;
