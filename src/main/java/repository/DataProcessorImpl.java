@@ -33,7 +33,8 @@ public class DataProcessorImpl implements DataProcessor {
             if (cleanPhone.length() != 9) {
                 throw new InputMismatchException("Phone format incorrect.");
             } else {
-                formattedNumberKG = "+996 " + cleanPhone.replaceAll("(.{3})(.{3})(.{3})", "$1 $2 $3");
+                formattedNumberKG = "+996 "
+                        + cleanPhone.replaceAll("(.{3})(.{3})(.{3})", "$1 $2 $3");
                 formattedNumberKG = formattedNumberKG.trim();
             }
 
