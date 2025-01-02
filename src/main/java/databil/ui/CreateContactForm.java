@@ -62,10 +62,12 @@ public class CreateContactForm extends VBox {
 
         saveButton
                 .addEventHandler(MouseEvent.MOUSE_CLICKED,
-                        _ -> handleSave(contactList, contactCreateServiceImpl, dataProcessorImpl, successMessage));
+                        _ -> handleSave(contactList, contactCreateServiceImpl,
+                                dataProcessorImpl, successMessage));
         cancelButton
                 .addEventHandler(MouseEvent.MOUSE_CLICKED,
-                        _ -> handleCancel(nameField, surnameField, addressField, phoneField, successMessage));
+                        _ -> handleCancel(nameField, surnameField,
+                                addressField, phoneField, successMessage));
     }
 
     private HBox createInputRow(String labelText, TextField textField) {
