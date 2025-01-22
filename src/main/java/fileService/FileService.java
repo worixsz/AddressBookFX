@@ -43,7 +43,8 @@ public class FileService {
                     if (contactsNode != null && contactsNode.isArray()) {
                         List<Contact> contacts = objectMapper.convertValue(
                                 contactsNode,
-                                objectMapper.getTypeFactory().constructCollectionType(List.class, Contact.class)
+                                objectMapper.getTypeFactory()
+                                        .constructCollectionType(List.class, Contact.class)
                         );
 
                         for (Contact contact : contacts) {
@@ -93,7 +94,8 @@ public class FileService {
                 .observeOn(Schedulers.single())
                 .subscribe(
                         (_) -> System.out.println("Contact success created!"),
-                        throwable -> System.err.println("Error of creating contact: " + throwable.getMessage())
+                        throwable ->
+                                System.err.println("Error of creating contact: " + throwable.getMessage())
                 );
     }
 }
