@@ -49,15 +49,20 @@ public class UpdateContactForm extends BorderPane {
         this.setTop(searchBox);
 
         contactTableView = new TableView<>();
-        contactTableView.setStyle("-fx-background-color: #ECF0F1; -fx-font-size: 14px; -fx-background-radius: 5px;");
+        contactTableView.setStyle("-fx-background-color: #ECF0F1;" +
+                " -fx-font-size: 14px; -fx-background-radius: 5px;");
 
-        TableColumn<Contact, String> nameColumn = createTableColumn("Name", "name");
+        TableColumn<Contact, String> nameColumn =
+                createTableColumn("Name", "name");
         nameColumn.setMinWidth(100);
-        TableColumn<Contact, String> surnameColumn = createTableColumn("Surname", "surname");
+        TableColumn<Contact, String> surnameColumn =
+                createTableColumn("Surname", "surname");
         surnameColumn.setMinWidth(100);
-        TableColumn<Contact, String> addressColumn = createTableColumn("Address", "address");
+        TableColumn<Contact, String> addressColumn =
+                createTableColumn("Address", "address");
         addressColumn.setMinWidth(100);
-        TableColumn<Contact, String> phoneColumn = createTableColumn("Phone", "phone");
+        TableColumn<Contact, String> phoneColumn =
+                createTableColumn("Phone", "phone");
         phoneColumn.setMinWidth(150);
 
         contactTableView.getColumns().addAll(nameColumn, surnameColumn, addressColumn, phoneColumn);
@@ -93,13 +98,17 @@ public class UpdateContactForm extends BorderPane {
         phoneSearchField = createInputField();
 
         Button nameSearchButton = createStyledButton("🔍");
-        nameSearchButton.setOnMouseClicked(_ -> handleSearch(nameSearchField.getText().trim(), "name"));
+        nameSearchButton.setOnMouseClicked(_ ->
+                handleSearch(nameSearchField.getText().trim(), "name"));
         Button surnameSearchButton = createStyledButton("🔍");
-        surnameSearchButton.setOnMouseClicked(_ -> handleSearch(surnameSearchField.getText().trim(), "surname"));
+        surnameSearchButton.setOnMouseClicked(_ ->
+                handleSearch(surnameSearchField.getText().trim(), "surname"));
         Button addressSearchButton = createStyledButton("🔍");
-        addressSearchButton.setOnMouseClicked(_ -> handleSearch(addressSearchField.getText().trim(), "address"));
+        addressSearchButton.setOnMouseClicked(_ ->
+                handleSearch(addressSearchField.getText().trim(), "address"));
         Button phoneSearchButton = createStyledButton("🔍");
-        phoneSearchButton.setOnMouseClicked(_ -> handleSearch(phoneSearchField.getText().trim(), "phone"));
+        phoneSearchButton.setOnMouseClicked(_ ->
+                handleSearch(phoneSearchField.getText().trim(), "phone"));
 
         HBox nameRow = new HBox(10, nameSearchLabel, nameSearchField, nameSearchButton);
         HBox surnameRow = new HBox(10, surnameSearchLabel, surnameSearchField, surnameSearchButton);
@@ -157,7 +166,8 @@ public class UpdateContactForm extends BorderPane {
 
     private void handleSearch(String query, String type) {
         if (query.trim().isEmpty()) {
-            showAlert(Alert.AlertType.WARNING, "Error", "Please enter a search query.");
+            showAlert(Alert.AlertType.WARNING, "Error",
+                    "Please enter a search query.");
             return;
         }
 
@@ -180,7 +190,8 @@ public class UpdateContactForm extends BorderPane {
             }
 
             if (results.isEmpty()) {
-                showAlert(Alert.AlertType.INFORMATION, "No Results", "No contacts found.");
+                showAlert(Alert.AlertType.INFORMATION, "No Results",
+                        "No contacts found.");
             } else {
                 contactTableView.getItems().setAll(results);
             }
@@ -194,7 +205,8 @@ public class UpdateContactForm extends BorderPane {
     private void handleUpdate() {
         Contact selectedContact = contactTableView.getSelectionModel().getSelectedItem();
         if (selectedContact == null) {
-            showAlert(Alert.AlertType.WARNING, "No Selection", "Please select a contact to update.");
+            showAlert(Alert.AlertType.WARNING, "No Selection",
+                    "Please select a contact to update.");
             return;
         }
 
@@ -225,7 +237,8 @@ public class UpdateContactForm extends BorderPane {
             contactList.remove(selectedContact);
             contactList.add(updatedContact);
 
-            showAlert(Alert.AlertType.INFORMATION, "Success", "Contact updated successfully.");
+            showAlert(Alert.AlertType.INFORMATION, "Success",
+                    "Contact updated successfully.");
             clearFields();
 
         } catch (InputMismatchException e) {
@@ -270,7 +283,8 @@ public class UpdateContactForm extends BorderPane {
 
     private TextField createInputField() {
         TextField textField = new TextField();
-        textField.setStyle("-fx-background-color: #ECF0F1; -fx-text-fill: #34495E; -fx-font-size: 14px;");
+        textField.setStyle("-fx-background-color: #ECF0F1;" +
+                " -fx-text-fill: #34495E; -fx-font-size: 14px;");
         return textField;
     }
 
