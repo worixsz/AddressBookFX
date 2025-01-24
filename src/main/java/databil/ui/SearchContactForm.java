@@ -61,7 +61,8 @@ public class SearchContactForm extends GridPane {
         Button searchByPhoneButton = createStyledButton();
         searchByPhoneButton.setOnAction(_ -> performSearch("phone"));
 
-        searchByPhoneField.textProperty().addListener((_, _, newValue) -> {
+        searchByPhoneField.textProperty()
+                .addListener((_, _, newValue) -> {
             if (!newValue.startsWith("+996 ")) {
                 searchByPhoneField.setText("+996 ");
             }
@@ -98,7 +99,8 @@ public class SearchContactForm extends GridPane {
                         input = input.substring(5);
                     }
                 }
-                default -> showAlert(Alert.AlertType.WARNING, "❗", "Please enter a value to search.");
+                default -> showAlert(Alert.AlertType.WARNING, "❗",
+                        "Please enter a value to search.");
             }
 
             if (input.trim().isEmpty()) {
@@ -121,7 +123,8 @@ public class SearchContactForm extends GridPane {
         }
     }
 
-    private void displayResults(String input, List<Contact> results, String searchType) {
+    private void displayResults(String input, List<Contact> results,
+                                String searchType) {
         StringBuilder resultsText = new StringBuilder();
 
         if (results.isEmpty()) {

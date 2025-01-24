@@ -43,7 +43,8 @@ public class UpdateContactForm extends BorderPane {
         this.contactList = contactList;
 
         this.setPadding(new Insets(20));
-        this.setStyle("-fx-background-color: #1A2A36; -fx-font-family: 'Segoe UI', sans-serif;");
+        this.setStyle("-fx-background-color: #1A2A36; " +
+                "-fx-font-family: 'Segoe UI', sans-serif;");
 
         VBox searchBox = createSearchBox();
         this.setTop(searchBox);
@@ -65,8 +66,10 @@ public class UpdateContactForm extends BorderPane {
                 createTableColumn("Phone", "phone");
         phoneColumn.setMinWidth(150);
 
-        contactTableView.getColumns().addAll(nameColumn, surnameColumn, addressColumn, phoneColumn);
-        contactTableView.getSelectionModel().selectedItemProperty().addListener((_, _, newSelection) -> {
+        contactTableView.getColumns().addAll(nameColumn, surnameColumn,
+                addressColumn, phoneColumn);
+        contactTableView.getSelectionModel().selectedItemProperty()
+                .addListener((_, _, newSelection) -> {
             if (newSelection != null) populateFields(newSelection);
         });
 
