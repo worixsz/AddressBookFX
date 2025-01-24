@@ -23,7 +23,8 @@ public class ShowContactForm extends GridPane {
     private final ViewerServiceImpl contactViewerServiceImpl;
     private final ObservableList<Contact> contactList;
 
-    public ShowContactForm(ObservableList<Contact> contactList, ViewerServiceImpl contactViewerServiceImpl) {
+    public ShowContactForm(ObservableList<Contact> contactList,
+                           ViewerServiceImpl contactViewerServiceImpl) {
         this.contactList = contactList;
         this.contactViewerServiceImpl = contactViewerServiceImpl;
         this.setPadding(new Insets(20));
@@ -78,7 +79,8 @@ public class ShowContactForm extends GridPane {
         try {
             List<Contact> result = contactViewerServiceImpl.showContact();
             contactList.setAll(result);
-            Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(5), event -> autoRefresh()));
+            Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(5),
+                    event -> autoRefresh()));
             timeline.setCycleCount(Timeline.INDEFINITE);
             timeline.play();
 
