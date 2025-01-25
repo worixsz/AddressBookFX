@@ -30,10 +30,13 @@ public class MainControlPane extends StackPane {
     ) {
 
         ObservableList<Contact> contactList = FXCollections.observableArrayList();
-        this.createContactForm = new CreateContactForm(contactList, contactCreateServiceImpl, dataProcessorImpl);
+        this.createContactForm = new CreateContactForm(contactList, contactCreateServiceImpl,
+                dataProcessorImpl);
         this.showContactForm = new ShowContactForm(contactList, contactViewerServiceImpl);
-        this.searchContactForm = new SearchContactForm(searchServiceImpl, contactSearcherPrefix, dataProcessorImpl);
-        this.updateContactForm = new UpdateContactForm(contactList, dataProcessorImpl, searchServiceImpl);
+        this.searchContactForm = new SearchContactForm(searchServiceImpl, contactSearcherPrefix,
+                dataProcessorImpl);
+        this.updateContactForm = new UpdateContactForm(contactList, dataProcessorImpl,
+                searchServiceImpl);
         this.deleteContactForm = new DeleteContactForm(contactList, deleteContactImpl);
 
         Button createButton = new Button("CREATE CONTACT");
@@ -51,7 +54,8 @@ public class MainControlPane extends StackPane {
 
         backButton.setVisible(false);
 
-        VBox buttonBox = new VBox(15, createButton, showButton, searchButton, updateButton, deleteButton);
+        VBox buttonBox = new VBox(15, createButton, showButton,
+                searchButton, updateButton, deleteButton);
         buttonBox.setAlignment(Pos.CENTER);
 
         StackPane.setAlignment(backButton, Pos.BOTTOM_RIGHT);
