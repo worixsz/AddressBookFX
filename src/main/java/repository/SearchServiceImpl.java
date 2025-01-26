@@ -62,7 +62,8 @@ public class SearchServiceImpl implements SearchService {
         List<Contact> contacts = fileService.read();
 
         String cleanPhone = phone.replaceAll("\\D", "");
-        String formattedPhone = "+996 " + cleanPhone.replaceAll("(.{3})(.{3})(.{3})", "$1 $2 $3");
+        String formattedPhone = "+996 " + cleanPhone.replaceAll("(.{3})(.{3})(.{3})",
+                "$1 $2 $3");
 
         return Flowable.fromIterable(contacts)
                 .filter(contact -> contact.getPhone().equalsIgnoreCase(formattedPhone))

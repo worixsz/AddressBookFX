@@ -41,7 +41,8 @@ public class DeleteServiceImpl implements DeleteService {
                 .observeOn(Schedulers.single())
                 .subscribe(
                         (_) -> System.out.println("Contact success deleted!"),
-                        throwable -> System.err.println("Error of deleting contact: " + throwable.getMessage())
+                        throwable ->
+                                System.err.println("Error of deleting contact: " + throwable.getMessage())
                 );
 
     }
