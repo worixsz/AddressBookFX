@@ -113,10 +113,14 @@ public class UpdateContactForm extends BorderPane {
         phoneSearchButton.setOnMouseClicked(_ ->
                 handleSearch(phoneSearchField.getText().trim(), "phone"));
 
-        HBox nameRow = new HBox(10, nameSearchLabel, nameSearchField, nameSearchButton);
-        HBox surnameRow = new HBox(10, surnameSearchLabel, surnameSearchField, surnameSearchButton);
-        HBox phoneRow = new HBox(10, phoneSearchLabel, phoneSearchField, phoneSearchButton);
-        HBox addressRow = new HBox(10, addressSearchLabel, addressSearchField, addressSearchButton);
+        HBox nameRow = new HBox(10, nameSearchLabel, nameSearchField,
+                nameSearchButton);
+        HBox surnameRow = new HBox(10, surnameSearchLabel, surnameSearchField,
+                surnameSearchButton);
+        HBox phoneRow = new HBox(10, phoneSearchLabel, phoneSearchField,
+                phoneSearchButton);
+        HBox addressRow = new HBox(10, addressSearchLabel, addressSearchField,
+                addressSearchButton);
 
         nameRow.setPrefWidth(100);
         surnameRow.setPrefWidth(100);
