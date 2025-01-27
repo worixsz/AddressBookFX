@@ -104,7 +104,8 @@ public class SearchContactForm extends GridPane {
             }
 
             if (input.trim().isEmpty()) {
-                showAlert(Alert.AlertType.WARNING, "❗", "Please enter a value to search.");
+                showAlert(Alert.AlertType.WARNING, "❗",
+                        "Please enter a value to search.");
                 return;
             }
 
@@ -150,7 +151,8 @@ public class SearchContactForm extends GridPane {
                 }
             }
         } else {
-            resultsText.append("Matches found for ").append(searchType).append(": ").append(input).append("\n");
+            resultsText.append("Matches found for ").append(searchType)
+                            .append(": ").append(input).append("\n");
             for (Contact contact : results) {
                 resultsText.append(contact).append("\n");
             }
