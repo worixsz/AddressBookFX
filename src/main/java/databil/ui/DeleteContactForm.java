@@ -111,7 +111,8 @@ public class DeleteContactForm extends GridPane {
         deleteService.deleteContact(List.of(contact));
         contactList.remove(contact);
 
-        showAlert(Alert.AlertType.INFORMATION, "Success", "Contact successfully deleted.");
+        showAlert(Alert.AlertType.INFORMATION, "Success",
+                "Contact successfully deleted.");
     }
 
 
