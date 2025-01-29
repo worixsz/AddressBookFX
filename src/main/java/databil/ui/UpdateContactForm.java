@@ -81,7 +81,8 @@ public class UpdateContactForm extends BorderPane {
         this.setBottom(bottomBox);
     }
 
-    private TableColumn<Contact, String> createTableColumn(String title, String property) {
+    private TableColumn<Contact, String> createTableColumn(String title,
+                                                           String property) {
         TableColumn<Contact, String> column = new TableColumn<>(title);
         column.setCellValueFactory(new PropertyValueFactory<>(property));
         return column;

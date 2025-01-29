@@ -18,7 +18,8 @@ public class DeleteContactForm extends GridPane {
     private final DeleteServiceImpl deleteService;
     private final ObservableList<Contact> contactList;
 
-    public DeleteContactForm(ObservableList<Contact> contactList, DeleteServiceImpl deleteService) {
+    public DeleteContactForm(ObservableList<Contact> contactList,
+                             DeleteServiceImpl deleteService) {
         this.contactList = contactList;
         this.deleteService = deleteService;
         this.setPadding(new Insets(20));
@@ -67,7 +68,8 @@ public class DeleteContactForm extends GridPane {
             }
         });
 
-        contactTableView.getColumns().addAll(nameColumn, surnameColumn, addressColumn, phoneColumn, deleteColumn);
+        contactTableView.getColumns().addAll(nameColumn, surnameColumn,
+                addressColumn, phoneColumn, deleteColumn);
         contactTableView.setItems(contactList);
         contactTableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
