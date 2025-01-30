@@ -30,7 +30,8 @@ public class CreateContactForm extends VBox {
                              DataProcessorImpl dataProcessorImpl) {
         this.contacts = new Contact();
         this.setAlignment(Pos.CENTER);
-        this.setStyle("-fx-background-color: #1A2A36; -fx-font-family: 'Segoe UI', sans-serif;");
+        this.setStyle("-fx-background-color: #1A2A36;" +
+                " -fx-font-family: 'Segoe UI', sans-serif;");
         this.setSpacing(17);
 
         this.setPadding(new Insets(30, 100, 30, 100));
@@ -181,13 +182,16 @@ public class CreateContactForm extends VBox {
         button.setPrefWidth(150);
         button.setPrefHeight(20);
 
-        button.setOnMouseEntered(_ -> button.setStyle("-fx-background-color: #1A2A36;" +
+        button.setOnMouseEntered
+                (_ -> button.setStyle("-fx-background-color: #1A2A36;" +
                 " -fx-text-fill: white; -fx-font-weight: bold;" +
                 " -fx-font-size: 14px; -fx-background-radius: 8px;"));
-        button.setOnMouseExited(_ -> button.setStyle("-fx-background-color: #2A3A50;" +
+        button.setOnMouseExited
+                (_ -> button.setStyle("-fx-background-color: #2A3A50;" +
                 " -fx-text-fill: white; -fx-font-weight: bold;" +
                 " -fx-font-size: 14px; -fx-background-radius: 8px;"));
-        button.setOnMouseClicked(_ -> button.setStyle("-fx-background-color: #1A2A36;" +
+        button.setOnMouseClicked
+                (_ -> button.setStyle("-fx-background-color: #1A2A36;" +
                 " -fx-text-fill: white; -fx-font-weight: bold;" +
                 " -fx-font-size: 14px; -fx-background-radius: 8px;"));
         return button;
